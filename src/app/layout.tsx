@@ -2,6 +2,7 @@ import '@/app/globals.css'
 
 import { Poppins } from 'next/font/google'
 import { ClerkProvider, ClerkLoaded } from '@clerk/nextjs'
+import { neobrutalism } from '@clerk/themes'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -16,7 +17,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider dynamic>
+    <ClerkProvider
+      dynamic
+      appearance={{ baseTheme: neobrutalism, variables: { colorPrimary: 'orange' } }}
+    >
       <html lang='en'>
         <body className={`${poppins.className}`}>
           <ClerkLoaded>{children}</ClerkLoaded>
