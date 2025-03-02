@@ -1,0 +1,21 @@
+services:
+  postgres:
+    container_name: mine_postgres
+    image: postgres:17.2
+    environment:
+      POSTGRES_USER: mine
+      POSTGRES_PASSWORD: mine
+      POSTGRES_DB: mine
+    volumes:
+      - mine_postgres_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - mine_network
+
+volumes:
+  mine_postgres_data:
+
+networks:
+  mine_network:
+    driver: bridge
