@@ -1,31 +1,40 @@
 import '@/app/globals.css'
 
-import { Poppins } from 'next/font/google'
+import { Work_Sans } from 'next/font/google'
 import { ClerkProvider, ClerkLoaded } from '@clerk/nextjs'
 import { neobrutalism } from '@clerk/themes'
 
-const poppins = Poppins({
+import { ThemeProvider } from '@/components/theme-provider'
+import { TooltipProvider } from '@/components/ui/tooltip'
+
+const workSans = Work_Sans({
   subsets: ['latin'],
   weight: '400',
   display: 'swap',
-  variable: '--font-poppins'
+  variable: '--font-work-sans'
 })
 
-export default function RootLayout({
+const Layout = ({
   children
 }: Readonly<{
   children: React.ReactNode
-}>) {
+}>) => {
   return (
     <ClerkProvider
       dynamic
       appearance={{ baseTheme: neobrutalism, variables: { colorPrimary: 'orange' } }}
     >
       <html lang='en'>
-        <body className={`${poppins.className}`}>
-          <ClerkLoaded>{children}</ClerkLoaded>
+        <body className={`${workSans.className}`}>
+          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+            <ClerkLoaded>
+              <TooltipProvider>{children}</TooltipProvider>
+            </ClerkLoaded>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>
   )
 }
+
+export default Layout
