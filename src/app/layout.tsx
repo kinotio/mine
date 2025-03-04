@@ -4,7 +4,6 @@ import { Work_Sans } from 'next/font/google'
 import { ClerkProvider, ClerkLoaded } from '@clerk/nextjs'
 import { neobrutalism } from '@clerk/themes'
 
-import { ThemeProvider } from '@/components/theme-provider'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
 const workSans = Work_Sans({
@@ -22,15 +21,13 @@ const Layout = ({
   return (
     <ClerkProvider
       dynamic
-      appearance={{ baseTheme: neobrutalism, variables: { colorPrimary: 'orange' } }}
+      appearance={{ baseTheme: neobrutalism, variables: { colorPrimary: '#ff6500' } }}
     >
       <html lang='en'>
         <body className={`${workSans.className}`}>
-          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-            <ClerkLoaded>
-              <TooltipProvider>{children}</TooltipProvider>
-            </ClerkLoaded>
-          </ThemeProvider>
+          <ClerkLoaded>
+            <TooltipProvider>{children}</TooltipProvider>
+          </ClerkLoaded>
         </body>
       </html>
     </ClerkProvider>
