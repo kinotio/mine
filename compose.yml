@@ -13,6 +13,19 @@ services:
     networks:
       - mine_network
 
+  minio:
+    container_name: mine_minio
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: mine
+      MINIO_ROOT_PASSWORD: mine
+    volumes:
+      - mine_minio_data:/data
+    ports:
+      - 9000:9000
+    networks:
+      - mine_network
+
 volumes:
   mine_postgres_data:
 
