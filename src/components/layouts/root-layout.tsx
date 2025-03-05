@@ -26,7 +26,7 @@ export const RootLayout = ({
 
 const Header = () => {
   return (
-    <header className='sticky top-0 z-40 border-b-4 border-black'>
+    <header className='sticky top-0 z-40 border-b-4 border-black bg-white'>
       <div className='flex h-16 items-center justify-between px-4 md:px-6'>
         <Link href='/' className='flex items-center gap-2'>
           <Mine width={125} height={50} />
