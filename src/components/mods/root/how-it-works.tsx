@@ -47,7 +47,7 @@ export const HowItWorksSection = () => {
             <h2 className='text-3xl font-extrabold'>How It Works</h2>
           </div>
           <p className='text-xl max-w-3xl mx-auto mt-4'>
-            Getting started with DevHub is simple. Follow these steps to create your developer
+            Getting started with Mine is simple. Follow these steps to create your developer
             presence.
           </p>
         </motion.div>
