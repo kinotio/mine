@@ -1,7 +1,9 @@
+import { Hero } from '@/components/mods/root/hero'
+
 const Page = () => {
   return (
     <div>
-      <h1>Hello, world!</h1>
+      <Hero />
     </div>
   )
 }
