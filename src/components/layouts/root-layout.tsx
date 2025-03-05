@@ -59,7 +59,7 @@ const Footer = () => {
         <div className='grid gap-8 sm:grid-cols-2 md:grid-cols-4'>
           <div>
             <Kinotio width={125} height={50} />
-            <p className='text-gray-400 max-w-xs mt-6 text-sm'>
+            <p className='text-gray-400 max-w-xs mt-6'>
               The platform for developers to showcase their skills, projects, and connect with
               opportunities.
             </p>
@@ -69,17 +69,17 @@ const Footer = () => {
             <h3 className='font-bold mb-4'>Quick Links</h3>
             <ul className='space-y-2'>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   Features
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   FAQ
                 </Link>
               </li>
@@ -90,22 +90,22 @@ const Footer = () => {
             <h3 className='font-bold mb-4'>Resources</h3>
             <ul className='space-y-2'>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   Documentation
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   Community
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   Support
                 </Link>
               </li>
@@ -116,22 +116,22 @@ const Footer = () => {
             <h3 className='font-bold mb-4'>Connect</h3>
             <ul className='space-y-2'>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   X (Formerly Twitter)
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   Blueksy
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   LinkedIn
                 </Link>
               </li>
               <li>
-                <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+                <Link href='#' className='text-gray-400 hover:text-white'>
                   Discord
                 </Link>
               </li>
@@ -144,16 +144,16 @@ const Footer = () => {
             <div className='h-6 w-6 opacity-50'>
               <Heart />
             </div>
-            <p className='text-sm'>crafted with care and dedication.</p>
+            <p>crafted with care and dedication.</p>
           </div>
           <div className='flex space-x-4 mt-4 sm:mt-0'>
-            <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+            <Link href='#' className='text-gray-400 hover:text-white'>
               Privacy Policy
             </Link>
-            <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+            <Link href='#' className='text-gray-400 hover:text-white'>
               Terms of Service
             </Link>
-            <Link href='#' className='text-gray-400 hover:text-white text-sm'>
+            <Link href='#' className='text-gray-400 hover:text-white'>
               Cookie Policy
             </Link>
           </div>
