@@ -16,29 +16,19 @@ export const Faq = () => {
 
   const faqItems: FAQItem[] = [
     {
-      question: 'What is DevHub?',
+      question: 'What is Mine?',
       answer:
-        'DevHub is a platform for developers to showcase their skills, projects, and connect with other developers and potential employers. It allows you to create a professional profile highlighting your technical expertise and portfolio.'
+        'Mine is a platform for developers to showcase their skills, projects, and connect with other developers and potential employers. It allows you to create a professional profile highlighting your technical expertise and portfolio.'
     },
     {
-      question: 'Is DevHub free to use?',
+      question: 'Is Mine free to use?',
       answer:
-        'DevHub offers both free and premium plans. The free plan allows you to create a basic profile and showcase up to 5 projects. Premium plans offer additional features like custom domains, advanced analytics, and unlimited projects.'
+        'Mine is free to use for developers and other users. No subscription required. You can create a basic profile and showcase up your projects.'
     },
     {
       question: 'How do I add projects to my profile?',
       answer:
-        "After logging in, navigate to your dashboard and click on 'Add Project'. You can then enter details about your project including title, description, technologies used, and links to live demos or repositories. You can also upload screenshots or videos of your project."
-    },
-    {
-      question: 'Can I import my projects from GitHub?',
-      answer:
-        'Yes, DevHub allows you to connect your GitHub account and import repositories directly. This makes it easy to showcase your existing work without manually entering all the details.'
-    },
-    {
-      question: 'How can employers or clients contact me?',
-      answer:
-        'When you create your profile, you can choose to display contact information or enable the built-in messaging system. Interested parties can reach out to you directly through the platform without exposing your personal email address.'
+        "After logging in, navigate to your profile and click on 'Add Project'. You can then enter details about your project including title, description, technologies used, and links to live demos or repositories. You can also upload screenshots or videos of your project."
     }
   ]
 
@@ -60,7 +50,7 @@ export const Faq = () => {
             <h2 className='text-3xl font-extrabold'>Frequently Asked Questions</h2>
           </div>
           <p className='text-xl max-w-3xl mx-auto mt-4'>
-            Get answers to the most common questions about DevHub.
+            Get answers to the most common questions about Mine.
           </p>
         </motion.div>
 
