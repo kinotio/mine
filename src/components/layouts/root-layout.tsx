@@ -33,6 +33,17 @@ const Header = () => {
         <Link href='/' className='flex items-center gap-2'>
           <Mine width={125} height={50} />
         </Link>
+        <nav className='hidden gap-6 lg:flex'>
+          {DATA.shared.quickLinks.map((link, index) => (
+            <Link
+              key={index}
+              href={link.href}
+              className='text-lg font-medium transition-colors hover:text-primary'
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
         <div className='flex items-center gap-4'>
           <Button variant='neutral'>
             <Github />
@@ -72,7 +83,7 @@ const Footer = () => {
           <div>
             <h3 className='font-bold mb-4'>Quick Links</h3>
             <ul className='space-y-2'>
-              {DATA.footer.quickLinks.map((link, index) => (
+              {DATA.shared.quickLinks.map((link, index) => (
                 <li key={index}>
                   <Link href={link.href} className='text-gray-400 hover:text-white'>
                     {link.name}
@@ -85,7 +96,7 @@ const Footer = () => {
           <div>
             <h3 className='font-bold mb-4'>Resources</h3>
             <ul className='space-y-2'>
-              {DATA.footer.resources.map((resource, index) => (
+              {DATA.shared.resources.map((resource, index) => (
                 <li key={index}>
                   <Link href={resource.href} className='text-gray-400 hover:text-white'>
                     {resource.name}
@@ -98,7 +109,7 @@ const Footer = () => {
           <div>
             <h3 className='font-bold mb-4'>Connect</h3>
             <ul className='space-y-2'>
-              {DATA.footer.connect.map((connect, index) => (
+              {DATA.shared.connect.map((connect, index) => (
                 <li key={index}>
                   <Link href={connect.href} className='text-gray-400 hover:text-white'>
                     {connect.name}
@@ -117,7 +128,7 @@ const Footer = () => {
             <p>crafted with care and dedication.</p>
           </div>
           <div className='flex space-x-4 mt-4 sm:mt-0'>
-            {DATA.footer.legal.map((legal, index) => (
+            {DATA.shared.legal.map((legal, index) => (
               <Link key={index} href={legal.href} className='text-gray-400 hover:text-white'>
                 {legal.name}
               </Link>

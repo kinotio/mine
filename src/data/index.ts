@@ -19,7 +19,7 @@ export const DATA = {
     base: '#ff6500'
   },
   navbar: [],
-  footer: {
+  shared: {
     quickLinks: [
       {
         href: '/#how-it-works',
@@ -32,6 +32,10 @@ export const DATA = {
       {
         href: '/#showcase',
         name: 'Showcase'
+      },
+      {
+        href: '/#faq',
+        name: 'FAQ'
       }
     ],
     resources: [
