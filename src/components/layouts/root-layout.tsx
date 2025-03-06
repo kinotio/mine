@@ -18,7 +18,7 @@ export const RootLayout = ({
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <main className='container mx-auto'>{children}</main>
       <Footer />
     </>
   )
@@ -147,13 +147,13 @@ const Footer = () => {
             <p>crafted with care and dedication.</p>
           </div>
           <div className='flex space-x-4 mt-4 sm:mt-0'>
-            <Link href='#' className='text-gray-400 hover:text-white'>
+            <Link href='/legal/privacy' className='text-gray-400 hover:text-white'>
               Privacy Policy
             </Link>
-            <Link href='#' className='text-gray-400 hover:text-white'>
+            <Link href='/legal/terms' className='text-gray-400 hover:text-white'>
               Terms of Service
             </Link>
-            <Link href='#' className='text-gray-400 hover:text-white'>
+            <Link href='/legal/cookie' className='text-gray-400 hover:text-white'>
               Cookie Policy
             </Link>
           </div>
