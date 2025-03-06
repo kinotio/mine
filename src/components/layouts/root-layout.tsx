@@ -10,6 +10,8 @@ import { Mine } from '@/components/icons/mine'
 import { Kinotio } from '@/components/icons/kinotio'
 import { Heart } from '@/components/icons/heart'
 
+import { DATA } from '@/data'
+
 export const RootLayout = ({
   children
 }: Readonly<{
@@ -18,7 +20,7 @@ export const RootLayout = ({
   return (
     <>
       <Header />
-      <main className='container mx-auto'>{children}</main>
+      <main>{children}</main>
       <Footer />
     </>
   )
@@ -54,11 +56,13 @@ const Header = () => {
 
 const Footer = () => {
   return (
-    <footer className='bg-black text-white py-12 border-t-4 border-white'>
+    <footer className='bg-black text-white py-12 border-t-4 border-black'>
       <div className='px-4 md:px-6'>
         <div className='grid gap-8 sm:grid-cols-2 md:grid-cols-4'>
           <div>
-            <Kinotio width={125} height={50} />
+            <Link href={DATA.kinotio.url}>
+              <Kinotio width={125} height={50} />
+            </Link>
             <p className='text-gray-400 max-w-xs mt-6'>
               The platform for developers to showcase their skills, projects, and connect with
               opportunities.
@@ -68,73 +72,39 @@ const Footer = () => {
           <div>
             <h3 className='font-bold mb-4'>Quick Links</h3>
             <ul className='space-y-2'>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  How It Works
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  FAQ
-                </Link>
-              </li>
+              {DATA.footer.quickLinks.map((link, index) => (
+                <li key={index}>
+                  <Link href={link.href} className='text-gray-400 hover:text-white'>
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h3 className='font-bold mb-4'>Resources</h3>
             <ul className='space-y-2'>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  Documentation
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  Community
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  Support
-                </Link>
-              </li>
+              {DATA.footer.resources.map((resource, index) => (
+                <li key={index}>
+                  <Link href={resource.href} className='text-gray-400 hover:text-white'>
+                    {resource.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h3 className='font-bold mb-4'>Connect</h3>
             <ul className='space-y-2'>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  X (Formerly Twitter)
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  Blueksy
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  LinkedIn
-                </Link>
-              </li>
-              <li>
-                <Link href='#' className='text-gray-400 hover:text-white'>
-                  Discord
-                </Link>
-              </li>
+              {DATA.footer.connect.map((connect, index) => (
+                <li key={index}>
+                  <Link href={connect.href} className='text-gray-400 hover:text-white'>
+                    {connect.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -147,15 +117,11 @@ const Footer = () => {
             <p>crafted with care and dedication.</p>
           </div>
           <div className='flex space-x-4 mt-4 sm:mt-0'>
-            <Link href='/legal/privacy' className='text-gray-400 hover:text-white'>
-              Privacy Policy
-            </Link>
-            <Link href='/legal/terms' className='text-gray-400 hover:text-white'>
-              Terms of Service
-            </Link>
-            <Link href='/legal/cookie' className='text-gray-400 hover:text-white'>
-              Cookie Policy
-            </Link>
+            {DATA.footer.legal.map((legal, index) => (
+              <Link key={index} href={legal.href} className='text-gray-400 hover:text-white'>
+                {legal.name}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

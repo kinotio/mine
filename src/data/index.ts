@@ -12,63 +12,72 @@ export const DATA = {
   repo: 'https://github.com/kinotiodotio/mine',
   doc_repo: 'https://github.com/kinotiodotio/mine/tree/main',
   keywords: ['Mine', 'Open Source', 'Hub', 'Developer-Hubs', 'Skills', 'Works'],
+  kinotio: {
+    url: 'https://kinotio.io'
+  },
   color: {
     base: '#ff6500'
   },
   navbar: [],
   footer: {
-    contact: [
+    quickLinks: [
       {
-        icon: 'Mail',
-        href: 'mailto:contact@kinotio.io',
-        label: 'contact@kinotio.io'
-      }
-    ],
-    help: [
-      {
-        href: '#faq',
-        name: 'FAQ'
+        href: '/#how-it-works',
+        name: 'How It Works'
       },
       {
-        href: 'https://github.com/kinotiodotio/mine/issues',
-        name: 'Issues'
+        href: '/#features',
+        name: 'Features'
+      },
+      {
+        href: '/#showcase',
+        name: 'Showcase'
+      }
+    ],
+    resources: [
+      {
+        href: '#',
+        name: 'Blog'
+      },
+      {
+        href: '#',
+        name: 'Community'
+      },
+      {
+        href: 'mailto:contact@kinotio.io',
+        name: 'Support'
+      }
+    ],
+    connect: [
+      {
+        href: 'https://x.com/kinotiodotio',
+        name: 'X (Formerly Twitter)'
+      },
+      {
+        href: 'https://linkedin.com/company/kinotiodotio',
+        name: 'LinkedIn'
+      },
+      {
+        href: 'https://discord.gg/cskvbKQA',
+        name: 'Discord'
+      },
+      {
+        href: 'https://bsky.app/profile/kinotio.io',
+        name: 'Bluesky'
       }
     ],
     legal: [
       {
-        href: '/legal/terms',
-        name: 'Terms'
-      },
-      {
         href: '/legal/privacy',
-        name: 'Privacy'
-      }
-    ],
-    socials: [
-      {
-        icon: 'Github',
-        href: 'https://github.com/kinotiodotio',
-        name: 'github'
+        name: 'Privacy Policy'
       },
       {
-        icon: 'X',
-        href: 'https://x.com/kinotiodotio',
-        label: 'X'
+        href: '/legal/terms',
+        name: 'Terms of Service'
       },
       {
-        icon: 'Linkedin',
-        href: 'https://linkedin.com/company/kinotiodotio',
-        label: 'LinkedIn'
-      },
-      {
-        icon: 'MessageCircle',
-        href: 'https://discord.gg/cskvbKQA',
-        label: 'Discord'
-      },
-      {
-        icon: 'MessageCircle',
-        href: 'https://bsky.app/profile/kinotio.io',
-        label: 'Bluesky'
+        href: '/legal/cookie',
+        name: 'Cookie Policy'
       }
     ]
   }

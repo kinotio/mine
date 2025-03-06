@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
 type FAQItem = {
   question: string
@@ -121,21 +119,6 @@ export const Faq = () => {
                 </AnimatePresence>
               </motion.div>
             ))}
-          </motion.div>
-
-          <motion.div
-            className='mt-10 text-center'
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-          >
-            <Link href='/faq'>
-              <Button className='bg-main text-black border-4 border-black font-bold px-8 py-6 text-xl transform hover:rotate-1 transition-transform'>
-                View All FAQs
-                <HelpCircle className='ml-2 h-5 w-5' />
-              </Button>
-            </Link>
           </motion.div>
         </div>
       </div>
