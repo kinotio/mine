@@ -12,7 +12,7 @@ export const ProfileLayout = ({ children }: { children: ReactNode }) => {
   return (
     <ProfileProvider>
       <Header />
-      <div className='min-h-screen bg-[#f0f0f0] p-6 md:p-10'>
+      <div className='min-h-screen bg-[#f0f0f0] p-6 md:p-10 mt-16 lg:mt-0'>
         <div className='flex flex-col lg:block'>
           <ProfileSidebar />
 
