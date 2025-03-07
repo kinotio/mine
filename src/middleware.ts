@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-const isProtectedRoute = createRouteMatcher(['/u(.*)'])
+const isProtectedRoute = createRouteMatcher(['/profile(.*)'])
 
 export default clerkMiddleware(async (auth, request) => {
   const url = request.nextUrl.clone()
@@ -11,7 +11,7 @@ export default clerkMiddleware(async (auth, request) => {
     (userId && request.nextUrl.pathname === '/') ||
     (userId && request.nextUrl.pathname.startsWith('/legal'))
   ) {
-    url.pathname = '/u'
+    url.pathname = '/profile'
     return NextResponse.redirect(url)
   }
 
