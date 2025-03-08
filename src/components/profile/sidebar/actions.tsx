@@ -1,28 +1,16 @@
 'use client'
 
 import { PlusCircle, User } from 'lucide-react'
-import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { useClipboard } from '@/hooks/use-clipboard'
 
 interface ProfileActionsProps {
   onAddNewSection: () => void
 }
 
 export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) => {
-  const [copied, setCopied] = useState(false)
-
-  const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText('https://portfolio.dev/janedeveloper')
-      .then(() => {
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-      })
-      .catch((err) => {
-        console.error('Failed to copy: ', err)
-      })
-  }
+  const { copyToClipboard, copied } = useClipboard()
 
   return (
     <div className='mt-8 mb-6'>
@@ -75,7 +63,7 @@ export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) 
             https://portfolio.dev/janedeveloper
           </div>
           <Button
-            onClick={copyToClipboard}
+            onClick={() => copyToClipboard('https://portfolio.dev/janedeveloper')}
             className='ml-2 bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
           >
             {copied ? (
