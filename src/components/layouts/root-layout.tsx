@@ -3,12 +3,8 @@
 import Link from 'next/link'
 import { SignInButton, SignedOut, SignUpButton } from '@clerk/nextjs'
 
-import { Github } from 'lucide-react'
-
 import { Button } from '@/components/ui/button'
-import { Mine } from '@/components/icons/mine'
-import { Kinotio } from '@/components/icons/kinotio'
-import { Heart } from '@/components/icons/heart'
+import { Heart, Kinotio, Mine, Github } from '@/components/icons'
 
 import { DATA } from '@/data'
 

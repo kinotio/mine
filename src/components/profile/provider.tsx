@@ -62,7 +62,8 @@ export type UserProfile = {
   website?: string
   github?: string
   linkedin?: string
-  twitter?: string
+  x?: string
+  bluesky?: string
   avatarUrl: string
   bannerUrl: string
   stats: Stats
@@ -82,7 +83,8 @@ const initialProfile: UserProfile = {
   website: 'https://janedeveloper.com',
   github: 'janedeveloper',
   linkedin: 'janedeveloper',
-  twitter: 'janedeveloper',
+  x: 'janedeveloper',
+  bluesky: 'janedeveloper',
   avatarUrl: '/placeholder.svg?height=200&width=200',
   bannerUrl: '/placeholder.svg?height=400&width=1200',
   stats: {

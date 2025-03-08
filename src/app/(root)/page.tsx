@@ -1,8 +1,8 @@
-import { Hero } from '@/components/mods/root/hero'
-import { Features } from '@/components/mods/root/features'
-import { HowItWorksSection } from '@/components/mods/root/how-it-works'
-import { Showcase } from '@/components/mods/root/showcase'
-import { Faq } from '@/components/mods/root/faq'
+import { Hero } from '@/components/root/hero'
+import { Features } from '@/components/root/features'
+import { HowItWorksSection } from '@/components/root/how-it-works'
+import { Showcase } from '@/components/root/showcase'
+import { Faq } from '@/components/root/faq'
 
 const Page = () => {
   return (
