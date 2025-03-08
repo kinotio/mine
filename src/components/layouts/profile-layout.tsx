@@ -4,19 +4,18 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { UserButton } from '@clerk/nextjs'
 
-import { ProfileProvider } from '@/components/mods/profile/profile-provider'
-import { Mine } from '@/components/icons/mine'
-import { ProfileSidebar } from '@/components/mods/profile/profile-sidebar'
+import { ProfileProvider } from '@/components/profile/provider'
+import { ProfileSidebar } from '@/components/profile/sidebar'
+import { Mine } from '@/components/icons'
 
 export const ProfileLayout = ({ children }: { children: ReactNode }) => {
   return (
     <ProfileProvider>
       <Header />
-      <div className='min-h-screen bg-[#f0f0f0] p-6 md:p-10 mt-16 lg:mt-0'>
+      <div className='min-h-screen bg-[#f0f0f0] p-6 md:p-10 mt-8'>
         <div className='flex flex-col lg:block'>
           <ProfileSidebar />
-
-          <div className='flex-1 overflow-hidden lg:ml-[380px] mt-4'>{children}</div>
+          <div className='flex-1 overflow-hidden lg:ml-[380px] mt-6 lg:mt-0'>{children}</div>
         </div>
       </div>
     </ProfileProvider>
