@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Edit, MapPin } from 'lucide-react'
+import { isEmpty } from 'lodash'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -30,16 +31,13 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
   }, [profile.name])
 
   // Determine background style based on whether a banner image exists
-  const backgroundStyle =
-    profile.bannerUrl && !profile.bannerUrl.includes('placeholder')
-      ? {
-          backgroundImage: `url(${profile.bannerUrl})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }
-      : {
-          background: getGradientFromColor(avatarColor)
-        }
+  const backgroundStyle = isEmpty(profile.bannerUrl)
+    ? { background: getGradientFromColor(avatarColor) }
+    : {
+        backgroundImage: `url(${profile.bannerUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+      }
 
   return (
     <div
@@ -60,18 +58,19 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
           <Avatar
             className={`transition-all duration-300 ease-in-out ${isScrolled ? 'w-16 h-16' : 'w-24 h-24'} border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:scale-105`}
           >
-            {profile.avatarUrl && !profile.avatarUrl.includes('placeholder.svg') ? (
+            {isEmpty(profile.avatarUrl) ? (
+              <AvatarFallback
+                style={{ backgroundColor: avatarColor, color: textColor }}
+                className='text-3xl font-bold'
+              >
+                {profile.name
+                  .split(' ')
+                  .map((n) => n[0])
+                  .join('')}
+              </AvatarFallback>
+            ) : (
               <AvatarImage src={profile.avatarUrl} alt={profile.name} />
-            ) : null}
-            <AvatarFallback
-              style={{ backgroundColor: avatarColor, color: textColor }}
-              className='text-3xl font-bold'
-            >
-              {profile.name
-                .split(' ')
-                .map((n) => n[0])
-                .join('')}
-            </AvatarFallback>
+            )}
           </Avatar>
           <h1 className='text-xl font-black mt-3 transition-colors duration-300 ease-in-out'>
             {profile.name}
