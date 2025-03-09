@@ -85,8 +85,8 @@ const initialProfile: UserProfile = {
   linkedin: 'janedeveloper',
   x: 'janedeveloper',
   bluesky: 'janedeveloper',
-  avatarUrl: '/placeholder.svg?height=200&width=200',
-  bannerUrl: '/placeholder.svg?height=400&width=1200',
+  avatarUrl: '',
+  bannerUrl: '',
   stats: {
     projects: 24,
     experience: 5,
