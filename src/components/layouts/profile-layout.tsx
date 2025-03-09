@@ -28,7 +28,7 @@ const Header = () => {
       <div className='flex h-16 items-center justify-between px-4 md:px-6 w-full'>
         <div className='flex items-center gap-4'>
           <Link href='/' className='flex items-center gap-2'>
-            <Mine width={125} height={50} />
+            <Mine width={100} height={50} />
           </Link>
         </div>
 
