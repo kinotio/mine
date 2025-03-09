@@ -314,9 +314,7 @@ export const ProfileDialogEdit = () => {
                     onClick={() => avatarInputRef.current?.click()}
                   >
                     <Avatar className='w-20 h-20 border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'>
-                      {avatarPreview && !avatarPreview.includes('placeholder.svg') ? (
-                        <AvatarImage src={avatarPreview} />
-                      ) : (
+                      {isEmpty(avatarPreview) ? (
                         <AvatarFallback
                           style={{ backgroundColor: avatarColor, color: textColor }}
                           className='text-3xl font-bold'
@@ -327,6 +325,8 @@ export const ProfileDialogEdit = () => {
                             .map((n) => n[0])
                             .join('')}
                         </AvatarFallback>
+                      ) : (
+                        <AvatarImage src={avatarPreview} />
                       )}
                     </Avatar>
                     <div className='absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'>
