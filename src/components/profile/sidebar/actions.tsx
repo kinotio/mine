@@ -60,10 +60,10 @@ export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) 
         <h2 className='text-xl font-bold mb-3'>Profile URL</h2>
         <div className='flex'>
           <div className='flex-1 bg-white border-[3px] border-black p-2 text-sm font-medium truncate'>
-            https://portfolio.dev/janedeveloper
+            https://mine.kinotio.io/@janedeveloper
           </div>
           <Button
-            onClick={() => copyToClipboard('https://portfolio.dev/janedeveloper')}
+            onClick={() => copyToClipboard('https://mine.kinotio.io/@janedeveloper')}
             className='ml-2 bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
           >
             {copied ? (
