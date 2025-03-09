@@ -1,6 +1,7 @@
 'use client'
 
 import { PlusCircle, User } from 'lucide-react'
+import { useAuth } from '@clerk/nextjs'
 
 import { Button } from '@/components/ui/button'
 import { useClipboard } from '@/hooks/use-clipboard'
@@ -10,6 +11,8 @@ interface ProfileActionsProps {
 }
 
 export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) => {
+  const { isSignedIn } = useAuth()
+
   const { copyToClipboard, copied } = useClipboard()
 
   return (
@@ -97,12 +100,14 @@ export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) 
         </div>
       </div>
 
-      <Button
-        onClick={onAddNewSection}
-        className='w-full bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
-      >
-        <PlusCircle className='mr-2 h-5 w-5' /> Add New Section
-      </Button>
+      {isSignedIn ? (
+        <Button
+          onClick={onAddNewSection}
+          className='w-full bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
+        >
+          <PlusCircle className='mr-2 h-5 w-5' /> Add New Section
+        </Button>
+      ) : null}
     </div>
   )
 }

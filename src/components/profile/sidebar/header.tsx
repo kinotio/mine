@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Edit, MapPin } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { isEmpty } from 'lodash'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+
+import { ProfileDialogEdit } from '@/components/profile/dialog/edit'
+
 import { getColorFromString, getGradientFromColor, getTextColorForBackground } from '@/lib/colors'
 
 interface ProfileHeaderProps {
@@ -46,12 +48,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
     >
       <div className='relative bg-white/80 backdrop-blur-sm'>
         <div className='absolute top-2 right-4 z-20'>
-          <Button
-            className='bg-[#4cc9f0] hover:bg-[#3db8df] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all h-10 w-10 p-0'
-            aria-label='Edit Profile'
-          >
-            <Edit className='h-5 w-5' />
-          </Button>
+          <ProfileDialogEdit />
         </div>
 
         <div className='flex flex-col items-center pt-4 pb-4 px-6'>
