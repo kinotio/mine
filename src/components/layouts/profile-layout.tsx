@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, useAuth } from '@clerk/nextjs'
 
 import { ProfileProvider } from '@/components/profile/provider'
 import { ProfileSidebar } from '@/components/profile/sidebar'
@@ -23,6 +23,8 @@ export const ProfileLayout = ({ children }: { children: ReactNode }) => {
 }
 
 const Header = () => {
+  const { isSignedIn } = useAuth()
+
   return (
     <header className='fixed top-0 z-40 bg-[#f0f0f0] w-full'>
       <div className='flex h-16 items-center justify-between px-4 md:px-6 w-full'>
@@ -32,11 +34,13 @@ const Header = () => {
           </Link>
         </div>
 
-        <div className='flex items-center gap-4'>
-          <div className='relative'>
-            <UserButton />
+        {isSignedIn ? (
+          <div className='flex items-center gap-4'>
+            <div className='relative'>
+              <UserButton />
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </header>
   )
