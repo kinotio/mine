@@ -1,17 +1,9 @@
-import { varchar, pgTable, timestamp } from '@/server/drizzle'
+import { users, userRelations } from '@/server/db/schemas/user'
+import { profiles, profileRelations } from '@/server/db/schemas/profile'
 
-export const users = pgTable('users', {
-  id: varchar({ length: 256 }).primaryKey().notNull(),
-  email: varchar({ length: 256 }).notNull(),
-  first_name: varchar({ length: 256 }).notNull(),
-  last_name: varchar({ length: 256 }).notNull(),
-  created: timestamp({ withTimezone: true }).notNull().defaultNow(),
-  updated: timestamp({ withTimezone: true })
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date())
-})
+const schemas = { users, profiles }
+const relations = { userRelations, profileRelations }
 
-const schema = { users }
+const schema = { ...schemas, ...relations }
 
 export default schema

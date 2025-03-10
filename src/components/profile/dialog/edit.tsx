@@ -449,7 +449,7 @@ export const ProfileDialogEdit = () => {
                   name='website'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className='font-bold'>Email</FormLabel>
+                      <FormLabel className='font-bold'>Website</FormLabel>
                       <FormControl>
                         <Input {...field} type='email' className='border-[2px] border-black' />
                       </FormControl>

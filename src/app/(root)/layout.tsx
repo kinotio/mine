@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { RootLayout } from '@/components/layouts/root-layout'
+import { RootLayout } from '@/components/layouts/root'
 import { DATA } from '@/data'
 
 export const metadata: Metadata = {
