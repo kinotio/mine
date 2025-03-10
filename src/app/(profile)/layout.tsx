@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { ProfileLayout } from '@/components/layouts/profile-layout'
+import { ProfileLayout } from '@/components/layouts/profile'
 import { DATA } from '@/data'
 
 export const metadata: Metadata = {
