@@ -157,13 +157,7 @@ export const ProfileDialogEdit = () => {
 
   // Form submission
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    // Combine form data with banner preview
-    const updatedData = {
-      ...data,
-      banner: bannerPreview
-    }
-
-    handleSave(updatedData)
+    console.log(data)
 
     toast({
       title: 'Profile updated',
@@ -212,11 +206,6 @@ export const ProfileDialogEdit = () => {
     }
 
     setActiveTab(value)
-  }
-
-  const handleSave = (updatedData: unknown) => {
-    // server action to save profile data
-    console.log(updatedData)
   }
 
   return (
@@ -269,10 +258,18 @@ export const ProfileDialogEdit = () => {
                   <Label className='font-bold mb-2 block'>Banner Image</Label>
                   <div
                     className='w-full h-[100px] border-[2px] border-black relative bg-cover bg-center group cursor-pointer'
-                    style={getBackgroundStyleByProfile({
-                      avatarColor: avatarColor,
-                      bannerUrl: profile.bannerUrl
-                    })}
+                    style={
+                      isEmpty(bannerPreview)
+                        ? getBackgroundStyleByProfile({
+                            avatarColor: avatarColor,
+                            bannerUrl: profile.bannerUrl
+                          })
+                        : {
+                            backgroundImage: `url(${bannerPreview})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }
+                    }
                     onClick={() => bannerInputRef.current?.click()}
                   >
                     <div className='absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'>
