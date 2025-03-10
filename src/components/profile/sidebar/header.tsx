@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { ProfileDialogEdit } from '@/components/profile/dialog/edit'
 
-import { getColorFromString, getGradientFromColor, getTextColorForBackground } from '@/lib/colors'
+import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 import { getBackgroundStyleByProfile } from '@/lib/utils'
 
 interface ProfileHeaderProps {
