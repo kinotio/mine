@@ -47,30 +47,8 @@ import { toast } from '@/hooks/use-toast'
 
 import { cn } from '@/lib/utils'
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
-
-// Sample list of countries with flags
-const countries = [
-  { value: 'us', label: 'United States', flag: '🇺🇸' },
-  { value: 'ca', label: 'Canada', flag: '🇨🇦' },
-  { value: 'gb', label: 'United Kingdom', flag: '🇬🇧' },
-  { value: 'au', label: 'Australia', flag: '🇦🇺' },
-  { value: 'de', label: 'Germany', flag: '🇩🇪' },
-  { value: 'fr', label: 'France', flag: '🇫🇷' },
-  { value: 'jp', label: 'Japan', flag: '🇯🇵' },
-  { value: 'cn', label: 'China', flag: '🇨🇳' },
-  { value: 'in', label: 'India', flag: '🇮🇳' },
-  { value: 'br', label: 'Brazil', flag: '🇧🇷' },
-  { value: 'mx', label: 'Mexico', flag: '🇲🇽' },
-  { value: 'es', label: 'Spain', flag: '🇪🇸' },
-  { value: 'it', label: 'Italy', flag: '🇮🇹' },
-  { value: 'ru', label: 'Russia', flag: '🇷🇺' },
-  { value: 'za', label: 'South Africa', flag: '🇿🇦' },
-  { value: 'kr', label: 'South Korea', flag: '🇰🇷' },
-  { value: 'sg', label: 'Singapore', flag: '🇸🇬' },
-  { value: 'se', label: 'Sweden', flag: '🇸🇪' },
-  { value: 'nl', label: 'Netherlands', flag: '🇳🇱' },
-  { value: 'nz', label: 'New Zealand', flag: '🇳🇿' }
-]
+import { countries } from '@/lib/countries'
+import { getBackgroundStyleByProfile } from '@/lib/utils'
 
 // Zod schemas for each tab
 const basicInfoSchema = z.object({
@@ -291,7 +269,10 @@ export const ProfileDialogEdit = () => {
                   <Label className='font-bold mb-2 block'>Banner Image</Label>
                   <div
                     className='w-full h-[100px] border-[2px] border-black relative bg-cover bg-center group cursor-pointer'
-                    style={{ backgroundImage: `url(${bannerPreview})` }}
+                    style={getBackgroundStyleByProfile({
+                      avatarColor: avatarColor,
+                      bannerUrl: profile.bannerUrl
+                    })}
                     onClick={() => bannerInputRef.current?.click()}
                   >
                     <div className='absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity'>
@@ -395,21 +376,21 @@ export const ProfileDialogEdit = () => {
                               <Globe className='h-5 w-5' />
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className='w-[300px] p-0 border-[2px] border-black'>
-                            <Command>
+                          <PopoverContent className='w-[300px] p-0 bg-white border-none'>
+                            <Command className='bg-white'>
                               <CommandInput
                                 placeholder='Search country...'
-                                className='h-9 border-b-[2px] border-black'
+                                className='h-9 bg-white px-4 border-[2px] border-black my-2'
                               />
                               <CommandList>
                                 <CommandEmpty>No country found.</CommandEmpty>
-                                <CommandGroup className='max-h-[300px] overflow-auto'>
+                                <CommandGroup className='max-h-[300px] overflow-auto bg-white'>
                                   {countries.map((country) => (
                                     <CommandItem
                                       key={country.value}
                                       value={country.value}
                                       onSelect={() => selectCountry(country)}
-                                      className='flex items-center gap-2 cursor-pointer hover:bg-[#f0f0f0]'
+                                      className='flex items-center gap-2 cursor-pointer'
                                     >
                                       <span className='text-lg'>{country.flag}</span>
                                       <span>{country.label}</span>

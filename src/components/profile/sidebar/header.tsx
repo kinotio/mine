@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ProfileDialogEdit } from '@/components/profile/dialog/edit'
 
 import { getColorFromString, getGradientFromColor, getTextColorForBackground } from '@/lib/colors'
+import { getBackgroundStyleByProfile } from '@/lib/utils'
 
 interface ProfileHeaderProps {
   profile: {
@@ -32,19 +33,13 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
     setTextColor(getTextColorForBackground(color))
   }, [profile.name])
 
-  // Determine background style based on whether a banner image exists
-  const backgroundStyle = isEmpty(profile.bannerUrl)
-    ? { background: getGradientFromColor(avatarColor) }
-    : {
-        backgroundImage: `url(${profile.bannerUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }
-
   return (
     <div
       className='sticky top-0 bg-white z-10 border-b-[3px] border-black transition-all duration-300 ease-in-out overflow-hidden'
-      style={backgroundStyle}
+      style={getBackgroundStyleByProfile({
+        avatarColor: avatarColor,
+        bannerUrl: profile.bannerUrl
+      })}
     >
       <div className='relative bg-white/80 backdrop-blur-sm'>
         <div className='absolute top-2 right-4 z-20'>
