@@ -2,6 +2,8 @@ import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 
+import { saveUser, deleteUser } from '@/server/actions/user'
+
 export const POST = async (req: Request) => {
   const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET
 
@@ -40,12 +42,21 @@ export const POST = async (req: Request) => {
   }
 
   if (evt.type === 'user.created') {
+    await saveUser({
+      id: evt.data.id,
+      email: evt.data.email_addresses[0].email_address,
+      username: evt.data.username as string,
+      first_name: evt.data.first_name as string,
+      last_name: evt.data.last_name as string,
+      imageUrl: evt.data.image_url
+    })
   }
 
   if (evt.type === 'user.updated') {
   }
 
   if (evt.type === 'user.deleted') {
+    await deleteUser(evt.data.id as string)
   }
 
   if (evt.type === 'session.created') {

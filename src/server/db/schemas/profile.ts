@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { users } from '@/server/db/schemas/user'
 
 export const profiles = pgTable('profiles', {
-  id: uuid().primaryKey().notNull(),
+  id: uuid().defaultRandom().primaryKey().notNull(),
   user_id: varchar({ length: 256 })
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' })
@@ -34,20 +34,20 @@ export const profileRelations = relations(profiles, ({ one }) => ({
 }))
 
 export const profileSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   user_id: z.string(),
-  avatarUrl: z.string(),
-  bannerUrl: z.string(),
+  avatarUrl: z.string().optional(),
+  bannerUrl: z.string().optional(),
   name: z.string(),
-  title: z.string(),
-  location: z.string(),
-  bio: z.string(),
+  title: z.string().optional(),
+  location: z.string().optional(),
+  bio: z.string().optional(),
   email: z.string(),
-  website: z.string(),
-  github: z.string(),
-  x: z.string(),
-  linkedin: z.string(),
-  bluesky: z.string()
+  website: z.string().optional(),
+  github: z.string().optional(),
+  x: z.string().optional(),
+  linkedin: z.string().optional(),
+  bluesky: z.string().optional()
 })
 
 export type Profile = z.infer<typeof profileSchema>
