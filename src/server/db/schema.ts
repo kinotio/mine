@@ -5,4 +5,5 @@ const schemas = { users, profiles }
 const relations = { userRelations, profileRelations }
 const schema = { ...schemas, ...relations }
 
+export { users, profiles }
 export default schema
