@@ -15,7 +15,7 @@ import {
 import schema from '@/server/db/schema'
 
 export const drizzle = pg(process.env.DATABASE_URL, {
-  logger: process.env.NODE_ENV === 'production' ? false : true,
+  logger: process.env.NODE_ENV === 'development',
   schema
 })
 
