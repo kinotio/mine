@@ -3,7 +3,6 @@ import { profiles, profileRelations } from '@/server/db/schemas/profile'
 
 const schemas = { users, profiles }
 const relations = { userRelations, profileRelations }
-
 const schema = { ...schemas, ...relations }
 
 export default schema
