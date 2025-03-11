@@ -13,6 +13,7 @@
     "prettier:fix": "prettier --write src",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
+    "db:up": "drizzle-kit up",
     "db:seed": "tsx ./src/server/db/seed.ts"
   },
   "dependencies": {

@@ -2,6 +2,7 @@
 
 import { drizzle, eq } from '@/server/drizzle'
 import { users, type User } from '@/server/db/schemas/user'
+import { saveProfile } from '@/server/actions/profile'
 
 export const getUserById = async (id: string) => {
   return await drizzle.query.users.findFirst({
@@ -10,7 +11,13 @@ export const getUserById = async (id: string) => {
 }
 
 export const saveUser = async (user: User) => {
-  return await drizzle.insert(users).values(user).returning()
+  const savedUser = await drizzle.insert(users).values(user).returning()
+
+  await saveProfile({
+    user_id: savedUser[0].id,
+    name: user.first_name + ' ' + user.last_name,
+    email: savedUser[0].email
+  })
 }
 
 export const updateUser = async (id: string, user: Partial<User>) => {

@@ -11,6 +11,7 @@ import {
   serial,
   jsonb
 } from 'drizzle-orm/pg-core'
+
 import schema from '@/server/db/schema'
 
 export const drizzle = pg(process.env.DATABASE_URL, {
