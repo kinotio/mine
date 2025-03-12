@@ -8,6 +8,8 @@ import { getUserByUsername } from '@/server/actions/user'
 import { UserProfile } from '@/lib/types/profile'
 import { ClerkUserMinimal } from '@/lib/types/clerk'
 
+import { useEventSubscription } from '@/hooks/use-event'
+
 type ProfileContextType = {
   user: ClerkUserMinimal
   profile: UserProfile
@@ -29,12 +31,19 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
 
   const value = { user, profile, loading }
 
-  useEffect(() => {
+  const fetchProfile = () => {
     getUserByUsername(params.username)
       .then((user) => setProfile(user?.profile as unknown as UserProfile))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    fetchProfile()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.username])
+
+  useEventSubscription('profile:updated', () => fetchProfile())
 
   return (
     <ProfileContext.Provider value={value as ProfileContextType}>
