@@ -10,6 +10,7 @@ export const profiles = pgTable('profiles', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' })
     .unique(),
+  profileUrl: varchar({ length: 256 }).notNull(),
   avatarUrl: varchar({ length: 256 }),
   bannerUrl: varchar({ length: 256 }),
   name: varchar({ length: 256 }).notNull(),
@@ -36,6 +37,7 @@ export const profileRelations = relations(profiles, ({ one }) => ({
 export const profileSchema = z.object({
   id: z.string().optional(),
   user_id: z.string(),
+  profileUrl: z.string(),
   avatarUrl: z.string().optional(),
   bannerUrl: z.string().optional(),
   name: z.string(),

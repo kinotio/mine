@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 
 import { useProfile } from '@/components/profile/provider'
 import { ProfileSidebarHeader } from '@/components/profile/sidebar/header'
-import { ProfileSidebarStats } from '@/components/profile/sidebar/stats'
-import { Separator } from '@/components/ui/separator'
+
 import { ProfileSidebarBio } from '@/components/profile/sidebar/bio'
 import { ProfileSidebarContact } from '@/components/profile/sidebar/contact'
 import { ProfileSidebarActions } from '@/components/profile/sidebar/actions'
@@ -37,10 +36,8 @@ export const ProfileSidebar = () => {
         <ProfileSidebarHeader profile={profile} isScrolled={isScrolled} />
 
         <div className='p-6 pt-4'>
-          <ProfileSidebarStats stats={profile.stats} />
-          <Separator className='bg-black h-[3px] my-4' />
-          <ProfileSidebarBio bio={profile.bio} />
-          <Separator className='bg-black h-[3px] my-4' />
+          <ProfileSidebarBio bio={profile?.bio} />
+
           <ProfileSidebarContact
             email={profile.email}
             github={profile.github}
@@ -48,7 +45,7 @@ export const ProfileSidebar = () => {
             linkedin={profile.linkedin}
             bluesky={profile.bluesky}
           />
-          <Separator className='bg-black h-[3px] my-4' />
+
           <ProfileSidebarActions onAddNewSection={() => {}} />
         </div>
       </div>

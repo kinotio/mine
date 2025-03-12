@@ -1,23 +1,19 @@
 'use client'
 
-import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { UserButton, useAuth } from '@clerk/nextjs'
 
-import { ProfileProvider } from '@/components/profile/provider'
-import { ProfileSidebar } from '@/components/profile/sidebar'
 import { Mine } from '@/components/icons'
+import { ProfileProvider } from '@/components/profile/provider'
+import { ProfileWrapper } from '@/components/profile/wrapper'
+import { Toaster } from '@/components/ui/toaster'
 
-export const ProfileLayout = ({ children }: { children: ReactNode }) => {
+export const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ProfileProvider>
       <Header />
-      <div className='min-h-screen bg-[#f0f0f0] p-6 md:p-10 mt-8'>
-        <div className='flex flex-col lg:block'>
-          <ProfileSidebar />
-          <div className='flex-1 overflow-hidden lg:ml-[380px] mt-6 lg:mt-0'>{children}</div>
-        </div>
-      </div>
+      <ProfileWrapper>{children}</ProfileWrapper>
+      <Toaster />
     </ProfileProvider>
   )
 }

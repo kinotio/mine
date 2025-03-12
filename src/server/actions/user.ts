@@ -4,9 +4,18 @@ import { drizzle, eq } from '@/server/drizzle'
 import { users, type User } from '@/server/db/schemas/user'
 import { saveProfile } from '@/server/actions/profile'
 
+import { cleanParamsUsername, generateProfileUrl } from '@/lib/utils'
+
 export const getUserById = async (id: string) => {
   return await drizzle.query.users.findFirst({
     where: eq(users.id, id)
+  })
+}
+
+export const getUserByUsername = async (username: string) => {
+  return await drizzle.query.users.findFirst({
+    where: eq(users.username, cleanParamsUsername(username)),
+    with: { profile: true }
   })
 }
 
@@ -16,7 +25,9 @@ export const saveUser = async (user: User) => {
   await saveProfile({
     user_id: savedUser[0].id,
     name: user.first_name + ' ' + user.last_name,
-    email: savedUser[0].email
+    email: savedUser[0].email,
+    bio: 'Welcome, this is my Mine bio 👋',
+    profileUrl: generateProfileUrl(user.username)
   })
 }
 
