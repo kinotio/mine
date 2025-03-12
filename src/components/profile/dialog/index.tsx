@@ -27,16 +27,19 @@ import {
   contactSchema,
   type FormSchema
 } from '@/components/profile/dialog/schemas'
-
 import { useProfile } from '@/components/profile/provider'
-import { useToast } from '@/hooks/use-toast'
+
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 import { updateProfile } from '@/server/actions/profile'
+
+import { useToast } from '@/hooks/use-toast'
+import { useEventEmitter } from '@/hooks/use-event'
 
 export const ProfileDialogEdit = () => {
   const { profile } = useProfile()
   const { isSignedIn } = useAuth()
   const { toast } = useToast()
+  const { emit } = useEventEmitter()
 
   // Dialog and tab state
   const [open, setOpen] = useState(false)
@@ -156,12 +159,14 @@ export const ProfileDialogEdit = () => {
 
   const onSubmit = async (data: FormSchema) => {
     try {
-      await updateProfile(profile.id, data)
+      await updateProfile(profile.id, data).finally(() => {})
 
       toast({
         title: 'Profile updated',
         description: 'Your profile has been successfully updated.'
       })
+
+      emit('profile:updated', {})
 
       setOpen(false)
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
