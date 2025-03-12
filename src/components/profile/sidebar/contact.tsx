@@ -1,11 +1,12 @@
-import { Mail } from 'lucide-react'
 import { SVGProps } from 'react'
+import { Mail, Globe } from 'lucide-react'
 
 import { Github, Linkedin, X, Bluesky } from '@/components/icons'
 import { Separator } from '@/components/ui/separator'
 
 interface ProfileContactProps {
   email: string
+  website?: string
   github?: string
   x?: string
   linkedin?: string
@@ -22,12 +23,14 @@ type SocialLink = {
 
 export const ProfileSidebarContact = ({
   email,
+  website,
   github,
   x,
   linkedin,
   bluesky
 }: ProfileContactProps) => {
   const socialLinks = [
+    { url: website, Icon: Globe, label: website },
     { url: github, Icon: Github, label: github },
     { url: x, Icon: X, label: x },
     { url: linkedin, Icon: Linkedin, label: linkedin },
