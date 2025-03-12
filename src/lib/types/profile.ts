@@ -62,6 +62,7 @@ export type UserProfile = {
   bluesky?: string
   avatarUrl: string
   bannerUrl: string
+  profileUrl: string
   stats: Stats
   skills: Skill[]
   projects: Project[]

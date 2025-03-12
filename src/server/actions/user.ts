@@ -2,7 +2,7 @@
 
 import { drizzle, eq } from '@/server/drizzle'
 import { users, type User } from '@/server/db/schemas/user'
-import { saveProfile } from '@/server/actions/profile'
+import { saveProfile, updateProfile } from '@/server/actions/profile'
 
 import { cleanParamsUsername, generateProfileUrl } from '@/lib/utils'
 
@@ -32,7 +32,13 @@ export const saveUser = async (user: User) => {
 }
 
 export const updateUser = async (id: string, user: Partial<User>) => {
-  return await drizzle.update(users).set(user).where(eq(users.id, id)).returning()
+  const updatedUser = await drizzle.update(users).set(user).where(eq(users.id, id)).returning()
+
+  await updateProfile(updatedUser[0].id, {
+    name: updatedUser[0].first_name + ' ' + updatedUser[0].last_name,
+    email: updatedUser[0].email,
+    profileUrl: generateProfileUrl(updatedUser[0].username)
+  })
 }
 
 export const deleteUser = async (id: string) => {
