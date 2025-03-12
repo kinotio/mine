@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-import { ProfileDialogEdit } from '@/components/profile/dialog/edit'
+import { ProfileDialogEdit } from '@/components/profile/dialog'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 import { getBackgroundStyleByProfile } from '@/lib/utils'
@@ -67,11 +67,16 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
           <h1 className='text-xl font-black mt-3 transition-colors duration-300 ease-in-out'>
             {profile.name}
           </h1>
-          <p className='font-bold transition-colors duration-300 ease-in-out'>{profile.title}</p>
-          <div className='flex items-center mt-1 transition-colors duration-300 ease-in-out'>
-            <MapPin className='w-4 h-4 mr-1' />
-            <span>{profile.location}</span>
-          </div>
+          {profile.title && (
+            <p className='font-bold transition-colors duration-300 ease-in-out'>{profile.title}</p>
+          )}
+
+          {profile.location && (
+            <div className='flex items-center mt-1 transition-colors duration-300 ease-in-out'>
+              <MapPin className='w-4 h-4 mr-1' />
+              <span>{profile.location}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

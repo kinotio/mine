@@ -1,0 +1,108 @@
+import type { Control } from 'react-hook-form'
+
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { LocationSelect } from '@/components/profile/dialog/location-select'
+import { AvatarUpload } from '@/components/profile/dialog/avatar-upload'
+import { BannerUpload } from '@/components/profile/dialog/banner-upload'
+
+import type { FormSchema } from '@/components/profile/dialog/schemas'
+
+interface BasicInfoProps {
+  control: Control<FormSchema>
+  avatarPreview: string
+  bannerPreview: string
+  avatarColor: string
+  textColor: string
+  profileBannerUrl: string
+  countryOpen: boolean
+  selectedCountry: string
+  onCountryOpenChange: (open: boolean) => void
+  onCountrySelect: (country: { value: string; label: string; flag: string }) => void
+  onAvatarChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBannerChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+export const BasicInfo = ({
+  control,
+  avatarPreview,
+  bannerPreview,
+  avatarColor,
+  textColor,
+  profileBannerUrl,
+  countryOpen,
+  selectedCountry,
+  onCountryOpenChange,
+  onCountrySelect,
+  onAvatarChange,
+  onBannerChange
+}: BasicInfoProps) => {
+  return (
+    <div className='space-y-4'>
+      <BannerUpload
+        bannerPreview={bannerPreview}
+        avatarColor={avatarColor}
+        profileBannerUrl={profileBannerUrl}
+        onBannerChange={onBannerChange}
+      />
+
+      <AvatarUpload
+        avatarPreview={avatarPreview}
+        avatarColor={avatarColor}
+        textColor={textColor}
+        name={control._formValues.name}
+        onAvatarChange={onAvatarChange}
+      />
+
+      <FormField
+        control={control}
+        name='name'
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className='font-bold'>Name</FormLabel>
+            <FormControl>
+              <Input {...field} className='border-[2px] border-black' />
+            </FormControl>
+            <FormMessage className='text-[#ff6b6b] font-medium' />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name='title'
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className='font-bold'>Title</FormLabel>
+            <FormControl>
+              <Input {...field} className='border-[2px] border-black' />
+            </FormControl>
+            <FormMessage className='text-[#ff6b6b] font-medium' />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name='location'
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className='font-bold'>Location</FormLabel>
+            <div className='flex gap-2'>
+              <FormControl>
+                <Input {...field} className='border-[2px] border-black flex-1' />
+              </FormControl>
+              <LocationSelect
+                open={countryOpen}
+                selectedCountry={selectedCountry}
+                onOpenChange={onCountryOpenChange}
+                onSelect={onCountrySelect}
+              />
+            </div>
+            <FormMessage className='text-[#ff6b6b] font-medium' />
+          </FormItem>
+        )}
+      />
+    </div>
+  )
+}

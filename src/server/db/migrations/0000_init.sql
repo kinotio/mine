@@ -1,6 +1,7 @@
 CREATE TABLE "profiles" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" varchar(256) NOT NULL,
+	"profileUrl" varchar(256) NOT NULL,
 	"avatarUrl" varchar(256),
 	"bannerUrl" varchar(256),
 	"name" varchar(256) NOT NULL,

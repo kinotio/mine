@@ -20,3 +20,11 @@ export const getBackgroundStyleByProfile = (profile: {
         backgroundPosition: 'center'
       }
 }
+
+export const cleanParamsUsername = (paramsUsername: string) => {
+  return paramsUsername.replace(/[^a-zA-Z]/g, '')
+}
+
+export const generateProfileUrl = (username: string) => {
+  return `${process.env.NEXT_PUBLIC_BASE_URL}/@${username}`
+}

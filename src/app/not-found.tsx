@@ -15,7 +15,13 @@ const NotFound = () => {
           <p className='text-gray-500 dark:text-gray-400'>
             {` The page you re looking for doesn't exist or has been moved.`}
           </p>
-          <Button onClick={() => router.back()}>Go back</Button>
+
+          <div className='flex items-center justify-center space-x-4'>
+            <Button onClick={() => router.push('/')}>Go to Home</Button>
+            <Button variant='neutral' onClick={() => router.push('/sign-up')}>
+              Create an Account
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,8 @@
 import { Mail } from 'lucide-react'
+import { SVGProps } from 'react'
+
 import { Github, Linkedin, X, Bluesky } from '@/components/icons'
+import { Separator } from '@/components/ui/separator'
 
 interface ProfileContactProps {
   email: string
@@ -9,6 +12,14 @@ interface ProfileContactProps {
   bluesky?: string
 }
 
+type IconComponent = (props: SVGProps<SVGSVGElement>) => JSX.Element
+
+type SocialLink = {
+  url: string
+  Icon: IconComponent
+  label: string
+}
+
 export const ProfileSidebarContact = ({
   email,
   github,
@@ -16,61 +27,45 @@ export const ProfileSidebarContact = ({
   linkedin,
   bluesky
 }: ProfileContactProps) => {
+  const socialLinks = [
+    { url: github, Icon: Github, label: github },
+    { url: x, Icon: X, label: x },
+    { url: linkedin, Icon: Linkedin, label: linkedin },
+    { url: bluesky, Icon: Bluesky, label: bluesky }
+  ].filter((link): link is SocialLink => {
+    return link.url != null && link.url !== ''
+  })
+
+  const renderLink = ({ url, Icon, label }: SocialLink) => (
+    <div key={url} className='flex items-center'>
+      <Icon className='w-5 h-5 mr-2' />
+      <a
+        href={`https://${url}`}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='underline font-medium'
+      >
+        {label}
+      </a>
+    </div>
+  )
+
   return (
-    <div className='mb-6'>
-      <h2 className='text-xl font-bold mb-3'>Contact & Social</h2>
-      <div className='space-y-3'>
-        <div className='flex items-center'>
-          <Mail className='w-5 h-5 mr-2' />
-          <a href={`mailto:${email}`} className='underline font-medium'>
-            {email}
-          </a>
-        </div>
-        <div className='flex items-center'>
-          <Github className='w-5 h-5 mr-2' />
-          <a
-            href={`https://${github}`}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='underline font-medium'
-          >
-            {github}
-          </a>
-        </div>
-        <div className='flex items-center'>
-          <X className='w-5 h-5 mr-2' />
-          <a
-            href={`https://${x}`}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='underline font-medium'
-          >
-            {x}
-          </a>
-        </div>
-        <div className='flex items-center'>
-          <Linkedin className='w-5 h-5 mr-2' />
-          <a
-            href={`https://${linkedin}`}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='underline font-medium'
-          >
-            {linkedin}
-          </a>
-        </div>
-        <div className='flex items-center'>
-          <Bluesky className='w-5 h-5 mr-2' />
-          <a
-            href={`https://${bluesky}`}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='underline font-medium'
-          >
-            {bluesky}
-          </a>
+    <>
+      <div className='mb-6'>
+        <h2 className='text-xl font-bold mb-3'>Contact & Social</h2>
+        <div className='space-y-3'>
+          <div className='flex items-center'>
+            <Mail className='w-5 h-5 mr-2' />
+            <a href={`mailto:${email}`} className='underline font-medium'>
+              {email}
+            </a>
+          </div>
+          {socialLinks.map(renderLink)}
         </div>
       </div>
-    </div>
+
+      <Separator className='bg-black h-[3px] my-4' />
+    </>
   )
 }

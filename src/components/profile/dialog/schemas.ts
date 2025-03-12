@@ -1,0 +1,30 @@
+import * as z from 'zod'
+
+export const basicInfoSchema = z.object({
+  name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
+  title: z.string().min(2, { message: 'Title must be at least 2 characters' }),
+  location: z.string().min(2, { message: 'Location is required' }),
+  avatarUrl: z.string().optional(),
+  bannerUrl: z.string().optional()
+})
+
+export const bioSchema = z.object({
+  bio: z.string().optional()
+})
+
+export const contactSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+  website: z.string().optional(),
+  github: z.string().optional(),
+  x: z.string().optional(),
+  linkedin: z.string().optional(),
+  bluesky: z.string().optional()
+})
+
+export const formSchema = z.object({
+  ...basicInfoSchema.shape,
+  ...bioSchema.shape,
+  ...contactSchema.shape
+})
+
+export type FormSchema = z.infer<typeof formSchema>
