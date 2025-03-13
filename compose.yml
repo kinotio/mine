@@ -28,10 +28,12 @@ services:
     image: minio/minio:latest
     environment:
       MINIO_ROOT_USER: mine
-      MINIO_ROOT_PASSWORD: mine
+      MINIO_ROOT_PASSWORD: password
+    command: 'minio server /data/minio --console-address ":8900"'
     volumes:
       - mine_minio_data:/data
     ports:
+      - 8900:8900
       - 9000:9000
     networks:
       - mine_network

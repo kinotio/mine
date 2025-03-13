@@ -48,7 +48,7 @@ export const POST = async (req: Request) => {
       username: evt.data.username as string,
       first_name: evt.data.first_name as string,
       last_name: evt.data.last_name as string,
-      imageUrl: evt.data.image_url
+      image_url: evt.data.image_url
     })
   }
 
@@ -58,7 +58,7 @@ export const POST = async (req: Request) => {
       username: evt.data.username as string,
       first_name: evt.data.first_name as string,
       last_name: evt.data.last_name as string,
-      imageUrl: evt.data.image_url
+      image_url: evt.data.image_url
     })
   }
 

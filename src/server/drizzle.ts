@@ -9,7 +9,8 @@ import {
   timestamp,
   integer,
   serial,
-  jsonb
+  jsonb,
+  text
 } from 'drizzle-orm/pg-core'
 
 import schema from '@/server/db/schema'
@@ -33,5 +34,6 @@ export {
   and,
   count,
   desc,
-  sql
+  sql,
+  text
 }

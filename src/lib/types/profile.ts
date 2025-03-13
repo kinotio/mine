@@ -60,9 +60,9 @@ export type UserProfile = {
   linkedin?: string
   x?: string
   bluesky?: string
-  avatarUrl: string
-  bannerUrl: string
-  profileUrl: string
+  avatar_url: string
+  banner_url: string
+  profile_url: string
   stats: Stats
   skills: Skill[]
   projects: Project[]

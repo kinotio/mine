@@ -10,7 +10,7 @@ export const users = pgTable('users', {
   username: varchar({ length: 256 }).notNull(),
   first_name: varchar({ length: 256 }).notNull(),
   last_name: varchar({ length: 256 }).notNull(),
-  imageUrl: varchar({ length: 256 }),
+  image_url: varchar({ length: 256 }),
   created: timestamp({ withTimezone: true }).notNull().defaultNow(),
   updated: timestamp({ withTimezone: true })
     .notNull()
@@ -28,7 +28,7 @@ export const userSchema = z.object({
   username: z.string(),
   first_name: z.string(),
   last_name: z.string(),
-  imageUrl: z.string().optional()
+  image_url: z.string().optional()
 })
 
 export type User = z.infer<typeof userSchema>
