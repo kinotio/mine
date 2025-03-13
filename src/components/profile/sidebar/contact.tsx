@@ -16,7 +16,7 @@ interface ProfileContactProps {
 type IconComponent = (props: SVGProps<SVGSVGElement>) => JSX.Element
 
 type SocialLink = {
-  url: string
+  name: string
   Icon: IconComponent
   label: string
 }
@@ -30,25 +30,36 @@ export const ProfileSidebarContact = ({
   bluesky
 }: ProfileContactProps) => {
   const socialLinks = [
-    { url: website, Icon: Globe, label: website },
-    { url: github, Icon: Github, label: github },
-    { url: x, Icon: X, label: x },
-    { url: linkedin, Icon: Linkedin, label: linkedin },
-    { url: bluesky, Icon: Bluesky, label: bluesky }
+    { name: website, Icon: Globe, label: 'website' },
+    { name: github, Icon: Github, label: 'github' },
+    { name: x, Icon: X, label: 'x' },
+    { name: linkedin, Icon: Linkedin, label: 'linkedin' },
+    { name: bluesky, Icon: Bluesky, label: 'bluesky' }
   ].filter((link): link is SocialLink => {
-    return link.url != null && link.url !== ''
+    return link.name != null && link.name !== ''
   })
 
-  const renderLink = ({ url, Icon, label }: SocialLink) => (
-    <div key={url} className='flex items-center'>
+  const getFullUrl = (platform: string, username: string) => {
+    const urls = {
+      github: `https://github.com/${username}`,
+      linkedin: `https://linkedin.com/in/${username}`,
+      x: `https://x.com/${username}`,
+      bluesky: `https://bsky.app/profile/${username}`,
+      website: username.startsWith('http') ? username : `https://${username}`
+    }
+    return urls[platform as keyof typeof urls] || username
+  }
+
+  const renderLink = ({ name, Icon, label }: SocialLink) => (
+    <div key={name} className='flex items-center'>
       <Icon className='w-5 h-5 mr-2' />
       <a
-        href={`https://${url}`}
+        href={getFullUrl(label.toLowerCase(), name)}
         target='_blank'
         rel='noopener noreferrer'
         className='underline font-medium'
       >
-        {label}
+        {name}
       </a>
     </div>
   )
