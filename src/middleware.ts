@@ -6,13 +6,13 @@ const isProtectedRoute = createRouteMatcher([])
 export default clerkMiddleware(async (auth, request) => {
   const url = request.nextUrl.clone()
 
-  const { userId } = await auth()
+  const { userId, sessionClaims } = await auth()
 
   if (
     (userId && request.nextUrl.pathname === '/') ||
     (userId && request.nextUrl.pathname.startsWith('/legal'))
   ) {
-    url.pathname = '/@test'
+    url.pathname = `/@${sessionClaims?.username}`
     return NextResponse.redirect(url)
   }
 
