@@ -1,8 +1,9 @@
-import { varchar, pgTable, timestamp } from '@/server/drizzle'
 import { relations } from 'drizzle-orm'
 import { z } from 'zod'
 
+import { varchar, pgTable, timestamp } from '@/server/drizzle'
 import { profiles } from '@/server/db/schemas/profile'
+import { files } from '@/server/db/schemas/file'
 
 export const users = pgTable('users', {
   id: varchar({ length: 256 }).primaryKey().notNull(),
@@ -20,6 +21,10 @@ export const users = pgTable('users', {
 
 export const userRelations = relations(users, ({ one }) => ({
   profile: one(profiles)
+}))
+
+export const userFilesRelations = relations(users, ({ many }) => ({
+  files: many(files)
 }))
 
 export const userSchema = z.object({

@@ -1,7 +1,7 @@
-import { varchar, pgTable, timestamp, uuid, text } from '@/server/drizzle'
 import { relations } from 'drizzle-orm'
 import { z } from 'zod'
 
+import { varchar, pgTable, timestamp, uuid, text } from '@/server/drizzle'
 import { users } from '@/server/db/schemas/user'
 
 export const profiles = pgTable('profiles', {
