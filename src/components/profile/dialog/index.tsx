@@ -30,7 +30,9 @@ import {
 import { useProfile } from '@/components/profile/provider'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
+
 import { updateProfile } from '@/server/actions/profile'
+import { upload } from '@/server/actions/upload'
 
 import { useToast } from '@/hooks/use-toast'
 import { useEventEmitter } from '@/hooks/use-event'
@@ -50,8 +52,11 @@ export const ProfileDialogEdit = () => {
   const [selectedCountry, setSelectedCountry] = useState('')
 
   // Image preview state
-  const [avatarPreview, setAvatarPreview] = useState(profile.avatarUrl)
-  const [bannerPreview, setBannerPreview] = useState(profile.bannerUrl)
+  const [avatarPreview, setAvatarPreview] = useState(profile.avatar_url)
+  const [avatarFile, setAvatarFile] = useState<File>()
+
+  const [bannerPreview, setBannerPreview] = useState(profile.banner_url)
+  const [bannerFile, setBannerFile] = useState<File>()
 
   // Color state for avatar
   const [avatarColor, setAvatarColor] = useState('')
@@ -73,8 +78,8 @@ export const ProfileDialogEdit = () => {
       location: profile.location,
       bio: profile.bio ?? '',
       email: profile.email,
-      avatarUrl: profile.avatarUrl ?? '',
-      bannerUrl: profile.bannerUrl ?? '',
+      avatarUrl: profile.avatar_url ?? '',
+      bannerUrl: profile.banner_url ?? '',
       website: profile.website ?? '',
       github: profile.github ?? '',
       x: profile.x ?? '',
@@ -93,11 +98,12 @@ export const ProfileDialogEdit = () => {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setAvatarFile(file)
       const reader = new FileReader()
       reader.onload = (event) => {
         const result = event.target?.result as string
         setAvatarPreview(result)
-        form.setValue('avatarUrl', result, { shouldValidate: true })
+        form.setValue('avatar_url', result, { shouldValidate: true })
       }
       reader.readAsDataURL(file)
     }
@@ -106,11 +112,12 @@ export const ProfileDialogEdit = () => {
   const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setBannerFile(file)
       const reader = new FileReader()
       reader.onload = (event) => {
         const result = event.target?.result as string
         setBannerPreview(result)
-        form.setValue('bannerUrl', result, { shouldValidate: true })
+        form.setValue('banner_url', result, { shouldValidate: true })
       }
       reader.readAsDataURL(file)
     }
@@ -159,7 +166,27 @@ export const ProfileDialogEdit = () => {
 
   const onSubmit = async (data: FormSchema) => {
     try {
-      await updateProfile(profile.id, data).finally(() => {})
+      await updateProfile(profile.id, data)
+
+      if (avatarFile) {
+        const formData = new FormData()
+        formData.append('file', avatarFile)
+        formData.append('bucket', 'avatars')
+
+        const { success, url } = await upload(formData)
+
+        if (success) await updateProfile(profile.id, { avatar_url: url })
+      }
+
+      if (bannerFile) {
+        const formData = new FormData()
+        formData.append('file', bannerFile)
+        formData.append('bucket', 'banners')
+
+        const { success, url } = await upload(formData)
+
+        if (success) await updateProfile(profile.id, { banner_url: url })
+      }
 
       toast({
         title: 'Profile updated',
@@ -169,7 +196,6 @@ export const ProfileDialogEdit = () => {
       emit('profile:updated', {})
 
       setOpen(false)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       console.error(e)
       toast({
@@ -232,7 +258,7 @@ export const ProfileDialogEdit = () => {
                   bannerPreview={bannerPreview}
                   avatarColor={avatarColor}
                   textColor={textColor}
-                  profileBannerUrl={profile.bannerUrl}
+                  profileBannerUrl={profile.banner_url}
                   countryOpen={countryOpen}
                   selectedCountry={selectedCountry}
                   onCountryOpenChange={setCountryOpen}

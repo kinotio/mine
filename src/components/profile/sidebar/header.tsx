@@ -5,7 +5,6 @@ import { MapPin } from 'lucide-react'
 import { isEmpty } from 'lodash'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-
 import { ProfileDialogEdit } from '@/components/profile/dialog'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
@@ -16,8 +15,8 @@ interface ProfileHeaderProps {
     name: string
     title: string
     location: string
-    avatarUrl: string
-    bannerUrl: string
+    avatar_url: string
+    banner_url: string
   }
   isScrolled: boolean
 }
@@ -28,20 +27,22 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
 
   // Generate a consistent color based on the user's name
   useEffect(() => {
-    const color = getColorFromString(profile.name)
-    setAvatarColor(color)
-    setTextColor(getTextColorForBackground(color))
-  }, [profile.name])
+    if (isEmpty(profile.avatar_url)) {
+      const color = getColorFromString(profile.name)
+      setAvatarColor(color)
+      setTextColor(getTextColorForBackground(color))
+    }
+  }, [profile.name, profile.avatar_url])
 
   return (
     <div
       className='sticky top-0 bg-white z-10 border-b-[3px] border-black transition-all duration-300 ease-in-out overflow-hidden'
       style={getBackgroundStyleByProfile({
         avatarColor: avatarColor,
-        bannerUrl: profile.bannerUrl
+        bannerUrl: profile.banner_url
       })}
     >
-      <div className='relative bg-white/80 backdrop-blur-sm'>
+      <div className='relative backdrop-blur-sm'>
         <div className='absolute top-2 right-4 z-20'>
           <ProfileDialogEdit />
         </div>
@@ -50,7 +51,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
           <Avatar
             className={`transition-all duration-300 ease-in-out ${isScrolled ? 'w-16 h-16' : 'w-24 h-24'} border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:scale-105`}
           >
-            {isEmpty(profile.avatarUrl) ? (
+            {isEmpty(profile.avatar_url) ? (
               <AvatarFallback
                 style={{ backgroundColor: avatarColor, color: textColor }}
                 className='text-3xl font-bold'
@@ -61,7 +62,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
                   .join('')}
               </AvatarFallback>
             ) : (
-              <AvatarImage src={profile.avatarUrl} alt={profile.name} />
+              <AvatarImage src={profile.avatar_url} alt={profile.name} />
             )}
           </Avatar>
           <h1 className='text-xl font-black mt-3 transition-colors duration-300 ease-in-out'>

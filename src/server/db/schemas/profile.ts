@@ -1,4 +1,4 @@
-import { varchar, pgTable, timestamp, uuid } from '@/server/drizzle'
+import { varchar, pgTable, timestamp, uuid, text } from '@/server/drizzle'
 import { relations } from 'drizzle-orm'
 import { z } from 'zod'
 
@@ -10,9 +10,9 @@ export const profiles = pgTable('profiles', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' })
     .unique(),
-  profileUrl: varchar({ length: 256 }).notNull(),
-  avatarUrl: varchar({ length: 256 }),
-  bannerUrl: varchar({ length: 256 }),
+  profile_url: varchar({ length: 256 }).notNull(),
+  avatar_url: text(),
+  banner_url: text(),
   name: varchar({ length: 256 }).notNull(),
   title: varchar({ length: 256 }),
   location: varchar({ length: 256 }),
@@ -37,9 +37,9 @@ export const profileRelations = relations(profiles, ({ one }) => ({
 export const profileSchema = z.object({
   id: z.string().optional(),
   user_id: z.string(),
-  profileUrl: z.string(),
-  avatarUrl: z.string().optional(),
-  bannerUrl: z.string().optional(),
+  profile_url: z.string(),
+  avatar_url: z.string().optional(),
+  banner_url: z.string().optional(),
   name: z.string(),
   title: z.string().optional(),
   location: z.string().optional(),

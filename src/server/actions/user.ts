@@ -27,7 +27,7 @@ export const saveUser = async (user: User) => {
     name: user.first_name + ' ' + user.last_name,
     email: savedUser[0].email,
     bio: 'Welcome, this is my Mine bio 👋',
-    profileUrl: generateProfileUrl(user.username)
+    profile_url: generateProfileUrl(user.username)
   })
 }
 
@@ -37,7 +37,7 @@ export const updateUser = async (id: string, user: Partial<User>) => {
   await updateProfile(updatedUser[0].id, {
     name: updatedUser[0].first_name + ' ' + updatedUser[0].last_name,
     email: updatedUser[0].email,
-    profileUrl: generateProfileUrl(updatedUser[0].username)
+    profile_url: generateProfileUrl(updatedUser[0].username)
   })
 }
 
