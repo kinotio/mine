@@ -12,7 +12,6 @@ export const getBackgroundStyleByProfile = (profile: {
   avatarColor: string
   bannerUrl: string
 }) => {
-  console.log(profile)
   return isEmpty(profile.bannerUrl)
     ? { background: getGradientFromColor(profile.avatarColor) }
     : {

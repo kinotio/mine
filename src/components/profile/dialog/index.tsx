@@ -5,6 +5,7 @@ import { Edit } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAuth } from '@clerk/nextjs'
+import { isEmpty } from 'lodash'
 
 import {
   Dialog,
@@ -64,10 +65,12 @@ export const ProfileDialogEdit = () => {
 
   // Generate avatar color based on name
   useEffect(() => {
-    const color = getColorFromString(profile.name)
-    setAvatarColor(color)
-    setTextColor(getTextColorForBackground(color))
-  }, [profile.name])
+    if (isEmpty(profile.avatar_url)) {
+      const color = getColorFromString(profile.name)
+      setAvatarColor(color)
+      setTextColor(getTextColorForBackground(color))
+    }
+  }, [profile.name, profile.avatar_url])
 
   // Initialize form
   const form = useForm<FormSchema>({
@@ -103,7 +106,7 @@ export const ProfileDialogEdit = () => {
       reader.onload = (event) => {
         const result = event.target?.result as string
         setAvatarPreview(result)
-        form.setValue('avatar_url', result, { shouldValidate: true })
+        form.setValue('avatarUrl', result, { shouldValidate: true })
       }
       reader.readAsDataURL(file)
     }
@@ -117,7 +120,7 @@ export const ProfileDialogEdit = () => {
       reader.onload = (event) => {
         const result = event.target?.result as string
         setBannerPreview(result)
-        form.setValue('banner_url', result, { shouldValidate: true })
+        form.setValue('bannerUrl', result, { shouldValidate: true })
       }
       reader.readAsDataURL(file)
     }
