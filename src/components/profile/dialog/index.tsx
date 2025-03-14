@@ -33,13 +33,14 @@ import { useProfile } from '@/components/profile/provider'
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 
 import { updateProfile } from '@/server/actions/profile'
-import { upload } from '@/server/actions/upload'
+import { saveFile } from '@/server/actions/file'
+import { upload } from '@/server/actions/common/upload'
 
 import { useToast } from '@/hooks/use-toast'
 import { useEventEmitter } from '@/hooks/use-event'
 
 export const ProfileDialogEdit = () => {
-  const { profile } = useProfile()
+  const { profile, user } = useProfile()
   const { isSignedIn } = useAuth()
   const { toast } = useToast()
   const { emit } = useEventEmitter()
@@ -167,29 +168,37 @@ export const ProfileDialogEdit = () => {
     setActiveTab(value)
   }
 
+  const handleFileUpload = async (
+    file: File,
+    bucket: 'avatars' | 'banners',
+    updateField: 'avatar_url' | 'banner_url'
+  ) => {
+    if (!file) return
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('bucket', bucket)
+
+    const { success, url, file: uploadedFile } = await upload(formData)
+
+    if (success && url) {
+      await updateProfile(profile.id, { [updateField]: url })
+      await saveFile({
+        file_url: url,
+        file_name: uploadedFile.name,
+        file_type: uploadedFile.type,
+        file_size: uploadedFile.size.toString(),
+        tags: bucket.slice(0, -1), // removes 's' from 'avatars'/'banners'
+        user_id: user.id
+      })
+    }
+  }
+
   const onSubmit = async (data: FormSchema) => {
     try {
       await updateProfile(profile.id, data)
-
-      if (avatarFile) {
-        const formData = new FormData()
-        formData.append('file', avatarFile)
-        formData.append('bucket', 'avatars')
-
-        const { success, url } = await upload(formData)
-
-        if (success) await updateProfile(profile.id, { avatar_url: url })
-      }
-
-      if (bannerFile) {
-        const formData = new FormData()
-        formData.append('file', bannerFile)
-        formData.append('bucket', 'banners')
-
-        const { success, url } = await upload(formData)
-
-        if (success) await updateProfile(profile.id, { banner_url: url })
-      }
+      await handleFileUpload(avatarFile as File, 'avatars', 'avatar_url')
+      await handleFileUpload(bannerFile as File, 'banners', 'banner_url')
 
       toast({
         title: 'Profile updated',

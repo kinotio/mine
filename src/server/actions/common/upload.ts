@@ -100,7 +100,11 @@ export const upload = async (formData: FormData) => {
     const baseUrl = process.env.NEXT_PUBLIC_MINIO_URL
     const url = `${baseUrl}/${bucket}/${filename}`
 
-    return { success: true, url }
+    return {
+      success: true,
+      url,
+      file: { name: file.name.toLowerCase(), type: file.type, size: file.size }
+    }
   } catch (error) {
     console.error('Upload error:', error)
 

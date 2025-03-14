@@ -51,7 +51,7 @@ export const ProfileSidebarContact = ({
   }
 
   const renderLink = ({ name, Icon, label }: SocialLink) => (
-    <div key={name} className='flex items-center'>
+    <div key={getFullUrl(label.toLowerCase(), name)} className='flex items-center'>
       <Icon className='w-5 h-5 mr-2' />
       <a
         href={getFullUrl(label.toLowerCase(), name)}
