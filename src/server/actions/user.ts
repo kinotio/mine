@@ -1,26 +1,26 @@
 'use server'
 
-import { drizzle, eq } from '@/server/drizzle'
-import { users, type User } from '@/server/db/schemas/user'
+import database, { eq } from '@/server/services/drizzle'
+import { users, type User } from '@/server/databases'
 import { saveProfile, updateProfile } from '@/server/actions/profile'
 
 import { cleanParamsUsername, generateProfileUrl } from '@/lib/utils'
 
 export const getUserById = async (id: string) => {
-  return await drizzle.query.users.findFirst({
+  return await database.drizzle.query.users.findFirst({
     where: eq(users.id, id)
   })
 }
 
 export const getUserByUsername = async (username: string) => {
-  return await drizzle.query.users.findFirst({
+  return await database.drizzle.query.users.findFirst({
     where: eq(users.username, cleanParamsUsername(username)),
     with: { profile: true }
   })
 }
 
 export const saveUser = async (user: User) => {
-  const savedUser = await drizzle.insert(users).values(user).returning()
+  const savedUser = await database.drizzle.insert(users).values(user).returning()
 
   await saveProfile({
     user_id: savedUser[0].id,
@@ -32,7 +32,11 @@ export const saveUser = async (user: User) => {
 }
 
 export const updateUser = async (id: string, user: Partial<User>) => {
-  const updatedUser = await drizzle.update(users).set(user).where(eq(users.id, id)).returning()
+  const updatedUser = await database.drizzle
+    .update(users)
+    .set(user)
+    .where(eq(users.id, id))
+    .returning()
 
   await updateProfile(updatedUser[0].id, {
     name: updatedUser[0].first_name + ' ' + updatedUser[0].last_name,
@@ -42,5 +46,5 @@ export const updateUser = async (id: string, user: Partial<User>) => {
 }
 
 export const deleteUser = async (id: string) => {
-  return await drizzle.delete(users).where(eq(users.id, id)).returning()
+  return await database.drizzle.delete(users).where(eq(users.id, id)).returning()
 }

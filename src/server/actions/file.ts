@@ -1,8 +1,8 @@
 'use server'
 
-import { drizzle } from '@/server/drizzle'
-import { files, File } from '@/server/db/schemas/file'
+import database from '@/server/services/drizzle'
+import { files, File } from '@/server/databases'
 
 export const saveFile = async (file: File) => {
-  return await drizzle.insert(files).values(file).returning()
+  return await database.drizzle.insert(files).values(file).returning()
 }

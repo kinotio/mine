@@ -1,50 +1,8 @@
 'use server'
 
-import * as Minio from 'minio'
-import { z } from 'zod'
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
-
-const minioClient = new Minio.Client({
-  endPoint: process.env.NEXT_PUBLIC_MINIO_ENDPOINT,
-  port: parseInt(process.env.NEXT_PUBLIC_MINIO_PORT),
-  useSSL: false,
-  accessKey: process.env.MINIO_ACCESS_KEY,
-  secretKey: process.env.MINIO_SECRET_KEY
-})
-
-// File validation schema
-const FileValidation = z.object({
-  type: z.string().startsWith('image/'),
-  size: z.number().max(MAX_FILE_SIZE, 'File size must be less than 5MB'),
-  name: z.string().refine(
-    (name) => {
-      const ext = name.toLowerCase()
-      return (
-        ext.endsWith('.jpg') ||
-        ext.endsWith('.jpeg') ||
-        ext.endsWith('.png') ||
-        ext.endsWith('.gif') ||
-        ext.endsWith('.webp')
-      )
-    },
-    { message: 'Only image files are allowed (jpg, jpeg, png, gif, webp)' }
-  )
-})
-
-// Updated bucket policy
-const getBucketPolicy = (bucketName: string) => ({
-  Version: '2012-10-17',
-  Statement: [
-    {
-      Sid: 'PublicRead',
-      Effect: 'Allow',
-      Principal: '*',
-      Action: ['s3:GetObject'],
-      Resource: [`arn:aws:s3:::${bucketName}/*`]
-    }
-  ]
-})
+import { minioClient } from '@/server/services/minio'
+import { getBucketPolicy } from '@/server/services/minio'
+import { FileValidation } from '@/server/services/validation/file'
 
 export const upload = async (formData: FormData) => {
   try {

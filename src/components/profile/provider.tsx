@@ -4,7 +4,7 @@ import { createContext, useContext, useState, type ReactNode, useEffect } from '
 import { useParams } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 
-import { getUserByUsername } from '@/server/actions/user'
+import { getUserByUsername } from '@/server/actions'
 import { UserProfile } from '@/lib/types/profile'
 import { ClerkUserMinimal } from '@/lib/types/clerk'
 

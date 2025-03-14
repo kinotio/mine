@@ -59,7 +59,7 @@ export const Contact = ({ control }: ContactProps) => {
         name='x'
         render={({ field }) => (
           <FormItem>
-            <FormLabel className='font-bold'>Twitter</FormLabel>
+            <FormLabel className='font-bold'>X</FormLabel>
             <FormControl>
               <Input {...field} className='border-[2px] border-black' />
             </FormControl>

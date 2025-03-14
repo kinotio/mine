@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ProfileDialogEdit } from '@/components/profile/dialog'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
-import { getBackgroundStyleByProfile } from '@/lib/utils'
+import { getBackgroundStyleByProfile, cn } from '@/lib/utils'
 
 interface ProfileHeaderProps {
   profile: {
@@ -65,18 +65,35 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
               <AvatarImage src={profile.avatar_url} alt={profile.name} />
             )}
           </Avatar>
-          <h1 className='text-xl font-black mt-3 transition-colors duration-300 ease-in-out text-white  [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'>
+          <h1
+            className={cn(
+              'text-xl font-black mt-3 transition-colors duration-300 ease-in-out',
+              !isEmpty(profile.banner_url) && 'text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'
+            )}
+          >
             {profile.name}
           </h1>
 
           {profile.title && (
-            <p className='font-bold transition-colors duration-300 ease-in-out text-white  [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'>
+            <p
+              className={cn(
+                'text-xl font-black mt-3 transition-colors duration-300 ease-in-out',
+                !isEmpty(profile.banner_url) &&
+                  'text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'
+              )}
+            >
               {profile.title}
             </p>
           )}
 
           {profile.location && (
-            <div className='flex items-center mt-1 transition-colors duration-300 ease-in-out text-white  [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'>
+            <div
+              className={cn(
+                'text-xl font-black mt-3 transition-colors duration-300 ease-in-out',
+                !isEmpty(profile.banner_url) &&
+                  'text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'
+              )}
+            >
               <MapPin className='w-4 h-4 mr-1' />
               <span>{profile.location}</span>
             </div>
