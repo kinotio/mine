@@ -32,15 +32,13 @@ import { useProfile } from '@/components/profile/provider'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 
-import { updateProfile } from '@/server/actions/profile'
-import { saveFile } from '@/server/actions/file'
-import { upload } from '@/server/actions/common/upload'
+import { updateProfile, saveFile, upload } from '@/server/actions'
 
 import { useToast } from '@/hooks/use-toast'
 import { useEventEmitter } from '@/hooks/use-event'
 
 export const ProfileDialogEdit = () => {
-  const { profile, user } = useProfile()
+  const { profile } = useProfile()
   const { isSignedIn } = useAuth()
   const { toast } = useToast()
   const { emit } = useEventEmitter()
@@ -189,7 +187,7 @@ export const ProfileDialogEdit = () => {
         file_type: uploadedFile.type,
         file_size: uploadedFile.size.toString(),
         tags: bucket.slice(0, -1), // removes 's' from 'avatars'/'banners'
-        user_id: user.id
+        profile_id: profile.id
       })
     }
   }
