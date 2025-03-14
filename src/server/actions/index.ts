@@ -1,30 +1,18 @@
-import { upload } from '@/server/actions/common/upload'
-import { saveFile } from '@/server/actions/file'
-import { saveProfile, updateProfile } from '@/server/actions/profile'
-import {
-  getUserById,
-  getUserByUsername,
-  saveUser,
-  updateUser,
-  deleteUser
-} from '@/server/actions/user'
+import { saveFile, uploadFile } from '@/server/actions/file'
+import { updateProfile, createProfile } from '@/server/actions/profile'
+import { updateUser, deleteUser, getUserByUsername } from '@/server/actions/user'
 
-// Named exports
 export {
-  // Common
-  upload,
-
   // File
   saveFile,
+  uploadFile,
 
   // Profile
-  saveProfile,
   updateProfile,
+  createProfile,
 
   // User
-  getUserById,
-  getUserByUsername,
-  saveUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUserByUsername
 }

@@ -15,8 +15,7 @@ export interface MinioUploadOptions {
 
 export interface MinioUploadResult {
   url: string
-  filename: string
+  name: string
   type: string
   size: number
-  bucket: string
 }
