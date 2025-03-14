@@ -155,7 +155,7 @@ export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) 
       <Dialog open={isShareOpen} onOpenChange={setIsShareOpen}>
         <DialogContent className='sm:max-w-[425px] bg-white p-6 border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]'>
           <h2 className='text-xl font-bold mb-4'>Share Profile</h2>
-          <div className='grid grid-cols-2 gap-3'>
+          <div className='grid grid-cols-1 gap-3'>
             {shareOptions.map((option) => (
               <Button
                 key={option.name}
