@@ -32,7 +32,7 @@ import { useProfile } from '@/components/profile/provider'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 
-import { updateProfile, saveFile, upload } from '@/server/actions'
+import { updateProfile, saveFile, uploadFile } from '@/server/actions'
 
 import { useToast } from '@/hooks/use-toast'
 import { useEventEmitter } from '@/hooks/use-event'
@@ -61,6 +61,8 @@ export const ProfileDialogEdit = () => {
   // Color state for avatar
   const [avatarColor, setAvatarColor] = useState('')
   const [textColor, setTextColor] = useState('#000000')
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Generate avatar color based on name
   useEffect(() => {
@@ -177,15 +179,15 @@ export const ProfileDialogEdit = () => {
     formData.append('file', file)
     formData.append('bucket', bucket)
 
-    const { success, url, file: uploadedFile } = await upload(formData)
+    const { success, data } = await uploadFile(formData)
 
-    if (success && url) {
-      await updateProfile(profile.id, { [updateField]: url })
+    if (success && data?.url) {
+      await updateProfile(profile.id, { [updateField]: data.url })
       await saveFile({
-        file_url: url,
-        file_name: uploadedFile.name,
-        file_type: uploadedFile.type,
-        file_size: uploadedFile.size.toString(),
+        file_url: data.url,
+        file_name: data.name,
+        file_type: data.type,
+        file_size: data.size.toString(),
         tags: bucket.slice(0, -1), // removes 's' from 'avatars'/'banners'
         profile_id: profile.id
       })
@@ -193,26 +195,43 @@ export const ProfileDialogEdit = () => {
   }
 
   const onSubmit = async (data: FormSchema) => {
+    setIsSubmitting(true)
+
     try {
-      await updateProfile(profile.id, data)
+      // Update profile
+      const profileResult = await updateProfile(profile.id, data)
+
+      if (!profileResult.success) {
+        toast({
+          title: 'Profile Update Error',
+          description: profileResult.error || 'Failed to update profile information',
+          variant: 'destructive'
+        })
+        return
+      }
+
       await handleFileUpload(avatarFile as File, 'avatars', 'avatar_url')
       await handleFileUpload(bannerFile as File, 'banners', 'banner_url')
 
+      // If we got here, at least the profile update was successful
       toast({
         title: 'Profile updated',
         description: 'Your profile has been successfully updated.'
       })
 
       emit('profile:updated', {})
-
       setOpen(false)
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to update profile. Please try again.',
+        title: 'Unexpected Error',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred. Please try again.',
         variant: 'destructive'
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -299,8 +318,9 @@ export const ProfileDialogEdit = () => {
               <Button
                 type='submit'
                 className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
+                disabled={isSubmitting}
               >
-                Save Changes
+                {isSubmitting ? 'Saving...' : 'Save Changes.'}
               </Button>
             </div>
           </form>

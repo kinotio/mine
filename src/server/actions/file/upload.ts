@@ -1,10 +1,12 @@
 'use server'
 
-import { minioClient } from '@/server/services/minio'
-import { getBucketPolicy } from '@/server/services/minio'
+import { minioClient, getBucketPolicy, MinioUploadResult } from '@/server/services/minio'
 import { FileValidation } from '@/server/services/validation/file'
+import { ActionResponse } from '@/server/utils/types'
 
-export const upload = async (formData: FormData) => {
+export const uploadFile = async (
+  formData: FormData
+): Promise<ActionResponse<MinioUploadResult>> => {
   try {
     const file = formData.get('file') as File
     const bucket = formData.get('bucket') as string
@@ -15,7 +17,7 @@ export const upload = async (formData: FormData) => {
         error: 'File and bucket are required'
       }
     }
-    // Validate file metadata
+
     const validation = FileValidation.safeParse({
       type: file.type,
       size: file.size,
@@ -25,7 +27,7 @@ export const upload = async (formData: FormData) => {
     if (!validation.success) {
       return {
         success: false,
-        error: validation.error.issues[0].message || 'Invalid file'
+        error: validation.error.issues[0].message
       }
     }
 
@@ -60,16 +62,17 @@ export const upload = async (formData: FormData) => {
 
     return {
       success: true,
-      url,
-      file: { name: file.name.toLowerCase(), type: file.type, size: file.size }
+      data: {
+        url,
+        name: file.name.toLowerCase(),
+        type: file.type,
+        size: file.size
+      }
     }
   } catch (error) {
-    console.error('Upload error:', error)
-
-    // Generic error handling
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to upload file'
+      error: error instanceof Error ? error.message : 'An error occurred while uploading file.'
     }
   }
 }

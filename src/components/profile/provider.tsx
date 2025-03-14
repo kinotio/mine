@@ -33,7 +33,7 @@ export const ProfileProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchProfile = () => {
     getUserByUsername(params.username)
-      .then((user) => setProfile(user?.profile as unknown as UserProfile))
+      .then(({ data }) => setProfile(data?.profile as unknown as UserProfile))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false))
   }

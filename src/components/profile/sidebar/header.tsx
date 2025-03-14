@@ -77,7 +77,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
           {profile.title && (
             <p
               className={cn(
-                'text-xl font-black mt-3 transition-colors duration-300 ease-in-out',
+                'font-bold transition-colors duration-300 ease-in-out',
                 !isEmpty(profile.banner_url) &&
                   'text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'
               )}
@@ -89,7 +89,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
           {profile.location && (
             <div
               className={cn(
-                'text-xl font-black mt-3 transition-colors duration-300 ease-in-out',
+                'flex items-center mt-1 transition-colors duration-300 ease-in-out',
                 !isEmpty(profile.banner_url) &&
                   'text-white [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'
               )}
