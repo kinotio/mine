@@ -42,7 +42,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
         bannerUrl: profile.banner_url
       })}
     >
-      <div className='relative backdrop-blur-sm'>
+      <div className='relative'>
         <div className='absolute top-2 right-4 z-20'>
           <ProfileDialogEdit />
         </div>
@@ -65,15 +65,18 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
               <AvatarImage src={profile.avatar_url} alt={profile.name} />
             )}
           </Avatar>
-          <h1 className='text-xl font-black mt-3 transition-colors duration-300 ease-in-out'>
+          <h1 className='text-xl font-black mt-3 transition-colors duration-300 ease-in-out text-white  [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'>
             {profile.name}
           </h1>
+
           {profile.title && (
-            <p className='font-bold transition-colors duration-300 ease-in-out'>{profile.title}</p>
+            <p className='font-bold transition-colors duration-300 ease-in-out text-white  [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'>
+              {profile.title}
+            </p>
           )}
 
           {profile.location && (
-            <div className='flex items-center mt-1 transition-colors duration-300 ease-in-out'>
+            <div className='flex items-center mt-1 transition-colors duration-300 ease-in-out text-white  [text-shadow:_0_1px_2px_rgba(0,0,0,0.8)]'>
               <MapPin className='w-4 h-4 mr-1' />
               <span>{profile.location}</span>
             </div>

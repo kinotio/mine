@@ -3,11 +3,14 @@
 import { useState } from 'react'
 import { PlusCircle, User, Check, Copy, Download, Share2, Mail, Send } from 'lucide-react'
 import { useAuth } from '@clerk/nextjs'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { X, Linkedin, Facebook, Whatsapp } from '@/components/icons'
 import { useProfile } from '@/components/profile/provider'
+import { ResumeTemplate } from '@/components/profile/pdf/resume'
+
 import { useClipboard } from '@/hooks/use-clipboard'
 
 interface ProfileActionsProps {
@@ -118,10 +121,26 @@ export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) 
           <User className='mr-2' /> Profile Actions
         </h2>
         <div className='grid grid-cols-1 gap-3'>
-          <Button className='w-full bg-[#ff6b6b] hover:bg-[#ff5252] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'>
-            <Download className='h-5 w-5 mr-2' />
-            Download Resume
-          </Button>
+          <PDFDownloadLink
+            document={<ResumeTemplate profile={profile} />}
+            fileName={`${profile.name.replace(/\s+/g, '_')}_Resume.pdf`}
+          >
+            {({ loading }) => (
+              <Button
+                className='w-full bg-[#ff6b6b] hover:bg-[#ff5252] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'
+                disabled={loading}
+              >
+                {loading ? (
+                  'Generating...'
+                ) : (
+                  <>
+                    <Download className='h-5 w-5 mr-2' />
+                    Download Resume
+                  </>
+                )}
+              </Button>
+            )}
+          </PDFDownloadLink>
           <Button
             onClick={() => setIsShareOpen(true)}
             className='w-full bg-[#4cc9f0] hover:bg-[#3db8df] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'
