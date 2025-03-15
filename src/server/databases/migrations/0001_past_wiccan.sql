@@ -1,0 +1,1 @@
+ALTER TABLE "files" RENAME COLUMN "tags" TO "tag";

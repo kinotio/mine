@@ -1,7 +1,10 @@
 'use server'
 
-import database, { eq } from '@/server/services/drizzle'
-import { users, profiles, files, type User, type Profile } from '@/server/databases'
+import { eq } from 'drizzle-orm'
+
+import database from '@/server/services/drizzle'
+import { users, profiles, files } from '@/server/databases/tables'
+import { User, Profile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { minioClient } from '@/server/services/minio'
 
@@ -14,7 +17,7 @@ type DeleteUserResponse = {
 export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserResponse>> => {
   try {
     // Get user with profile and related files
-    const user = await database.drizzle.query.users.findFirst({
+    const user = await database.query.users.findFirst({
       where: eq(users.id, id),
       with: {
         profile: {
@@ -33,7 +36,7 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
     }
 
     // Start a transaction to ensure all deletes succeed or none do
-    const result = await database.drizzle.transaction(async (tx) => {
+    const result = await database.transaction(async (tx) => {
       // Delete profile's files from storage
       if (Array.isArray(user.profile?.files) && user.profile?.files?.length > 0) {
         // Delete files from Minio
