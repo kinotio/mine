@@ -1,9 +1,10 @@
 'use server'
 
-import database from '@/server/services/drizzle'
 import { files } from '@/server/databases/tables'
 import { File } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
+
+import database from '@/server/services/drizzle'
 
 export const saveFile = async (file: File): Promise<ActionResponse<File>> => {
   try {

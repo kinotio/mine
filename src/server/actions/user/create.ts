@@ -2,12 +2,14 @@
 
 import { eq } from 'drizzle-orm'
 
-import database from '@/server/services/drizzle'
 import { users } from '@/server/databases/tables'
 import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { createProfile } from '@/server/actions/profile/create'
+
 import { UserValidation } from '@/server/services/validation/user'
+import database from '@/server/services/drizzle'
+
 import { generateProfileUrl } from '@/lib/utils'
 
 export const createUser = async (payload: User): Promise<ActionResponse<User>> => {

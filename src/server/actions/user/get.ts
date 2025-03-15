@@ -2,10 +2,13 @@
 
 import { eq } from 'drizzle-orm'
 
-import database from '@/server/services/drizzle'
 import { users } from '@/server/databases/tables'
 import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
+
+import database from '@/server/services/drizzle'
+import cache from '@/server/services/redis'
+
 import { cleanParamsUsername } from '@/lib/utils'
 
 export type CreateUserInput = {
@@ -40,12 +43,27 @@ export const getUserByUsername = async (
   username: string
 ): Promise<ActionResponse<UserWithProfile>> => {
   try {
-    const user = await database.query.users.findFirst({
-      where: eq(users.username, cleanParamsUsername(username)),
-      with: {
-        profile: true
-      }
-    })
+    const cleanUsername = cleanParamsUsername(username)
+
+    // User cache key based on username
+    const cacheKey = `user:${cleanUsername}`
+
+    // Use the getOrSet helper to handle caching
+    const user = await cache.getOrSet<UserWithProfile | null>(
+      cacheKey,
+      async () => {
+        // This function will be called only on cache miss
+        const user = await database.query.users.findFirst({
+          where: eq(users.username, cleanUsername),
+          with: {
+            profile: true
+          }
+        })
+        return user as UserWithProfile | null
+      },
+      // Cache for 30 minutes (1800 seconds)
+      1800
+    )
 
     if (!user) {
       return {
