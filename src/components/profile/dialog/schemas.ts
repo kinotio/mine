@@ -1,5 +1,7 @@
 import * as z from 'zod'
 
+const blueskyPattern = /^[a-zA-Z0-9_-]+\.(bsky\.social|[a-zA-Z0-9-]+)$/
+
 export const basicInfoSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters' }),
   title: z.string().min(2, { message: 'Title must be at least 2 characters' }),
@@ -14,11 +16,15 @@ export const bioSchema = z.object({
 
 export const contactSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
-  website: z.string().optional(),
+  website: z.string().url({ message: 'Please enter a valid website url' }).optional(),
   github: z.string().optional(),
   x: z.string().optional(),
   linkedin: z.string().optional(),
-  bluesky: z.string().optional()
+  bluesky: z
+    .string()
+    .regex(blueskyPattern, 'Invalid Bluesky handle format (e.g., username.bsky.social)')
+    .optional()
+    .or(z.literal(''))
 })
 
 export const formSchema = z.object({
