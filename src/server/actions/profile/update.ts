@@ -2,11 +2,13 @@
 
 import { eq } from 'drizzle-orm'
 
-import database from '@/server/services/drizzle'
-import { profiles } from '@/server/databases/tables'
+import { profiles, users } from '@/server/databases/tables'
 import { Profile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { ProfileValidation } from '@/server/services/validation/profile'
+
+import database from '@/server/services/drizzle'
+import cache from '@/server/services/redis'
 
 export const updateProfile = async (
   id: string,
@@ -27,6 +29,12 @@ export const updateProfile = async (
       .set(profile)
       .where(eq(profiles.id, id))
       .returning()
+
+    const user = await database.query.users.findFirst({
+      where: eq(users.id, updated[0].user_id)
+    })
+
+    if (user) await cache.invalidate(`user:${user.username}`)
 
     if (!updated.length) {
       return {

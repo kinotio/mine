@@ -2,11 +2,13 @@
 
 import { eq } from 'drizzle-orm'
 
-import database from '@/server/services/drizzle'
 import { users, profiles, files } from '@/server/databases/tables'
 import { User, Profile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
+
 import { minioClient } from '@/server/services/minio'
+import database from '@/server/services/drizzle'
+import cache from '@/server/services/redis'
 
 type DeleteUserResponse = {
   user: User
@@ -34,6 +36,8 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
         error: 'An account with that ID does not exist'
       }
     }
+
+    await cache.invalidate(`user:${user.username}`)
 
     // Start a transaction to ensure all deletes succeed or none do
     const result = await database.transaction(async (tx) => {

@@ -1,10 +1,11 @@
 'use server'
 
-import database from '@/server/services/drizzle'
 import { profiles } from '@/server/databases/tables'
 import { Profile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
+
 import { ProfileValidation } from '@/server/services/validation/profile'
+import database from '@/server/services/drizzle'
 
 export const createProfile = async (payload: Profile): Promise<ActionResponse<Profile>> => {
   try {

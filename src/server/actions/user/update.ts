@@ -2,13 +2,16 @@
 
 import { eq } from 'drizzle-orm'
 
-import database from '@/server/services/drizzle'
 import { users } from '@/server/databases/tables'
 import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { updateProfile } from '@/server/actions/profile/update'
-import { generateProfileUrl } from '@/lib/utils'
 import { UserValidation } from '@/server/services/validation/user'
+
+import database from '@/server/services/drizzle'
+import cache from '@/server/services/redis'
+
+import { generateProfileUrl } from '@/lib/utils'
 
 export const updateUser = async (id: string, user: User): Promise<ActionResponse<User>> => {
   try {
@@ -64,6 +67,13 @@ export const updateUser = async (id: string, user: User): Promise<ActionResponse
     }
 
     const updated = await database.update(users).set(user).where(eq(users.id, id)).returning()
+
+    await cache.invalidate(`user:${updated[0].username}`)
+
+    // If the username was changed, also invalidate the old cache entry
+    if (user.username && existingUser.username !== user.username) {
+      await cache.invalidate(`user:${existingUser.username}`)
+    }
 
     // Update associated profile if necessary fields changed
     if (user.first_name || user.last_name || user.username || user.email) {
