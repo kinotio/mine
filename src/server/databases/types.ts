@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { users, profiles, files } from '@/server/databases'
 
 export const userSchema = z.object({
   id: z.string(),
@@ -35,17 +34,9 @@ export const fileSchema = z.object({
   file_url: z.string(),
   file_type: z.string(),
   file_size: z.string(),
-  tags: z.string()
+  tag: z.string()
 })
 
 export type User = z.infer<typeof userSchema>
 export type Profile = z.infer<typeof profileSchema>
 export type File = z.infer<typeof fileSchema>
-
-export type UserSelect = typeof users.$inferSelect
-export type ProfileSelect = typeof profiles.$inferSelect
-export type FileSelect = typeof files.$inferSelect
-
-export type UserInsert = typeof users.$inferInsert
-export type ProfileInsert = typeof profiles.$inferInsert
-export type FileInsert = typeof files.$inferInsert

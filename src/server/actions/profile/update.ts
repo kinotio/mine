@@ -1,7 +1,10 @@
 'use server'
 
-import database, { eq } from '@/server/services/drizzle'
-import { profiles, type Profile } from '@/server/databases'
+import { eq } from 'drizzle-orm'
+
+import database from '@/server/services/drizzle'
+import { profiles } from '@/server/databases/tables'
+import { Profile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { ProfileValidation } from '@/server/services/validation/profile'
 
@@ -19,7 +22,7 @@ export const updateProfile = async (
       }
     }
 
-    const updated = await database.drizzle
+    const updated = await database
       .update(profiles)
       .set(profile)
       .where(eq(profiles.id, id))

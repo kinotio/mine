@@ -8,6 +8,13 @@
       "when": 1741966707867,
       "tag": "0000_late_hellfire_club",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742039354372,
+      "tag": "0001_past_wiccan",
+      "breakpoints": true
     }
   ]
 }

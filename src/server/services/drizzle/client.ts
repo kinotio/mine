@@ -1,9 +1,13 @@
 import 'dotenv/config'
-import { drizzle as pg } from 'drizzle-orm/node-postgres'
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { Pool } from 'pg'
 
-import schema from '@/server/databases'
+import { config } from '@/server/services/drizzle/config'
+import * as schema from '@/server/databases/schema'
 
-export const drizzle = pg(process.env.DATABASE_URL, {
+const pool = new Pool(config)
+
+export const database = drizzle(pool, {
   logger: process.env.NODE_ENV === 'development',
   schema
 })

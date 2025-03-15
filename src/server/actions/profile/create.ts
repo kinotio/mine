@@ -1,7 +1,8 @@
 'use server'
 
 import database from '@/server/services/drizzle'
-import { profiles, type Profile } from '@/server/databases'
+import { profiles } from '@/server/databases/tables'
+import { Profile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { ProfileValidation } from '@/server/services/validation/profile'
 
@@ -17,7 +18,7 @@ export const createProfile = async (payload: Profile): Promise<ActionResponse<Pr
     }
 
     // Check if user already has a profile
-    const existingProfile = await database.drizzle.query.profiles.findFirst({
+    const existingProfile = await database.query.profiles.findFirst({
       where: (profiles, { eq }) => eq(profiles.user_id, payload.user_id)
     })
 
@@ -46,7 +47,7 @@ export const createProfile = async (payload: Profile): Promise<ActionResponse<Pr
       bluesky: payload.bluesky
     }
 
-    const created = await database.drizzle.insert(profiles).values(data).returning()
+    const created = await database.insert(profiles).values(data).returning()
 
     return {
       success: true,

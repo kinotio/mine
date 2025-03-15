@@ -1,7 +1,10 @@
 'use server'
 
-import database, { eq } from '@/server/services/drizzle'
-import { users, type User } from '@/server/databases'
+import { eq } from 'drizzle-orm'
+
+import database from '@/server/services/drizzle'
+import { users } from '@/server/databases/tables'
+import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { createProfile } from '@/server/actions/profile/create'
 import { UserValidation } from '@/server/services/validation/user'
@@ -20,7 +23,7 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
     }
 
     // Check if username or email already exists
-    const existingUser = await database.drizzle.query.users.findFirst({
+    const existingUser = await database.query.users.findFirst({
       where: (users, { or, eq }) =>
         or(eq(users.username, payload.username), eq(users.email, payload.email.toLowerCase()))
     })
@@ -44,7 +47,7 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
       last_name: payload.last_name
     }
 
-    const created = await database.drizzle.insert(users).values(data).returning()
+    const created = await database.insert(users).values(data).returning()
 
     // Create associated profile
     const profileResult = await createProfile({
@@ -56,7 +59,7 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
 
     if (!profileResult.success) {
       // You might want to delete the user if profile creation fails
-      await database.drizzle.delete(users).where(eq(users.id, created[0].id))
+      await database.delete(users).where(eq(users.id, created[0].id))
 
       return {
         success: false,

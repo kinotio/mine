@@ -1,7 +1,10 @@
 'use server'
 
-import database, { eq } from '@/server/services/drizzle'
-import { users, type User } from '@/server/databases'
+import { eq } from 'drizzle-orm'
+
+import database from '@/server/services/drizzle'
+import { users } from '@/server/databases/tables'
+import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { updateProfile } from '@/server/actions/profile/update'
 import { generateProfileUrl } from '@/lib/utils'
@@ -19,7 +22,7 @@ export const updateUser = async (id: string, user: User): Promise<ActionResponse
     }
 
     // Verify user exists
-    const existingUser = await database.drizzle.query.users.findFirst({
+    const existingUser = await database.query.users.findFirst({
       where: eq(users.id, id)
     })
 
@@ -32,7 +35,7 @@ export const updateUser = async (id: string, user: User): Promise<ActionResponse
 
     // Check if new username is available if changing
     if (user.username) {
-      const usernameExists = await database.drizzle.query.users.findFirst({
+      const usernameExists = await database.query.users.findFirst({
         where: (users, { and, eq, not }) =>
           and(eq(users.username, user.username!), not(eq(users.id, id)))
       })
@@ -47,7 +50,7 @@ export const updateUser = async (id: string, user: User): Promise<ActionResponse
 
     // Check if email is available if changing
     if (user.email) {
-      const emailExists = await database.drizzle.query.users.findFirst({
+      const emailExists = await database.query.users.findFirst({
         where: (users, { and, eq, not }) =>
           and(eq(users.email, user.email!.toLowerCase()), not(eq(users.id, id)))
       })
@@ -60,11 +63,7 @@ export const updateUser = async (id: string, user: User): Promise<ActionResponse
       }
     }
 
-    const updated = await database.drizzle
-      .update(users)
-      .set(user)
-      .where(eq(users.id, id))
-      .returning()
+    const updated = await database.update(users).set(user).where(eq(users.id, id)).returning()
 
     // Update associated profile if necessary fields changed
     if (user.first_name || user.last_name || user.username || user.email) {

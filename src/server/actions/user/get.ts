@@ -1,10 +1,12 @@
 'use server'
 
-import database, { eq } from '@/server/services/drizzle'
-import { users } from '@/server/databases'
+import { eq } from 'drizzle-orm'
+
+import database from '@/server/services/drizzle'
+import { users } from '@/server/databases/tables'
+import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { cleanParamsUsername } from '@/lib/utils'
-import type { User } from '@/server/databases'
 
 export type CreateUserInput = {
   username: string
@@ -38,7 +40,7 @@ export const getUserByUsername = async (
   username: string
 ): Promise<ActionResponse<UserWithProfile>> => {
   try {
-    const user = await database.drizzle.query.users.findFirst({
+    const user = await database.query.users.findFirst({
       where: eq(users.username, cleanParamsUsername(username)),
       with: {
         profile: true
