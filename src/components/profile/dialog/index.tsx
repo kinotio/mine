@@ -188,7 +188,7 @@ export const ProfileDialogEdit = () => {
         file_name: data.name,
         file_type: data.type,
         file_size: data.size.toString(),
-        tags: bucket.slice(0, -1), // removes 's' from 'avatars'/'banners'
+        tag: bucket.slice(0, -1), // removes 's' from 'avatars'/'banners'
         profile_id: profile.id
       })
     }
@@ -320,7 +320,7 @@ export const ProfileDialogEdit = () => {
                 className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Saving...' : 'Save Changes.'}
+                {isSubmitting ? 'Saving...' : 'Save Changes'}
               </Button>
             </div>
           </form>

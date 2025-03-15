@@ -15,6 +15,7 @@ declare global {
       CRYPTO_PASSPHRASE: string
       MINIO_ACCESS_KEY: string
       MINIO_SECRET_KEY: string
+      REDIS_URL: string
     }
   }
 }
