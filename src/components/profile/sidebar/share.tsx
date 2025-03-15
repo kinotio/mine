@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { Copy, Mail, Share2 } from 'lucide-react'
+import { Copy, Mail, Share2, Check } from 'lucide-react'
 
 import {
   Dialog,
@@ -14,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Facebook, X, Whatsapp, Bluesky, Telegram } from '@/components/icons'
 
-import { useToast } from '@/hooks/use-toast'
+import { useClipboard } from '@/hooks/use-clipboard'
 
 interface ShareProfileDialogProps {
   profileUrl: string
@@ -27,30 +26,7 @@ export const ShareProfileDialog = ({
   profileName,
   trigger
 }: ShareProfileDialogProps) => {
-  const { toast } = useToast()
-
-  const [copied, setCopied] = useState(false)
-
-  const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText(profileUrl)
-      .then(() => {
-        setCopied(true)
-        toast({
-          title: 'URL copied',
-          description: 'Profile URL has been copied to clipboard'
-        })
-        setTimeout(() => setCopied(false), 2000)
-      })
-      .catch((err) => {
-        console.error('Failed to copy: ', err)
-        toast({
-          title: 'Copy failed',
-          description: 'Could not copy URL to clipboard',
-          variant: 'destructive'
-        })
-      })
-  }
+  const { copied, copyToClipboard } = useClipboard()
 
   const shareLinks = [
     {
@@ -101,7 +77,7 @@ export const ShareProfileDialog = ({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[500px] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]'>
+      <DialogContent className='sm:max-w-[500px] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] bg-white'>
         <DialogHeader>
           <DialogTitle className='text-2xl font-black'>Share Profile</DialogTitle>
         </DialogHeader>
@@ -117,20 +93,7 @@ export const ShareProfileDialog = ({
               onClick={copyToClipboard}
               className='ml-2 bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
             >
-              {copied ? (
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-5 w-5 text-black'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
-                </svg>
-              ) : (
-                <Copy className='h-5 w-5' />
-              )}
+              {copied ? <Check className='h5 w-5' /> : <Copy className='h-5 w-5' />}
             </Button>
           </div>
 
