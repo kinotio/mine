@@ -1,6 +1,6 @@
 'use client'
 
-import { PlusCircle, User, Check, Copy, Download, Share2, Mail, Send } from 'lucide-react'
+import { PlusCircle, User, Check, Copy, Download } from 'lucide-react'
 import { useAuth } from '@clerk/nextjs'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 
