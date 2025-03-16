@@ -1,10 +1,7 @@
+import { ExperienceData } from '@/lib/types/profile'
+
 interface ExperienceCardProps {
-  experience: {
-    company: string
-    position: string
-    period: string
-    description: string
-  }
+  experience: ExperienceData
 }
 
 export const ExperienceCard = ({ experience }: ExperienceCardProps) => {

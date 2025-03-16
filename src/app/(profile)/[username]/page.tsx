@@ -13,6 +13,14 @@ import { CertificationCard } from '@/components/profile/page/cards/certification
 import { DefaultCard } from '@/components/profile/page/cards/default'
 
 import { useEventEmitter } from '@/hooks/use-event'
+import { adaptToType } from '@/lib/utils'
+import {
+  ProjectData,
+  ExperienceData,
+  SkillData,
+  CertificationData,
+  DefaultData
+} from '@/lib/types/profile'
 
 import { getProfileSectionTemplates } from '@/server/actions/profile'
 import { ProfileSectionTemplate } from '@/server/databases/types'
@@ -28,18 +36,18 @@ const Page = () => {
     emit('profile:updated', {})
   }
 
-  const renderCard = (metadata: any, templateSlug: string | undefined) => {
+  const renderCard = (metadata: Record<string, unknown>, templateSlug: string | undefined) => {
     switch (templateSlug) {
       case 'projects':
-        return <ProjectCard project={metadata} />
+        return <ProjectCard project={adaptToType<ProjectData>(metadata)} />
       case 'experience':
-        return <ExperienceCard experience={metadata} />
+        return <ExperienceCard experience={adaptToType<ExperienceData>(metadata)} />
       case 'skills':
-        return <SkillCard skill={metadata} />
+        return <SkillCard skill={adaptToType<SkillData>(metadata)} />
       case 'certifications':
-        return <CertificationCard certification={metadata} />
+        return <CertificationCard certification={adaptToType<CertificationData>(metadata)} />
       default:
-        return <DefaultCard item={metadata} />
+        return <DefaultCard item={adaptToType<DefaultData>(metadata)} />
     }
   }
 
@@ -71,9 +79,14 @@ const Page = () => {
             <ScrollableSection>
               {Array.isArray(section.user_profile_section_items) &&
               section.user_profile_section_items.length > 0 ? (
-                section.user_profile_section_items.map((item) => (
-                  <div key={item.id}>{renderCard(item.metadata, template?.slug)}</div>
-                ))
+                section.user_profile_section_items.map((item) => {
+                  const metadata =
+                    typeof item.metadata === 'string'
+                      ? JSON.parse(item.metadata)
+                      : (item.metadata as Record<string, unknown>)
+
+                  return <div key={item.id}>{renderCard(metadata, template?.slug)}</div>
+                })
               ) : (
                 <div className='w-full py-8 text-center'>
                   <p className='text-lg font-bold'>

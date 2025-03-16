@@ -78,3 +78,37 @@ export type UserProfile = {
     }[]
   }[]
 }
+
+export interface ProjectData {
+  title: string
+  description: string
+  tags: string[]
+  image: string
+  sourceUrl?: string
+  liveUrl?: string
+}
+
+export interface ExperienceData {
+  company: string
+  position: string
+  period: string
+  description: string
+}
+
+export interface SkillData {
+  name: string
+  level: number
+}
+
+export interface CertificationData {
+  name: string
+  issuer: string
+  date: string
+  image: string
+}
+
+export interface DefaultData {
+  id: string
+  name: string
+  description: string
+}

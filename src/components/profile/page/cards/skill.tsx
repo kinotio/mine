@@ -1,8 +1,7 @@
+import { SkillData } from '@/lib/types/profile'
+
 interface SkillCardProps {
-  skill: {
-    name: string
-    level: number
-  }
+  skill: SkillData
 }
 
 export const SkillCard = ({ skill }: SkillCardProps) => {

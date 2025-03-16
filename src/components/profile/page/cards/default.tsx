@@ -1,9 +1,7 @@
+import { DefaultData } from '@/lib/types/profile'
+
 interface DefaultCardProps {
-  item: {
-    id: string
-    name: string
-    description: string
-  }
+  item: DefaultData
 }
 
 export const DefaultCard = ({ item }: DefaultCardProps) => {

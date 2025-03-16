@@ -1,12 +1,9 @@
 import Image from 'next/image'
 
+import { CertificationData } from '@/lib/types/profile'
+
 interface CertificationCardProps {
-  certification: {
-    name: string
-    issuer: string
-    date: string
-    image: string
-  }
+  certification: CertificationData
 }
 
 export const CertificationCard = ({ certification }: CertificationCardProps) => {

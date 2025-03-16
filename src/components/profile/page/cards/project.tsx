@@ -2,16 +2,10 @@ import { ExternalLink } from 'lucide-react'
 import Image from 'next/image'
 
 import { Github } from '@/components/icons'
+import { ProjectData } from '@/lib/types/profile'
 
 interface ProjectCardProps {
-  project: {
-    title: string
-    description: string
-    tags: string[]
-    image: string
-    sourceUrl?: string
-    liveUrl?: string
-  }
+  project: ProjectData
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
