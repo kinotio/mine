@@ -22,9 +22,9 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
     const user = await database.query.users.findFirst({
       where: eq(users.id, id),
       with: {
-        profile: {
+        user_profile: {
           with: {
-            files: true
+            user_profile_files: true
           }
         }
       }
@@ -42,17 +42,22 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
     // Start a transaction to ensure all deletes succeed or none do
     const result = await database.transaction(async (tx) => {
       // Delete profile's files from storage
-      if (Array.isArray(user.profile?.files) && user.profile?.files?.length > 0) {
+      if (
+        Array.isArray(user.user_profile?.user_profile_files) &&
+        user.user_profile?.user_profile_files?.length > 0
+      ) {
         // Delete files from Minio
-        const deletePromises = user.profile.files.map(async (file: UserProfileFile) => {
-          try {
-            const [bucket, objectName] = file.file_url.split('/').slice(-2)
-            await minioClient.removeObject(bucket, objectName)
-          } catch (error) {
-            console.error(`Failed to delete file from storage: ${file.file_url}`, error)
-            // Continue with other deletions even if one fails
+        const deletePromises = user.user_profile.user_profile_files.map(
+          async (file: UserProfileFile) => {
+            try {
+              const [bucket, objectName] = file.file_url.split('/').slice(-2)
+              await minioClient.removeObject(bucket, objectName)
+            } catch (error) {
+              console.error(`Failed to delete file from storage: ${file.file_url}`, error)
+              // Continue with other deletions even if one fails
+            }
           }
-        })
+        )
 
         // Wait for all file deletions to complete
         await Promise.allSettled(deletePromises)
@@ -60,11 +65,11 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
         // Delete file records from database
         await tx
           .delete(userProfileFiles)
-          .where(eq(userProfileFiles.user_profile_id, user.profile.id))
+          .where(eq(userProfileFiles.user_profile_id, user.user_profile.id))
       }
 
       // Delete profile
-      if (user.profile) {
+      if (user.user_profile) {
         await tx.delete(userProfiles).where(eq(userProfiles.user_id, id))
       }
 
@@ -73,8 +78,8 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
 
       return {
         user: deleted[0],
-        profile: user.profile,
-        deletedFiles: user.profile?.files?.length || 0
+        profile: user.user_profile,
+        deletedFiles: user.user_profile?.user_profile_files?.length || 0
       }
     })
 
