@@ -8,12 +8,12 @@ export const client = createClient(config)
 
 // Set up error handling
 client.on('error', (err) => {
-  console.error('An error occurred on redis:', err)
+  log.error('Cache', { context: 'Redis Error', error: err as Error })
 })
 
 // Connect to Redis
 client.connect().catch((err) => {
-  console.error('An error occurred while connecting to redis:', err)
+  log.error('Cache', { context: 'Redis Connection', error: err as Error })
 })
 
 export const getOrSet = async <T>(
@@ -33,11 +33,8 @@ export const getOrSet = async <T>(
       }
     }
 
-    // Generate key with prefix
-    const prefixedKey = `${config.prefix || ''}${key}`
-
     // Try to get data from cache
-    const cachedData = await client.get(prefixedKey)
+    const cachedData = await client.get(key)
 
     if (cachedData) {
       // Data found in cache
@@ -52,7 +49,7 @@ export const getOrSet = async <T>(
     // Store in cache if data exists and is not null or undefined
     if (data !== null && data !== undefined) {
       try {
-        await client.setEx(prefixedKey, ttl, JSON.stringify(data))
+        await client.setEx(key, ttl, JSON.stringify(data))
         log.info('Cache', { context: 'Cache Set', data: { key, ttl } })
       } catch (error) {
         log.error('Cache', { context: 'Cache Set', error: error as Error })
@@ -70,7 +67,7 @@ export const getOrSet = async <T>(
 export const invalidate = async (key: string) => {
   try {
     if (client.isOpen) {
-      await client.del(`${config.prefix || ''}${key}`)
+      await client.del(key)
       log.info('Cache', { context: 'Cache Invalidation', data: { key } })
     }
   } catch (error) {
