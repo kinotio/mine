@@ -42,6 +42,12 @@ export type UserWithProfile = User & {
       profile_section_template_id: string
       name: string
       slug: string
+      user_profile_section_items: {
+        id: string
+        user_profile_id: string
+        user_profile_section_id: string
+        metadata: { [key: string]: string }
+      }[]
     }[]
   }
 }
@@ -65,12 +71,16 @@ export const getUserByUsername = async (
           with: {
             user_profile: {
               with: {
-                user_profile_sections: true
+                user_profile_sections: {
+                  with: {
+                    user_profile_section_items: true
+                  }
+                }
               }
             }
           }
         })
-        return user as UserWithProfile | null
+        return user as unknown as UserWithProfile | null
       },
       // Cache for 30 minutes (1800 seconds)
       1800

@@ -57,3 +57,12 @@ export type UserProfile = z.infer<typeof userProfileSchema>
 export type UserProfileFile = z.infer<typeof userProfileFileSchema>
 export type UserProfileSection = z.infer<typeof userProfileSectionSchema>
 export type UserProfileSectionItem = z.infer<typeof userProfileSectionItemSchema>
+
+export type ProfileSectionTemplate = {
+  id: string
+  name: string
+  slug: string
+  description: string
+  color: string
+  icon: string
+}

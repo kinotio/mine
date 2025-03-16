@@ -50,22 +50,31 @@ export type Stats = {
 
 export type UserProfile = {
   id: string
+  user_id: string
   name: string
-  title: string
+  title: string | null
+  location: string | null
   bio: string
-  location: string
   email: string
-  website?: string
-  github?: string
-  linkedin?: string
-  x?: string
-  bluesky?: string
-  avatar_url: string
-  banner_url: string
+  avatar_url: string | null
+  banner_url: string | null
   profile_url: string
-  stats: Stats
-  skills: Skill[]
-  projects: Project[]
-  workExperience: WorkExperience[]
-  customSections: CustomSection[]
+  website: string | null
+  github: string | null
+  x: string | null
+  linkedin: string | null
+  bluesky: string | null
+  user_profile_sections: {
+    id: string
+    user_profile_id: string
+    profile_section_template_id: string
+    name: string
+    slug: string
+    user_profile_section_items: {
+      id: string
+      user_profile_id: string
+      user_profile_section_id: string
+      metadata: { [key: string]: string }
+    }[]
+  }[]
 }
