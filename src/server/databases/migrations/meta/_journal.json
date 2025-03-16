@@ -15,6 +15,13 @@
       "when": 1742039354372,
       "tag": "0001_past_wiccan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742108033927,
+      "tag": "0002_living_turbo",
+      "breakpoints": true
     }
   ]
 }

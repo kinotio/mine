@@ -2,8 +2,8 @@
 
 import { eq } from 'drizzle-orm'
 
-import { users, profiles, files } from '@/server/databases/tables'
-import { User, Profile } from '@/server/databases/types'
+import { users, userProfiles, userProfileFiles } from '@/server/databases/tables'
+import { User, UserProfile, UserProfileFile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import { minioClient } from '@/server/services/minio'
@@ -12,7 +12,7 @@ import cache from '@/server/services/redis'
 
 type DeleteUserResponse = {
   user: User
-  profile?: Profile
+  profile?: UserProfile
   deletedFiles: number
 }
 
@@ -44,7 +44,7 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
       // Delete profile's files from storage
       if (Array.isArray(user.profile?.files) && user.profile?.files?.length > 0) {
         // Delete files from Minio
-        const deletePromises = user.profile.files.map(async (file) => {
+        const deletePromises = user.profile.files.map(async (file: UserProfileFile) => {
           try {
             const [bucket, objectName] = file.file_url.split('/').slice(-2)
             await minioClient.removeObject(bucket, objectName)
@@ -58,12 +58,14 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
         await Promise.allSettled(deletePromises)
 
         // Delete file records from database
-        await tx.delete(files).where(eq(files.profile_id, user.profile.id))
+        await tx
+          .delete(userProfileFiles)
+          .where(eq(userProfileFiles.user_profile_id, user.profile.id))
       }
 
       // Delete profile
       if (user.profile) {
-        await tx.delete(profiles).where(eq(profiles.user_id, id))
+        await tx.delete(userProfiles).where(eq(userProfiles.user_id, id))
       }
 
       // Finally delete the user

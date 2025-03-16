@@ -21,7 +21,7 @@ export type CreateUserInput = {
 export type UpdateUserInput = Partial<Omit<User, 'id' | 'created_at' | 'updated_at'>>
 
 export type UserWithProfile = User & {
-  profile: {
+  user_profile: {
     id: string
     name: string
     title: string | null
@@ -56,7 +56,7 @@ export const getUserByUsername = async (
         const user = await database.query.users.findFirst({
           where: eq(users.username, cleanUsername),
           with: {
-            profile: true
+            user_profile: true
           }
         })
         return user as UserWithProfile | null

@@ -2,8 +2,8 @@
 
 import { eq } from 'drizzle-orm'
 
-import { profiles, users } from '@/server/databases/tables'
-import { Profile } from '@/server/databases/types'
+import { userProfiles, users } from '@/server/databases/tables'
+import { UserProfile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { ProfileValidation } from '@/server/services/validation/profile'
 
@@ -12,8 +12,8 @@ import cache from '@/server/services/redis'
 
 export const updateProfile = async (
   id: string,
-  profile: Partial<Profile>
-): Promise<ActionResponse<Profile>> => {
+  profile: Partial<UserProfile>
+): Promise<ActionResponse<UserProfile>> => {
   try {
     const validation = ProfileValidation.safeParse(profile)
 
@@ -25,9 +25,9 @@ export const updateProfile = async (
     }
 
     const updated = await database
-      .update(profiles)
+      .update(userProfiles)
       .set(profile)
-      .where(eq(profiles.id, id))
+      .where(eq(userProfiles.id, id))
       .returning()
 
     const user = await database.query.users.findFirst({
@@ -45,7 +45,7 @@ export const updateProfile = async (
 
     return {
       success: true,
-      data: updated[0] as Profile
+      data: updated[0] as UserProfile
     }
   } catch (error) {
     return {

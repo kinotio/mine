@@ -1,16 +1,51 @@
 import { relations } from 'drizzle-orm'
 
-import { users, profiles, files } from '@/server/databases/tables'
+import {
+  users,
+  userProfiles,
+  userProfileFiles,
+  userProfileSections,
+  userProfileSectionItems,
+  profileSectionTemplates
+} from '@/server/databases/tables'
 
 export const userRelations = relations(users, ({ one }) => ({
-  profile: one(profiles)
+  user_profile: one(userProfiles)
 }))
 
-export const profileRelations = relations(profiles, ({ one, many }) => ({
-  user: one(users, { fields: [profiles.user_id], references: [users.id] }),
-  files: many(files)
+export const userProfileRelations = relations(userProfiles, ({ one, many }) => ({
+  user: one(users, { fields: [userProfiles.user_id], references: [users.id] }),
+  user_profile_files: many(userProfileFiles),
+  user_profile_sections: many(userProfileSections)
 }))
 
-export const fileRelations = relations(files, ({ one }) => ({
-  profile: one(profiles, { fields: [files.profile_id], references: [profiles.id] })
+export const userProfileFileRelations = relations(userProfileFiles, ({ one }) => ({
+  user_profile: one(userProfiles, {
+    fields: [userProfileFiles.user_profile_id],
+    references: [userProfiles.id]
+  })
+}))
+
+export const userProfileSectionRelations = relations(userProfileSections, ({ one, many }) => ({
+  user_profile: one(userProfiles, {
+    fields: [userProfileSections.user_profile_id],
+    references: [userProfiles.id]
+  }),
+  user_profile_section_items: many(userProfileSectionItems),
+  profile_section_template: one(profileSectionTemplates)
+}))
+
+export const userProfileSectionItemRelations = relations(userProfileSectionItems, ({ one }) => ({
+  user_profile: one(userProfiles, {
+    fields: [userProfileSectionItems.user_profile_id],
+    references: [userProfiles.id]
+  }),
+  user_profile_section: one(userProfileSections, {
+    fields: [userProfileSectionItems.user_profile_section_id],
+    references: [userProfileSections.id]
+  })
+}))
+
+export const profileSectionTemplateRelations = relations(profileSectionTemplates, ({ many }) => ({
+  user_profile_sections: many(userProfileSections)
 }))
