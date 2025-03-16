@@ -28,3 +28,7 @@ export const cleanParamsUsername = (paramsUsername: string) => {
 export const generateProfileUrl = (username: string) => {
   return `${process.env.NEXT_PUBLIC_BASE_URL}/@${username}`
 }
+
+export const adaptToType = <T>(data: Record<string, unknown>): T => {
+  return data as unknown as T
+}
