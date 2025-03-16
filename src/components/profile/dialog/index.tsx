@@ -189,7 +189,7 @@ export const ProfileDialogEdit = () => {
         file_type: data.type,
         file_size: data.size.toString(),
         tag: bucket.slice(0, -1), // removes 's' from 'avatars'/'banners'
-        profile_id: profile.id
+        user_profile_id: profile.id
       })
     }
   }

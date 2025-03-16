@@ -36,6 +36,13 @@ export type UserWithProfile = User & {
     x: string | null
     linkedin: string | null
     bluesky: string | null
+    user_profile_sections: {
+      id: string
+      user_profile_id: string
+      profile_section_template_id: string
+      name: string
+      slug: string
+    }[]
   }
 }
 
@@ -56,7 +63,11 @@ export const getUserByUsername = async (
         const user = await database.query.users.findFirst({
           where: eq(users.username, cleanUsername),
           with: {
-            user_profile: true
+            user_profile: {
+              with: {
+                user_profile_sections: true
+              }
+            }
           }
         })
         return user as UserWithProfile | null
