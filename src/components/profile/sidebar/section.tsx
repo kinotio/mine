@@ -53,17 +53,14 @@ export const AddSectionDialog = ({ onAddSection, trigger }: AddSectionDialogProp
       onAddSection(selectedTemplate.id, customName)
 
       // Create the section to the user's profile
-      createProfileSection(profile.id, selectedTemplate.id, customName)
+      createProfileSection(profile.user_id, profile.id, selectedTemplate.id, customName)
         .then(({ success, error }) => {
           if (success) {
             toast({
               title: 'Section added',
               description: 'The section has been added to your profile.'
             })
-          }
-
-          if (error) {
-            console.log(error)
+          } else {
             toast({
               title: 'Error',
               description: error,

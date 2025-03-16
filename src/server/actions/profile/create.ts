@@ -1,13 +1,15 @@
 'use server'
 
+import { eq } from 'drizzle-orm'
 import slugify from 'slugify'
 
-import { userProfiles, userProfileSections } from '@/server/databases/tables'
+import { userProfiles, userProfileSections, users } from '@/server/databases/tables'
 import { UserProfile, UserProfileSection } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import { ProfileValidation } from '@/server/services/validation/profile'
 import database from '@/server/services/drizzle'
+import cache from '@/server/services/redis'
 
 export const createProfile = async (payload: UserProfile): Promise<ActionResponse<UserProfile>> => {
   try {
@@ -65,6 +67,7 @@ export const createProfile = async (payload: UserProfile): Promise<ActionRespons
 }
 
 export const createProfileSection = async (
+  user_id: string,
   user_profile_id: string,
   profile_section_template_id: string,
   name: string
@@ -105,6 +108,11 @@ export const createProfileSection = async (
     }
 
     const created = await database.insert(userProfileSections).values(data).returning()
+    const user = await database.query.users.findFirst({
+      where: eq(users.id, user_id)
+    })
+
+    await cache.invalidate(`user:${user?.username}`)
 
     return {
       success: true,

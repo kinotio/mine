@@ -3,15 +3,7 @@
 import { ActionResponse } from '@/server/utils/types'
 import database from '@/server/services/drizzle'
 import cache from '@/server/services/redis'
-
-export type ProfileSectionTemplate = {
-  id: string
-  name: string
-  slug: string
-  description: string
-  color: string
-  icon: string
-}
+import { ProfileSectionTemplate } from '@/server/databases/types'
 
 export const getProfileSectionTemplates = async (): Promise<
   ActionResponse<ProfileSectionTemplate[]>
