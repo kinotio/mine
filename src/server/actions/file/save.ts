@@ -1,14 +1,14 @@
 'use server'
 
-import { files } from '@/server/databases/tables'
-import { File } from '@/server/databases/types'
+import { userProfileFiles } from '@/server/databases/tables'
+import { UserProfileFile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import database from '@/server/services/drizzle'
 
-export const saveFile = async (file: File): Promise<ActionResponse<File>> => {
+export const saveFile = async (file: UserProfileFile): Promise<ActionResponse<UserProfileFile>> => {
   try {
-    const saved = await database.insert(files).values(file).returning()
+    const saved = await database.insert(userProfileFiles).values(file).returning()
 
     if (!saved.length) {
       return {

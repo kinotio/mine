@@ -1,13 +1,13 @@
 'use server'
 
-import { profiles } from '@/server/databases/tables'
-import { Profile } from '@/server/databases/types'
+import { userProfiles } from '@/server/databases/tables'
+import { UserProfile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import { ProfileValidation } from '@/server/services/validation/profile'
 import database from '@/server/services/drizzle'
 
-export const createProfile = async (payload: Profile): Promise<ActionResponse<Profile>> => {
+export const createProfile = async (payload: UserProfile): Promise<ActionResponse<UserProfile>> => {
   try {
     const validation = ProfileValidation.safeParse(payload)
 
@@ -31,7 +31,7 @@ export const createProfile = async (payload: Profile): Promise<ActionResponse<Pr
     }
 
     // Create profile with defaults
-    const data: Profile = {
+    const data: UserProfile = {
       user_id: payload.user_id,
       title: payload.title,
       name: payload.name,
@@ -48,11 +48,11 @@ export const createProfile = async (payload: Profile): Promise<ActionResponse<Pr
       bluesky: payload.bluesky
     }
 
-    const created = await database.insert(profiles).values(data).returning()
+    const created = await database.insert(userProfiles).values(data).returning()
 
     return {
       success: true,
-      data: created[0] as Profile
+      data: created[0] as UserProfile
     }
   } catch (error) {
     return {
