@@ -1,7 +1,9 @@
 'use server'
 
-import { userProfiles } from '@/server/databases/tables'
-import { UserProfile } from '@/server/databases/types'
+import slugify from 'slugify'
+
+import { userProfiles, userProfileSections } from '@/server/databases/tables'
+import { UserProfile, UserProfileSection } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import { ProfileValidation } from '@/server/services/validation/profile'
@@ -19,7 +21,7 @@ export const createProfile = async (payload: UserProfile): Promise<ActionRespons
     }
 
     // Check if user already has a profile
-    const existingProfile = await database.query.profiles.findFirst({
+    const existingProfile = await database.query.userProfiles.findFirst({
       where: (profiles, { eq }) => eq(profiles.user_id, payload.user_id)
     })
 
@@ -58,6 +60,61 @@ export const createProfile = async (payload: UserProfile): Promise<ActionRespons
     return {
       success: false,
       error: error instanceof Error ? error.message : 'An error occurred while creating profile.'
+    }
+  }
+}
+
+export const createProfileSection = async (
+  user_profile_id: string,
+  profile_section_template_id: string,
+  name: string
+): Promise<ActionResponse<UserProfileSection>> => {
+  try {
+    if (!user_profile_id || !profile_section_template_id || !name) {
+      return {
+        success: false,
+        error: 'Missing required fields'
+      }
+    }
+
+    // Generate slug from title
+    const slug = slugify(name, {
+      lower: true,
+      strict: true
+    })
+
+    // Check if section with this slug already exists for the profile
+    const existingSection = await database.query.userProfileSections.findFirst({
+      where: (sections, { and, eq }) =>
+        and(eq(sections.user_profile_id, user_profile_id), eq(sections.slug, slug))
+    })
+
+    if (existingSection) {
+      return {
+        success: false,
+        error: 'A section with this slug already exists'
+      }
+    }
+
+    // Create the section
+    const data = {
+      user_profile_id,
+      profile_section_template_id,
+      name,
+      slug
+    }
+
+    const created = await database.insert(userProfileSections).values(data).returning()
+
+    return {
+      success: true,
+      data: created[0]
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'An error occurred while creating profile section.'
     }
   }
 }

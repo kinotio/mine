@@ -1,19 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import {
-  Award,
-  Briefcase,
-  Code,
-  GraduationCap,
-  Lightbulb,
-  PlusCircle,
-  Trophy,
-  Palette,
-  BookOpen,
-  Globe,
-  Heart
-} from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { PlusCircle, icons } from 'lucide-react'
 
 import {
   Dialog,
@@ -24,8 +12,13 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Icon } from '@/components/icon'
 
 import { useToast } from '@/hooks/use-toast'
+import { useProfile } from '@/components/profile/provider'
+import { useEventEmitter } from '@/hooks/use-event'
+
+import { getProfileSectionTemplates, createProfileSection } from '@/server/actions/profile'
 
 interface SectionTemplate {
   id: string
@@ -42,102 +35,58 @@ interface AddSectionDialogProps {
 
 export const AddSectionDialog = ({ onAddSection, trigger }: AddSectionDialogProps) => {
   const { toast } = useToast()
+  const { profile } = useProfile()
+  const { emit } = useEventEmitter()
 
   const [open, setOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<SectionTemplate | null>(null)
   const [customName, setCustomName] = useState('')
-
-  const sectionTemplates: SectionTemplate[] = [
-    {
-      id: 'projects',
-      name: 'Projects',
-      icon: <Code className='h-5 w-5' />,
-      color: '#4cc9f0',
-      description: 'Showcase your portfolio of work with images, descriptions, and links.'
-    },
-    {
-      id: 'skills',
-      name: 'Skills',
-      icon: <Lightbulb className='h-5 w-5' />,
-      color: '#8ac926',
-      description: 'Display your technical and professional skills with proficiency levels.'
-    },
-    {
-      id: 'experience',
-      name: 'Work Experience',
-      icon: <Briefcase className='h-5 w-5' />,
-      color: '#f72585',
-      description:
-        'List your professional experience with companies, positions, and responsibilities.'
-    },
-    {
-      id: 'education',
-      name: 'Education',
-      icon: <GraduationCap className='h-5 w-5' />,
-      color: '#7209b7',
-      description: 'Share your educational background, degrees, and certifications.'
-    },
-    {
-      id: 'certifications',
-      name: 'Certifications',
-      icon: <Award className='h-5 w-5' />,
-      color: '#ff6b6b',
-      description: "Highlight professional certifications and credentials you've earned."
-    },
-    {
-      id: 'achievements',
-      name: 'Achievements',
-      icon: <Trophy className='h-5 w-5' />,
-      color: '#ffde59',
-      description: 'Showcase awards, recognition, and notable accomplishments.'
-    },
-    {
-      id: 'portfolio',
-      name: 'Design Portfolio',
-      icon: <Palette className='h-5 w-5' />,
-      color: '#fb5607',
-      description: 'Display visual work like designs, illustrations, or photography.'
-    },
-    {
-      id: 'publications',
-      name: 'Publications',
-      icon: <BookOpen className='h-5 w-5' />,
-      color: '#3a86ff',
-      description: 'List articles, papers, books, or other published works.'
-    },
-    {
-      id: 'languages',
-      name: 'Languages',
-      icon: <Globe className='h-5 w-5' />,
-      color: '#06d6a0',
-      description: 'Show languages you speak with proficiency levels.'
-    },
-    {
-      id: 'volunteer',
-      name: 'Volunteer Work',
-      icon: <Heart className='h-5 w-5' />,
-      color: '#e63946',
-      description: 'Highlight community service and volunteer experiences.'
-    }
-  ]
+  const [sectionTemplates, setSectionTemplates] = useState<SectionTemplate[]>([])
 
   const handleSelectTemplate = (template: SectionTemplate) => {
     setSelectedTemplate(template)
     setCustomName(template.name)
   }
 
-  const handleAddSection = () => {
+  const handleAddSection = async () => {
     if (selectedTemplate) {
       onAddSection(selectedTemplate.id, customName)
-      toast({
-        title: 'Section added',
-        description: `${customName} section has been added to your profile.`
-      })
-      setOpen(false)
-      setSelectedTemplate(null)
-      setCustomName('')
+
+      // Create the section to the user's profile
+      createProfileSection(profile.id, selectedTemplate.id, customName)
+        .then(({ success, error }) => {
+          if (success) {
+            toast({
+              title: 'Section added',
+              description: 'The section has been added to your profile.'
+            })
+          }
+
+          if (error) {
+            console.log(error)
+            toast({
+              title: 'Error',
+              description: error,
+              variant: 'destructive'
+            })
+          }
+        })
+        .finally(() => {
+          emit('profile:updated', {})
+          setOpen(false)
+          setSelectedTemplate(null)
+          setCustomName('')
+        })
     }
   }
+
+  useEffect(() => {
+    if (open) {
+      getProfileSectionTemplates()
+        .then(({ data }) => setSectionTemplates(data as SectionTemplate[]))
+        .catch((error) => console.error(error))
+    }
+  }, [open])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -157,7 +106,6 @@ export const AddSectionDialog = ({ onAddSection, trigger }: AddSectionDialogProp
           {!selectedTemplate ? (
             <>
               <p className='mb-4'>Choose a section type to add to your profile:</p>
-
               <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
                 {sectionTemplates.map((template) => (
                   <div
@@ -170,7 +118,7 @@ export const AddSectionDialog = ({ onAddSection, trigger }: AddSectionDialogProp
                       className='w-10 h-10 rounded-full flex items-center justify-center mb-2 border-[2px] border-black'
                       style={{ backgroundColor: template.color }}
                     >
-                      {template.icon}
+                      <Icon name={template.icon as keyof typeof icons} size={16} />
                     </div>
                     <h3 className='font-bold'>{template.name}</h3>
                   </div>
