@@ -1,9 +1,10 @@
 import { icons } from 'lucide-react'
 
 import { Icon } from '@/components/icon'
-import { AddItemDialog } from '@/components/profile/page/dialog'
+import { SectionItemDialog } from '@/components/profile/page/dialog'
 
 interface SectionHeaderProps {
+  sectionId: string
   name: string
   icon: string
   buttonText?: string
@@ -15,6 +16,7 @@ interface SectionHeaderProps {
 }
 
 export const SectionHeader = ({
+  sectionId,
   name,
   icon = 'Star',
   buttonText = 'Add Item',
@@ -32,7 +34,8 @@ export const SectionHeader = ({
       </h2>
 
       {onButtonClick && (
-        <AddItemDialog
+        <SectionItemDialog
+          sectionId={sectionId}
           sectionType={sectionType}
           sectionTitle={sectionTitle}
           buttonText={buttonText}

@@ -12,7 +12,7 @@ export const CertificationCard = ({ certification }: CertificationCardProps) => 
       <div className='flex items-center mb-3'>
         <div className='w-12 h-12 bg-[#f8f8f8] rounded-full border-[2px] border-black mr-3 overflow-hidden'>
           <Image
-            src={certification.image || '/placeholder.svg'}
+            src={certification.image || ''}
             alt={certification.issuer}
             className='w-full h-full object-cover'
           />

@@ -2,15 +2,17 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { Github, ExternalLink } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
+import { Github } from '@/components/icons'
 
 export const Showcase = () => {
   const profiles = [
     {
       name: 'Alex Johnson',
       role: 'Frontend Developer',
-      image: '/placeholder.svg?height=400&width=400',
+      image: '',
       skills: ['React', 'TypeScript', 'Tailwind CSS'],
       projects: [
         {
@@ -25,7 +27,7 @@ export const Showcase = () => {
     {
       name: 'Maria Garcia',
       role: 'Full Stack Developer',
-      image: '/placeholder.svg?height=400&width=400',
+      image: '',
       skills: ['Node.js', 'MongoDB', 'Vue.js'],
       projects: [
         {
@@ -39,7 +41,7 @@ export const Showcase = () => {
     {
       name: 'David Kim',
       role: 'Backend Engineer',
-      image: '/placeholder.svg?height=400&width=400',
+      image: '',
       skills: ['Python', 'Django', 'PostgreSQL'],
       projects: [
         {
@@ -109,7 +111,7 @@ export const Showcase = () => {
               <div className='flex items-center gap-4 mb-6'>
                 <div className='relative h-20 w-20 overflow-hidden border-4 border-black'>
                   <Image
-                    src={profile.image || '/placeholder.svg'}
+                    src={profile.image || ''}
                     alt={profile.name}
                     fill
                     className='object-cover'
@@ -141,7 +143,7 @@ export const Showcase = () => {
                   <div key={projectIndex} className='border-2 border-black'>
                     <div className='relative h-48 w-full overflow-hidden border-b-2 border-black'>
                       <Image
-                        src={project.image || '/placeholder.svg'}
+                        src={project.image || ''}
                         alt={project.title}
                         fill
                         className='object-cover'
