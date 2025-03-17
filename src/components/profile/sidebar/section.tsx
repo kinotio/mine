@@ -129,7 +129,7 @@ export const AddSectionDialog = ({ onAddSection, trigger }: AddSectionDialogProp
                   className='w-12 h-12 rounded-full flex items-center justify-center border-[3px] border-black'
                   style={{ backgroundColor: selectedTemplate.color }}
                 >
-                  {selectedTemplate.icon}
+                  <Icon name={selectedTemplate.icon as keyof typeof icons} size={16} />
                 </div>
                 <div>
                   <h3 className='font-bold text-lg'>{selectedTemplate.name}</h3>

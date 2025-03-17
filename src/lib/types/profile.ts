@@ -82,7 +82,7 @@ export type UserProfile = {
 export interface ProjectData {
   title: string
   description: string
-  tags?: string
+  tags?: string[]
   image?: string
   sourceUrl?: string
   liveUrl?: string
