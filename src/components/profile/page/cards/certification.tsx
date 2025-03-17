@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { Lightbulb } from 'lucide-react'
 
 import { CertificationData } from '@/lib/types/profile'
 
@@ -21,7 +22,9 @@ export const CertificationCard = ({ certification }: CertificationCardProps) => 
             <div
               className='w-full h-full flex items-center justify-center font-bold text-white'
               style={{ backgroundColor: '#ff6b6b' }}
-            ></div>
+            >
+              <Lightbulb size={24} className='text-black' />
+            </div>
           )}
         </div>
         <div className='bg-[#7209b7] text-white px-2 py-1 text-sm font-bold border-[2px] border-black'>
