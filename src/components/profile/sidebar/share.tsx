@@ -90,7 +90,7 @@ export const ShareProfileDialog = ({
               className='flex-1 border-[3px] border-black focus-visible:ring-0 focus-visible:ring-offset-0'
             />
             <Button
-              onClick={copyToClipboard}
+              onClick={() => copyToClipboard(profileUrl)}
               className='ml-2 bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
             >
               {copied ? <Check className='h5 w-5' /> : <Copy className='h-5 w-5' />}

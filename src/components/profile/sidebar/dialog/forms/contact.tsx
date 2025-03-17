@@ -3,7 +3,7 @@ import type { Control } from 'react-hook-form'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-import type { FormSchema } from '@/components/profile/dialog/schemas'
+import type { FormSchema } from '@/components/profile/sidebar/dialog/schemas'
 
 interface ContactProps {
   control: Control<FormSchema>

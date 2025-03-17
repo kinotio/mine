@@ -3,7 +3,7 @@ import type { Control } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 
-import type { FormSchema } from '@/components/profile/dialog/schemas'
+import type { FormSchema } from '@/components/profile/sidebar/dialog/schemas'
 
 interface BioProps {
   control: Control<FormSchema>

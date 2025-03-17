@@ -74,6 +74,8 @@ const Page = () => {
               name={section.name}
               buttonText={`Add ${section.name}`}
               buttonTextColor={textColor}
+              sectionType={template?.slug ?? ''}
+              sectionTitle={section.name}
               onButtonClick={() => handleCreateSectionItem(section.id)}
             />
             <ScrollableSection>
@@ -89,8 +91,8 @@ const Page = () => {
                 })
               ) : (
                 <div className='w-full py-8 text-center'>
-                  <p className='text-lg font-bold'>
-                    {`No items yet. Click "Add Item" to get started.`}
+                  <p className='text-md font-bold'>
+                    {`No items yet. Click "Add ${section.name}" to get started.`}
                   </p>
                 </div>
               )}
