@@ -49,8 +49,13 @@ import {
 } from '@/components/profile/page/dialog/types'
 
 import { useToast } from '@/hooks/use-toast'
+import { useProfile } from '@/components/profile/provider'
+import { useEventEmitter } from '@/hooks/use-event'
 
-interface AddItemDialogProps {
+import { createProfileSectionItem } from '@/server/actions/profile'
+
+interface SectionItemDialogProps {
+  sectionId: string
   sectionType: string
   sectionTitle: string
   buttonText: string
@@ -63,15 +68,19 @@ interface DynamicObject {
   [key: string]: unknown
 }
 
-export const AddItemDialog = ({
+export const SectionItemDialog = ({
+  sectionId,
   sectionType,
   sectionTitle,
   buttonColor,
   buttonText,
   buttonTextColor = 'black',
   trigger
-}: AddItemDialogProps) => {
+}: SectionItemDialogProps) => {
+  const { user, profile } = useProfile()
   const { toast } = useToast()
+  const { emit } = useEventEmitter()
+
   const [open, setOpen] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
@@ -109,16 +118,25 @@ export const AddItemDialog = ({
       data.tags = (data.tags as string).split(',').map((tag: string) => tag.trim())
     }
 
-    // Create section item here
-    console.log(data)
+    createProfileSectionItem(user.id, profile.id, sectionId, data)
+      .then(({ success, data, error }) => {
+        if (success && data) {
+          toast({
+            title: 'Saved',
+            description: `New item has been added to ${sectionTitle}.`
+          })
+        }
 
-    toast({
-      title: 'Item added',
-      description: `New item has been added to ${sectionTitle}.`
-    })
-    setOpen(false)
-    form.reset(defaultValues as FormValues)
-    setImagePreview(null)
+        if (!success && error) {
+          toast({ title: 'Error', description: error })
+        }
+      })
+      .finally(() => {
+        emit('profile:updated', {})
+        setOpen(false)
+        form.reset(defaultValues as FormValues)
+        setImagePreview(null)
+      })
   }
 
   // Create typed image handlers by providing the generic type parameter

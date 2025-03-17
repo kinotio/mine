@@ -69,6 +69,7 @@ const Page = () => {
         return (
           <section key={section.id} className='mb-10'>
             <SectionHeader
+              sectionId={section.id}
               icon={template?.icon as string}
               buttonColor={template?.color}
               name={section.name}
@@ -78,6 +79,7 @@ const Page = () => {
               sectionTitle={section.name}
               onButtonClick={() => handleCreateSectionItem(section.id)}
             />
+
             <ScrollableSection>
               {Array.isArray(section.user_profile_section_items) &&
               section.user_profile_section_items.length > 0 ? (
