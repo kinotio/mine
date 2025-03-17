@@ -82,10 +82,15 @@ export type UserProfile = {
 export interface ProjectData {
   title: string
   description: string
-  tags: string[]
-  image: string
+  tags?: string
+  image?: string
   sourceUrl?: string
   liveUrl?: string
+}
+
+export interface SkillData {
+  name: string
+  level: number // 1-100
 }
 
 export interface ExperienceData {
@@ -95,20 +100,57 @@ export interface ExperienceData {
   description: string
 }
 
-export interface SkillData {
-  name: string
-  level: number
-}
-
 export interface CertificationData {
-  name: string
+  title: string
   issuer: string
   date: string
-  image: string
+  image?: string
+}
+
+export interface EducationData {
+  institution: string
+  degree: string
+  period: string
+  description: string
+}
+
+export interface AchievementData {
+  title: string
+  issuer: string
+  date: string
+  description: string
+}
+
+export interface PortfolioData {
+  title: string
+  category: string
+  description: string
+  image?: string
+  url?: string
+}
+
+export interface PublicationData {
+  title: string
+  publisher: string
+  date: string
+  description: string
+  url?: string
+}
+
+export interface LanguageData {
+  name: string
+  proficiency: string
+  level: number // 1-100
+}
+
+export interface VolunteerData {
+  organization: string
+  role: string
+  period: string
+  description: string
 }
 
 export interface DefaultData {
-  id: string
-  name: string
+  title: string
   description: string
 }

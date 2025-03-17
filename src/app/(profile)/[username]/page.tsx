@@ -2,25 +2,40 @@
 
 import { useState, useEffect } from 'react'
 
-import { useProfile } from '@/components/profile/provider'
 import { ScrollableSection } from '@/components/profile/page/scrollable'
 import { SectionHeader } from '@/components/profile/page/section-header'
 
-import { ProjectCard } from '@/components/profile/page/cards/project'
-import { ExperienceCard } from '@/components/profile/page/cards/experience'
-import { SkillCard } from '@/components/profile/page/cards/skill'
-import { CertificationCard } from '@/components/profile/page/cards/certification'
-import { DefaultCard } from '@/components/profile/page/cards/default'
+import {
+  ProjectCard,
+  ExperienceCard,
+  SkillCard,
+  CertificationCard,
+  EducationCard,
+  AchievementCard,
+  PortfolioCard,
+  PublicationCard,
+  LanguageCard,
+  VolunteerCard,
+  DefaultCard
+} from '@/components/profile/page/cards'
 
-import { useEventEmitter } from '@/hooks/use-event'
 import { adaptToType } from '@/lib/utils'
 import {
   ProjectData,
   ExperienceData,
   SkillData,
   CertificationData,
+  EducationData,
+  AchievementData,
+  PortfolioData,
+  PublicationData,
+  LanguageData,
+  VolunteerData,
   DefaultData
 } from '@/lib/types/profile'
+
+import { useEventEmitter } from '@/hooks/use-event'
+import { useProfile } from '@/components/profile/provider'
 
 import { getProfileSectionTemplates } from '@/server/actions/profile'
 import { ProfileSectionTemplate } from '@/server/databases/types'
@@ -46,6 +61,18 @@ const Page = () => {
         return <SkillCard skill={adaptToType<SkillData>(metadata)} />
       case 'certifications':
         return <CertificationCard certification={adaptToType<CertificationData>(metadata)} />
+      case 'education':
+        return <EducationCard education={adaptToType<EducationData>(metadata)} />
+      case 'achievements':
+        return <AchievementCard achievement={adaptToType<AchievementData>(metadata)} />
+      case 'portfolio':
+        return <PortfolioCard portfolio={adaptToType<PortfolioData>(metadata)} />
+      case 'publications':
+        return <PublicationCard publication={adaptToType<PublicationData>(metadata)} />
+      case 'languages':
+        return <LanguageCard language={adaptToType<LanguageData>(metadata)} />
+      case 'volunteer':
+        return <VolunteerCard volunteer={adaptToType<VolunteerData>(metadata)} />
       default:
         return <DefaultCard item={adaptToType<DefaultData>(metadata)} />
     }
