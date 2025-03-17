@@ -2,11 +2,10 @@ import type { Control } from 'react-hook-form'
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { LocationSelect } from '@/components/profile/dialog/location-select'
-import { AvatarUpload } from '@/components/profile/dialog/avatar-upload'
-import { BannerUpload } from '@/components/profile/dialog/banner-upload'
-
-import type { FormSchema } from '@/components/profile/dialog/schemas'
+import { LocationSelect } from '@/components/profile/sidebar/dialog/forms/location-select'
+import { AvatarUpload } from '@/components/profile/sidebar/dialog/forms/avatar-upload'
+import { BannerUpload } from '@/components/profile/sidebar/dialog/forms/banner-upload'
+import type { FormSchema } from '@/components/profile/sidebar/dialog/schemas'
 
 interface BasicInfoProps {
   control: Control<FormSchema>

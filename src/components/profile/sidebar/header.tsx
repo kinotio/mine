@@ -5,7 +5,7 @@ import { MapPin } from 'lucide-react'
 import { isEmpty } from 'lodash'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { ProfileDialogEdit } from '@/components/profile/dialog'
+import { ProfileDialogEdit } from '@/components/profile/sidebar/dialog'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 import { getBackgroundStyleByProfile, cn } from '@/lib/utils'
@@ -13,10 +13,10 @@ import { getBackgroundStyleByProfile, cn } from '@/lib/utils'
 interface ProfileHeaderProps {
   profile: {
     name: string
-    title: string
-    location: string
-    avatar_url: string
-    banner_url: string
+    title: string | null
+    location: string | null
+    avatar_url: string | null
+    banner_url: string | null
   }
   isScrolled: boolean
 }
@@ -39,7 +39,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
       className='sticky top-0 bg-white z-10 border-b-[3px] border-black transition-all duration-300 ease-in-out overflow-hidden'
       style={getBackgroundStyleByProfile({
         avatarColor: avatarColor,
-        bannerUrl: profile.banner_url
+        bannerUrl: profile.banner_url ?? ''
       })}
     >
       <div className='relative'>
@@ -62,7 +62,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
                   .join('')}
               </AvatarFallback>
             ) : (
-              <AvatarImage src={profile.avatar_url} alt={profile.name} />
+              <AvatarImage src={profile.avatar_url ?? ''} alt={profile.name} />
             )}
           </Avatar>
           <h1

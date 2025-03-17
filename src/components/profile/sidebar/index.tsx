@@ -40,11 +40,11 @@ export const ProfileSidebar = () => {
 
           <ProfileSidebarContact
             email={profile.email}
-            website={profile.website}
-            github={profile.github}
-            x={profile.x}
-            linkedin={profile.linkedin}
-            bluesky={profile.bluesky}
+            website={profile.website ?? ''}
+            github={profile.github ?? ''}
+            x={profile.x ?? ''}
+            linkedin={profile.linkedin ?? ''}
+            bluesky={profile.bluesky ?? ''}
           />
 
           <ProfileSidebarActions onAddNewSection={() => {}} />

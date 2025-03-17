@@ -18,16 +18,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 
-import { BasicInfo } from '@/components/profile/dialog/basic-info'
-import { Bio } from '@/components/profile/dialog/bio'
-import { Contact } from '@/components/profile/dialog/contact'
+import { BasicInfo } from '@/components/profile/sidebar/dialog/forms/basic-info'
+import { Bio } from '@/components/profile/sidebar/dialog/forms/bio'
+import { Contact } from '@/components/profile/sidebar/dialog/forms/contact'
 import {
   formSchema,
   basicInfoSchema,
   bioSchema,
   contactSchema,
   type FormSchema
-} from '@/components/profile/dialog/schemas'
+} from '@/components/profile/sidebar/dialog/schemas'
 import { useProfile } from '@/components/profile/provider'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
@@ -78,8 +78,8 @@ export const ProfileDialogEdit = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: profile.name,
-      title: profile.title,
-      location: profile.location,
+      title: profile.title ?? '',
+      location: profile.location ?? '',
       bio: profile.bio ?? '',
       email: profile.email,
       avatarUrl: profile.avatar_url ?? '',
@@ -283,11 +283,11 @@ export const ProfileDialogEdit = () => {
               <TabsContent value='basic'>
                 <BasicInfo
                   control={form.control}
-                  avatarPreview={avatarPreview}
-                  bannerPreview={bannerPreview}
+                  avatarPreview={avatarPreview ?? ''}
+                  bannerPreview={bannerPreview ?? ''}
                   avatarColor={avatarColor}
                   textColor={textColor}
-                  profileBannerUrl={profile.banner_url}
+                  profileBannerUrl={profile.banner_url ?? ''}
                   countryOpen={countryOpen}
                   selectedCountry={selectedCountry}
                   onCountryOpenChange={setCountryOpen}
