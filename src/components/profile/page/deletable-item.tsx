@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/alert-dialog'
 
 interface DeletableProps {
+  canDelete: boolean
   itemId: string
   sectionId: string
   sectionName: string
@@ -25,7 +26,8 @@ interface DeletableProps {
   children: React.ReactNode
 }
 
-export const Deletable = ({
+export const DeletableItem = ({
+  canDelete,
   itemId,
   sectionId,
   itemName,
@@ -40,14 +42,16 @@ export const Deletable = ({
       <div className='absolute top-2 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity'>
         <AlertDialog open={open} onOpenChange={setOpen}>
           <AlertDialogTrigger asChild>
-            <Button
-              variant='neutral'
-              size='icon'
-              className='h-8 w-8 border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[2px_4px_0px_0px_rgba(0,0,0,1)] transition-all bg-[#ff6b6b] hover:bg-[#ff5252] text-white'
-              aria-label='Delete item'
-            >
-              <Trash2 className='h-4 w-4' />
-            </Button>
+            {canDelete ? (
+              <Button
+                variant='neutral'
+                size='icon'
+                className='h-8 w-8 border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[2px_4px_0px_0px_rgba(0,0,0,1)] transition-all bg-[#ff6b6b] hover:bg-[#ff5252]'
+                aria-label='Delete item'
+              >
+                <Trash2 className='h-4 w-4' />
+              </Button>
+            ) : null}
           </AlertDialogTrigger>
           <AlertDialogContent className='bg-white border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]'>
             <AlertDialogHeader>

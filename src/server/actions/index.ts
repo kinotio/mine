@@ -5,7 +5,8 @@ import {
   createProfileSection,
   createProfileSectionItem,
   deleteProfileSectionItem,
-  getProfileSectionTemplates
+  getProfileSectionTemplates,
+  deleteProfileSection
 } from '@/server/actions/profile'
 import { updateUser, deleteUser, getUserByUsername, createUser } from '@/server/actions/user'
 
@@ -21,6 +22,7 @@ export {
   createProfileSectionItem,
   deleteProfileSectionItem,
   getProfileSectionTemplates,
+  deleteProfileSection,
 
   // User
   updateUser,

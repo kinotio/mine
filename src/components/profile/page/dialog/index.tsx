@@ -55,7 +55,7 @@ import { DynamicObject } from '@/lib/utils'
 interface SectionItemDialogProps {
   sectionId: string
   sectionType: string
-  sectionTitle: string
+  sectionName: string
   buttonText: string
   buttonColor: string
   buttonTextColor?: string
@@ -66,7 +66,7 @@ interface SectionItemDialogProps {
 export const SectionItemDialog = ({
   sectionId,
   sectionType,
-  sectionTitle,
+  sectionName,
   buttonColor,
   buttonText,
   buttonTextColor = 'black',
@@ -178,7 +178,7 @@ export const SectionItemDialog = ({
       <DialogTrigger asChild>
         {trigger || (
           <Button
-            className='font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all mr-6 mt-3'
+            className='font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
             style={{
               backgroundColor: buttonColor,
               color: buttonTextColor === 'black' ? 'black' : 'white'
@@ -191,7 +191,7 @@ export const SectionItemDialog = ({
       </DialogTrigger>
       <DialogContent className='sm:max-w-[600px] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] bg-white'>
         <DialogHeader>
-          <DialogTitle className='text-2xl font-black'>Add to {sectionTitle}</DialogTitle>
+          <DialogTitle className='text-2xl font-black'>Add to {sectionName}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>

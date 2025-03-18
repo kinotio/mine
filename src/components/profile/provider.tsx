@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, type ReactNode, useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
+import { useUser, useAuth } from '@clerk/nextjs'
 
 import { getUserByUsername } from '@/server/actions'
 import { UserProfile } from '@/lib/types/profile'
@@ -14,22 +14,33 @@ type ProfileContextType = {
   user: ClerkUserMinimal
   profile: UserProfile
   loading: boolean
+  hasPermission: boolean
+  isSignedIn: boolean
 }
 
-const initialState = { user: {} as ClerkUserMinimal, profile: {} as UserProfile, loading: true }
+const initialState = {
+  user: {} as ClerkUserMinimal,
+  profile: {} as UserProfile,
+  loading: true,
+  hasPermission: false,
+  isSignedIn: false
+}
 
 const ProfileContext = createContext<ProfileContextType>(initialState)
 
 // Provider component
 export const ProfileProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser() as { user: ClerkUserMinimal }
+  const { userId, isSignedIn } = useAuth()
 
   const params = useParams<{ username: string }>()
 
   const [profile, setProfile] = useState<UserProfile>()
   const [loading, setLoading] = useState(true)
 
-  const value = { user, profile, loading }
+  const hasPermission = userId === profile?.user_id
+
+  const value = { user, profile, loading, hasPermission, isSignedIn }
 
   const fetchProfile = () => {
     getUserByUsername(params.username)

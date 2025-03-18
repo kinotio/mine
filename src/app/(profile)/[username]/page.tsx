@@ -18,7 +18,7 @@ import {
   VolunteerCard,
   DefaultCard
 } from '@/components/profile/page/cards'
-import { Deletable } from '@/components/profile/page/deletable'
+import { DeletableItem } from '@/components/profile/page/deletable-item'
 
 import { adaptToType, DynamicObject } from '@/lib/utils'
 import {
@@ -42,16 +42,34 @@ import { useProfile } from '@/components/profile/provider'
 import {
   getProfileSectionTemplates,
   createProfileSectionItem,
-  deleteProfileSectionItem
+  deleteProfileSectionItem,
+  deleteProfileSection
 } from '@/server/actions'
 import { ProfileSectionTemplate } from '@/server/databases/types'
 
 const Page = () => {
-  const { profile, user } = useProfile()
+  const { profile, user, hasPermission, isSignedIn } = useProfile()
   const { emit } = useEventEmitter()
   const { toast } = useToast()
 
   const [templates, setTemplates] = useState<ProfileSectionTemplate[]>([])
+
+  const handleDeleteSection = async (userId: string, sectionId: string) => {
+    deleteProfileSection(userId, sectionId).then(({ success, data, error }) => {
+      if (success && data) {
+        toast({
+          title: 'Deleted',
+          description: `The section has been deleted.`
+        })
+      }
+
+      if (!success && error) {
+        toast({ title: 'Error', description: error })
+      }
+
+      emit('profile:updated', {})
+    })
+  }
 
   const handleCreateSectionItem = async (
     userId: string,
@@ -169,9 +187,10 @@ const Page = () => {
         break
     }
 
-    // Wrap card with Deletable component
+    // Wrap card with DeletableItem component
     return (
-      <Deletable
+      <DeletableItem
+        canDelete={isSignedIn && hasPermission}
         itemId={itemId}
         sectionId={sectionId}
         sectionName={sectionName}
@@ -179,7 +198,7 @@ const Page = () => {
         onDelete={handleDeleteSectionItem}
       >
         {card}
-      </Deletable>
+      </DeletableItem>
     )
   }
 
@@ -208,8 +227,10 @@ const Page = () => {
               buttonText={`Add ${section.name}`}
               buttonTextColor={textColor}
               sectionType={template?.slug ?? ''}
-              sectionTitle={section.name}
+              sectionName={section.name}
               onSubmit={handleCreateSectionItem}
+              onDelete={handleDeleteSection}
+              canCreateOrDelete={isSignedIn && hasPermission}
             />
 
             <ScrollableSection>

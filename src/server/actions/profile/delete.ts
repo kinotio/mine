@@ -3,7 +3,7 @@
 import { eq, and } from 'drizzle-orm'
 
 import { userProfileSections, userProfileSectionItems, users } from '@/server/databases/tables'
-import { UserProfileSectionItem } from '@/server/databases/types'
+import { UserProfileSectionItem, UserProfileSection } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import database from '@/server/services/drizzle'
@@ -65,6 +65,63 @@ export const deleteProfileSectionItem = async (
     return {
       success: false,
       error: error instanceof Error ? error.message : 'An error occurred while deleting the item'
+    }
+  }
+}
+
+export const deleteProfileSection = async (
+  userId: string,
+  sectionId: string
+): Promise<ActionResponse<UserProfileSection>> => {
+  try {
+    const section = await database.query.userProfileSections.findFirst({
+      where: eq(userProfileSections.id, sectionId),
+      with: {
+        user_profile_section_items: true
+      }
+    })
+
+    if (!section) {
+      return {
+        success: false,
+        error: 'An error occurred while finding section'
+      }
+    }
+
+    if (
+      Array.isArray(section.user_profile_section_items) &&
+      section.user_profile_section_items.length > 0
+    ) {
+      return {
+        success: false,
+        error: 'An error occurred while deleting section, section need to be empty'
+      }
+    }
+
+    const user = await database.query.users.findFirst({
+      where: eq(users.id, userId)
+    })
+
+    if (user?.username) await cache.invalidate(`user:${user.username}`)
+
+    // Delete the item
+    const result = await database.transaction(async (tx) => {
+      const deleted = await tx
+        .delete(userProfileSections)
+        .where(eq(userProfileSections.id, sectionId))
+        .returning()
+
+      return deleted[0]
+    })
+
+    return {
+      success: true,
+      data: result as UserProfileSection
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'An error occurred while deleting the section'
     }
   }
 }

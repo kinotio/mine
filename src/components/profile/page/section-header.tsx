@@ -3,6 +3,8 @@ import { icons } from 'lucide-react'
 import { Icon } from '@/components/icon'
 import { SectionItemDialog } from '@/components/profile/page/dialog'
 
+import { DeletableSection } from '@/components/profile/page/deletable-section'
+
 import { DynamicObject } from '@/lib/utils'
 
 interface SectionHeaderProps {
@@ -13,8 +15,10 @@ interface SectionHeaderProps {
   buttonColor?: string
   buttonTextColor?: string
   sectionType: string
-  sectionTitle: string
-  onSubmit?: (userId: string, sectionId: string, data: DynamicObject) => Promise<void>
+  sectionName: string
+  onSubmit: (userId: string, sectionId: string, data: DynamicObject) => Promise<void>
+  onDelete: (userId: string, sectionId: string) => Promise<void>
+  canCreateOrDelete: boolean
 }
 
 export const SectionHeader = ({
@@ -25,8 +29,10 @@ export const SectionHeader = ({
   buttonColor = '#4cc9f0',
   buttonTextColor = 'black',
   sectionType,
-  sectionTitle,
-  onSubmit
+  sectionName,
+  onSubmit,
+  onDelete,
+  canCreateOrDelete
 }: SectionHeaderProps) => {
   return (
     <div className='flex justify-between items-center mb-6'>
@@ -35,17 +41,21 @@ export const SectionHeader = ({
         <span className='text-xl'>{name}</span>
       </h2>
 
-      {onSubmit && (
-        <SectionItemDialog
-          sectionId={sectionId}
-          sectionType={sectionType}
-          sectionTitle={sectionTitle}
-          buttonText={buttonText}
-          buttonColor={buttonColor}
-          buttonTextColor={buttonTextColor}
-          onSubmit={onSubmit}
-        />
-      )}
+      {canCreateOrDelete ? (
+        <div className='flex items-center gap-4 mt-3 mr-6'>
+          <SectionItemDialog
+            sectionId={sectionId}
+            sectionType={sectionType}
+            sectionName={sectionName}
+            buttonText={buttonText}
+            buttonColor={buttonColor}
+            buttonTextColor={buttonTextColor}
+            onSubmit={onSubmit}
+          />
+
+          <DeletableSection sectionId={sectionId} sectionName={sectionName} onDelete={onDelete} />
+        </div>
+      ) : null}
     </div>
   )
 }
