@@ -18,7 +18,7 @@ import { useToast } from '@/hooks/use-toast'
 import { useProfile } from '@/components/profile/provider'
 import { useEventEmitter } from '@/hooks/use-event'
 
-import { getProfileSectionTemplates, createProfileSection } from '@/server/actions/profile'
+import { getProfileSectionTemplates, createProfileSection } from '@/server/actions'
 
 interface SectionTemplate {
   id: string

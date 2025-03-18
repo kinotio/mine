@@ -32,3 +32,7 @@ export const generateProfileUrl = (username: string) => {
 export const adaptToType = <T>(data: Record<string, unknown>): T => {
   return data as unknown as T
 }
+
+export interface DynamicObject {
+  [key: string]: unknown
+}

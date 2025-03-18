@@ -48,11 +48,9 @@ import {
   PortfolioFormValues
 } from '@/components/profile/page/dialog/types'
 
-import { useToast } from '@/hooks/use-toast'
 import { useProfile } from '@/components/profile/provider'
-import { useEventEmitter } from '@/hooks/use-event'
 
-import { createProfileSectionItem } from '@/server/actions/profile'
+import { DynamicObject } from '@/lib/utils'
 
 interface SectionItemDialogProps {
   sectionId: string
@@ -61,11 +59,8 @@ interface SectionItemDialogProps {
   buttonText: string
   buttonColor: string
   buttonTextColor?: string
+  onSubmit: (userId: string, sectionId: string, data: DynamicObject) => Promise<void>
   trigger?: React.ReactNode
-}
-
-interface DynamicObject {
-  [key: string]: unknown
 }
 
 export const SectionItemDialog = ({
@@ -75,11 +70,10 @@ export const SectionItemDialog = ({
   buttonColor,
   buttonText,
   buttonTextColor = 'black',
+  onSubmit,
   trigger
 }: SectionItemDialogProps) => {
-  const { user, profile } = useProfile()
-  const { toast } = useToast()
-  const { emit } = useEventEmitter()
+  const { user } = useProfile()
 
   const [open, setOpen] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -110,39 +104,25 @@ export const SectionItemDialog = ({
       }
     }
 
+  // Create typed image handlers by providing the generic type parameter
+  const projectImageHandler = createImageUploadHandler<ProjectFormValues>()
+  const certificationImageHandler = createImageUploadHandler<CertificationFormValues>()
+  const portfolioImageHandler = createImageUploadHandler<PortfolioFormValues>()
+
   // Handle form submission
-  const onSubmit = (values: FormValues) => {
+  const handleSubmit = (values: FormValues) => {
     const data = { ...values } as DynamicObject
 
     if (sectionType === 'projects' && 'tags' in data && typeof data.tags === 'string') {
       data.tags = (data.tags as string).split(',').map((tag: string) => tag.trim())
     }
 
-    createProfileSectionItem(user.id, profile.id, sectionId, data)
-      .then(({ success, data, error }) => {
-        if (success && data) {
-          toast({
-            title: 'Saved',
-            description: `New item has been added to ${sectionTitle}.`
-          })
-        }
-
-        if (!success && error) {
-          toast({ title: 'Error', description: error })
-        }
-      })
-      .finally(() => {
-        emit('profile:updated', {})
-        setOpen(false)
-        form.reset(defaultValues as FormValues)
-        setImagePreview(null)
-      })
+    onSubmit(user.id, sectionId, data).finally(() => {
+      setOpen(false)
+      form.reset(defaultValues as FormValues)
+      setImagePreview(null)
+    })
   }
-
-  // Create typed image handlers by providing the generic type parameter
-  const projectImageHandler = createImageUploadHandler<ProjectFormValues>()
-  const certificationImageHandler = createImageUploadHandler<CertificationFormValues>()
-  const portfolioImageHandler = createImageUploadHandler<PortfolioFormValues>()
 
   // Render form based on section type
   const renderForm = () => {
@@ -215,7 +195,7 @@ export const SectionItemDialog = ({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4 mt-4'>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4 mt-4'>
             {renderForm()}
 
             <div className='pt-4 flex justify-end gap-3 border-t border-gray-200'>
