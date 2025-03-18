@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { Edit } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAuth } from '@clerk/nextjs'
 import { isEmpty } from 'lodash'
 
 import {
@@ -38,8 +37,7 @@ import { useToast } from '@/hooks/use-toast'
 import { useEventEmitter } from '@/hooks/use-event'
 
 export const ProfileDialogEdit = () => {
-  const { profile } = useProfile()
-  const { isSignedIn, userId } = useAuth()
+  const { profile, hasPermission, isSignedIn } = useProfile()
   const { toast } = useToast()
   const { emit } = useEventEmitter()
 
@@ -238,7 +236,7 @@ export const ProfileDialogEdit = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {isSignedIn && profile.user_id === userId ? (
+        {isSignedIn && hasPermission ? (
           <div className='absolute top-2 right-4 z-20'>
             <Button
               className='bg-[#4cc9f0] hover:bg-[#3db8df] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all h-10 w-10 p-0'

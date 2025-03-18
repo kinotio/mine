@@ -57,7 +57,7 @@ export function ResumeDialog({ profile }: ResumeDialogProps) {
 
       {/* Preview Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className='max-w-[900px] w-[90vw] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]'>
+        <DialogContent className='bg-white max-w-[900px] w-[90vw] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)]'>
           <DialogHeader>
             <DialogTitle className='text-2xl font-black'>Resume Preview</DialogTitle>
           </DialogHeader>

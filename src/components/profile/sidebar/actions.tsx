@@ -1,7 +1,6 @@
 'use client'
 
 import { User, Check, Copy } from 'lucide-react'
-import { useAuth } from '@clerk/nextjs'
 
 import { Button } from '@/components/ui/button'
 import { useProfile } from '@/components/profile/provider'
@@ -13,8 +12,8 @@ import { ResumeDialog } from '@/components/profile/sidebar/dialog/resume'
 import { useClipboard } from '@/hooks/use-clipboard'
 
 export const ProfileSidebarActions = () => {
-  const { profile } = useProfile()
-  const { isSignedIn, userId } = useAuth()
+  const { profile, hasPermission, isSignedIn } = useProfile()
+
   const { copyToClipboard, copied } = useClipboard()
 
   return (
@@ -47,7 +46,7 @@ export const ProfileSidebarActions = () => {
       </div>
 
       {/* Add New Section Button (Only for signed-in users) */}
-      {isSignedIn && profile.user_id === userId ? <AddSectionDialog /> : null}
+      {isSignedIn && hasPermission ? <AddSectionDialog /> : null}
     </div>
   )
 }
