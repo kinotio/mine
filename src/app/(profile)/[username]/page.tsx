@@ -64,7 +64,7 @@ const Page = () => {
       }
 
       if (!success && error) {
-        toast({ title: 'Error', description: error })
+        toast({ title: 'Error', description: error, variant: 'destructive' })
       }
 
       emit('profile:updated', {})
@@ -86,7 +86,7 @@ const Page = () => {
         }
 
         if (!success && error) {
-          toast({ title: 'Error', description: error })
+          toast({ title: 'Error', description: error, variant: 'destructive' })
         }
 
         emit('profile:updated', {})
@@ -104,7 +104,7 @@ const Page = () => {
       }
 
       if (!success && error) {
-        toast({ title: 'Error', description: error })
+        toast({ title: 'Error', description: error, variant: 'destructive' })
       }
 
       emit('profile:updated', {})
