@@ -18,8 +18,9 @@ import {
   VolunteerCard,
   DefaultCard
 } from '@/components/profile/page/cards'
+import { Deletable } from '@/components/profile/page/deletable'
 
-import { adaptToType } from '@/lib/utils'
+import { adaptToType, DynamicObject } from '@/lib/utils'
 import {
   ProjectData,
   ExperienceData,
@@ -35,47 +36,151 @@ import {
 } from '@/lib/types/profile'
 
 import { useEventEmitter } from '@/hooks/use-event'
+import { useToast } from '@/hooks/use-toast'
 import { useProfile } from '@/components/profile/provider'
 
-import { getProfileSectionTemplates } from '@/server/actions/profile'
+import {
+  getProfileSectionTemplates,
+  createProfileSectionItem,
+  deleteProfileSectionItem
+} from '@/server/actions'
 import { ProfileSectionTemplate } from '@/server/databases/types'
 
 const Page = () => {
-  const { profile } = useProfile()
+  const { profile, user } = useProfile()
   const { emit } = useEventEmitter()
+  const { toast } = useToast()
 
   const [templates, setTemplates] = useState<ProfileSectionTemplate[]>([])
 
-  const handleCreateSectionItem = (sectionId: string) => {
-    console.log(`Add item to section ${sectionId}`)
-    emit('profile:updated', {})
+  const handleCreateSectionItem = async (
+    userId: string,
+    sectionId: string,
+    data: DynamicObject
+  ) => {
+    createProfileSectionItem(userId, profile.id, sectionId, data).then(
+      ({ success, data, error }) => {
+        if (success && data) {
+          toast({
+            title: 'Saved',
+            description: `New item has been added.`
+          })
+        }
+
+        if (!success && error) {
+          toast({ title: 'Error', description: error })
+        }
+
+        emit('profile:updated', {})
+      }
+    )
   }
 
-  const renderCard = (metadata: Record<string, unknown>, templateSlug: string | undefined) => {
+  const handleDeleteSectionItem = async (itemId: string, sectionId: string) => {
+    deleteProfileSectionItem(user.id, sectionId, itemId).then(({ success, data, error }) => {
+      if (success && data) {
+        toast({
+          title: 'Removed',
+          description: `An item has been removed.`
+        })
+      }
+
+      if (!success && error) {
+        toast({ title: 'Error', description: error })
+      }
+
+      emit('profile:updated', {})
+    })
+  }
+
+  // Helper function to get item name for the Deletable component
+  const getItemName = (
+    metadata: Record<string, unknown>,
+    templateSlug: string | undefined
+  ): string => {
     switch (templateSlug) {
       case 'projects':
-        return <ProjectCard project={adaptToType<ProjectData>(metadata)} />
+        return (metadata.title as string) ?? (metadata.name as string) ?? 'Project'
       case 'experience':
-        return <ExperienceCard experience={adaptToType<ExperienceData>(metadata)} />
+        return (metadata.role as string) ?? (metadata.company as string) ?? 'Experience'
       case 'skills':
-        return <SkillCard skill={adaptToType<SkillData>(metadata)} />
+        return (metadata.name as string) ?? (metadata.skill as string) ?? 'Skill'
       case 'certifications':
-        return <CertificationCard certification={adaptToType<CertificationData>(metadata)} />
+        return (metadata.name as string) ?? 'Certification'
       case 'education':
-        return <EducationCard education={adaptToType<EducationData>(metadata)} />
+        return (metadata.degree as string) ?? (metadata.school as string) ?? 'Education'
       case 'achievements':
-        return <AchievementCard achievement={adaptToType<AchievementData>(metadata)} />
+        return (metadata.title as string) ?? 'Achievement'
       case 'portfolio':
-        return <PortfolioCard portfolio={adaptToType<PortfolioData>(metadata)} />
+        return (metadata.title as string) ?? (metadata.name as string) ?? 'Portfolio Item'
       case 'publications':
-        return <PublicationCard publication={adaptToType<PublicationData>(metadata)} />
+        return (metadata.title as string) ?? 'Publication'
       case 'languages':
-        return <LanguageCard language={adaptToType<LanguageData>(metadata)} />
+        return (metadata.language as string) ?? 'Language'
       case 'volunteer':
-        return <VolunteerCard volunteer={adaptToType<VolunteerData>(metadata)} />
+        return (metadata.role as string) ?? (metadata.organization as string) ?? 'Volunteer Work'
       default:
-        return <DefaultCard item={adaptToType<DefaultData>(metadata)} />
+        return (metadata.title as string) ?? (metadata.name as string) ?? 'Item'
     }
+  }
+
+  const renderCard = (
+    itemId: string,
+    sectionId: string,
+    sectionName: string,
+    metadata: Record<string, unknown>,
+    templateSlug: string | undefined
+  ) => {
+    // Get appropriate card based on templateSlug
+    let card
+    switch (templateSlug) {
+      case 'projects':
+        card = <ProjectCard project={adaptToType<ProjectData>(metadata)} />
+        break
+      case 'experience':
+        card = <ExperienceCard experience={adaptToType<ExperienceData>(metadata)} />
+        break
+      case 'skills':
+        card = <SkillCard skill={adaptToType<SkillData>(metadata)} />
+        break
+      case 'certifications':
+        card = <CertificationCard certification={adaptToType<CertificationData>(metadata)} />
+        break
+      case 'education':
+        card = <EducationCard education={adaptToType<EducationData>(metadata)} />
+        break
+      case 'achievements':
+        card = <AchievementCard achievement={adaptToType<AchievementData>(metadata)} />
+        break
+      case 'portfolio':
+        card = <PortfolioCard portfolio={adaptToType<PortfolioData>(metadata)} />
+        break
+      case 'publications':
+        card = <PublicationCard publication={adaptToType<PublicationData>(metadata)} />
+        break
+      case 'languages':
+        card = <LanguageCard language={adaptToType<LanguageData>(metadata)} />
+        break
+      case 'volunteer':
+        card = <VolunteerCard volunteer={adaptToType<VolunteerData>(metadata)} />
+        break
+      default:
+        card = <DefaultCard item={adaptToType<DefaultData>(metadata)} />
+        break
+    }
+
+    // Wrap card with Deletable component
+    return (
+      <Deletable
+        itemId={itemId}
+        sectionId={sectionId}
+        sectionName={sectionName}
+        itemName={getItemName(metadata, templateSlug)}
+        onDelete={handleDeleteSectionItem}
+      >
+        {card}
+      </Deletable>
+    )
   }
 
   useEffect(() => {
@@ -104,7 +209,7 @@ const Page = () => {
               buttonTextColor={textColor}
               sectionType={template?.slug ?? ''}
               sectionTitle={section.name}
-              onButtonClick={() => handleCreateSectionItem(section.id)}
+              onSubmit={handleCreateSectionItem}
             />
 
             <ScrollableSection>
@@ -116,7 +221,11 @@ const Page = () => {
                       ? JSON.parse(item.metadata)
                       : (item.metadata as Record<string, unknown>)
 
-                  return <div key={item.id}>{renderCard(metadata, template?.slug)}</div>
+                  return (
+                    <div key={item.id}>
+                      {renderCard(item.id, section.id, section.name, metadata, template?.slug)}
+                    </div>
+                  )
                 })
               ) : (
                 <div className='w-full py-8 text-center'>

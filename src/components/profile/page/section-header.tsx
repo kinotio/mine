@@ -3,6 +3,8 @@ import { icons } from 'lucide-react'
 import { Icon } from '@/components/icon'
 import { SectionItemDialog } from '@/components/profile/page/dialog'
 
+import { DynamicObject } from '@/lib/utils'
+
 interface SectionHeaderProps {
   sectionId: string
   name: string
@@ -12,7 +14,7 @@ interface SectionHeaderProps {
   buttonTextColor?: string
   sectionType: string
   sectionTitle: string
-  onButtonClick?: () => void
+  onSubmit?: (userId: string, sectionId: string, data: DynamicObject) => Promise<void>
 }
 
 export const SectionHeader = ({
@@ -24,7 +26,7 @@ export const SectionHeader = ({
   buttonTextColor = 'black',
   sectionType,
   sectionTitle,
-  onButtonClick
+  onSubmit
 }: SectionHeaderProps) => {
   return (
     <div className='flex justify-between items-center mb-6'>
@@ -33,7 +35,7 @@ export const SectionHeader = ({
         <span className='text-xl'>{name}</span>
       </h2>
 
-      {onButtonClick && (
+      {onSubmit && (
         <SectionItemDialog
           sectionId={sectionId}
           sectionType={sectionType}
@@ -41,6 +43,7 @@ export const SectionHeader = ({
           buttonText={buttonText}
           buttonColor={buttonColor}
           buttonTextColor={buttonTextColor}
+          onSubmit={onSubmit}
         />
       )}
     </div>
