@@ -47,7 +47,7 @@ export const ProfileSidebar = () => {
             bluesky={profile.bluesky ?? ''}
           />
 
-          <ProfileSidebarActions onAddNewSection={() => {}} />
+          <ProfileSidebarActions />
         </div>
       </div>
     </div>

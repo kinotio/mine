@@ -29,11 +29,10 @@ interface SectionTemplate {
 }
 
 interface AddSectionDialogProps {
-  onAddSection: (sectionType: string, sectionName: string) => void
   trigger?: React.ReactNode
 }
 
-export const AddSectionDialog = ({ onAddSection, trigger }: AddSectionDialogProps) => {
+export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
   const { toast } = useToast()
   const { profile } = useProfile()
   const { emit } = useEventEmitter()
@@ -50,8 +49,6 @@ export const AddSectionDialog = ({ onAddSection, trigger }: AddSectionDialogProp
 
   const handleAddSection = async () => {
     if (selectedTemplate) {
-      onAddSection(selectedTemplate.id, customName)
-
       // Create the section to the user's profile
       createProfileSection(profile.user_id, profile.id, selectedTemplate.id, customName)
         .then(({ success, error }) => {
