@@ -63,53 +63,51 @@ export const ResumeDialog = ({ profile }: ResumeDialogProps) => {
           </DialogHeader>
 
           <div className='flex flex-col'>
-            {/* PDF Viewer Toolbar */}
-            <div className='bg-[#f6f8fa] border-[3px] border-black p-3 flex justify-between items-center'>
-              <div className='flex items-center gap-2'>
-                <span className='font-medium'>Preview</span>
-              </div>
-              <div className='flex items-center gap-2'>
-                <Button
-                  size='sm'
-                  variant='neutral'
-                  className='border-[2px] border-black h-8 w-8 p-0'
-                  onClick={handleZoomOut}
-                >
-                  <ZoomOut className='h-4 w-4' />
-                </Button>
-                <span className='font-medium'>{Math.round(scale * 100)}%</span>
-                <Button
-                  size='sm'
-                  variant='neutral'
-                  className='border-[2px] border-black h-8 w-8 p-0'
-                  onClick={handleZoomIn}
-                >
-                  <ZoomIn className='h-4 w-4' />
-                </Button>
-              </div>
-            </div>
-
-            {/* PDF Preview */}
-            <div className='p-8 h-[700px] overflow-y-auto relative'>
+            {/* PDF Preview with floating toolbar */}
+            <div className='p-8 h-[700px] overflow-y-auto relative border-black border-[3px]'>
               <div className='flex justify-center'>
                 <div
                   style={{
                     transform: `scale(${scale})`,
                     transformOrigin: 'top center',
-                    width: '600px' // Match PDFViewer width
+                    width: '600px', // Match PDFViewer width
+                    height: '845px' // Match PDFViewer height
                   }}
                 >
                   {/* Use position absolute to prevent internal scroll */}
                   <div className='sticky top-0'>
                     <PDFViewer
                       width={600}
-                      height={800}
+                      height={845}
                       showToolbar={false}
                       className='pdf-viewer-no-scroll'
                     >
                       <ResumeTemplate profile={profile} />
                     </PDFViewer>
                   </div>
+                </div>
+              </div>
+
+              {/* Floating toolbar in bottom right corner */}
+              <div className='fixed bottom-8 right-8 z-10'>
+                <div className='bg-[#f6f8fa] border-[3px] border-black p-3 rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] flex items-center gap-3'>
+                  <Button
+                    size='sm'
+                    variant='neutral'
+                    className='border-[2px] border-black h-8 w-8 p-0'
+                    onClick={handleZoomOut}
+                  >
+                    <ZoomOut className='h-4 w-4' />
+                  </Button>
+                  <span className='font-medium'>{Math.round(scale * 100)}%</span>
+                  <Button
+                    size='sm'
+                    variant='neutral'
+                    className='border-[2px] border-black h-8 w-8 p-0'
+                    onClick={handleZoomIn}
+                  >
+                    <ZoomIn className='h-4 w-4' />
+                  </Button>
                 </div>
               </div>
             </div>

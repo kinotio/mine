@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, Code, Zap, Star } from 'lucide-react'
 import Link from 'next/link'
 
-import { floatingIcons, itemVariants, containerVariants } from '@/components/config/framer'
+import { floatingIcons, itemVariants, containerVariants } from '@/components/root/config'
 
 export const Hero = () => {
   return (
