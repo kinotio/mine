@@ -2,26 +2,20 @@ import { Document, Page, Text, View, Link } from '@react-pdf/renderer'
 
 import { styles } from '@/components/profile/pdf/config'
 import { formatDate, removeEmojis } from '@/components/profile/pdf/helpers'
-import { WorkExperience, Project, CustomSectionItem } from '@/lib/types/profile'
 import { UserProfile } from '@/lib/types/profile'
 
 interface ResumeTemplateProps {
   profile: UserProfile
 }
 
-const PageHeader = ({ profile }: { profile: UserProfile }) => (
-  <View style={styles.pageHeader} fixed>
-    <Text style={styles.headerName}>{profile.name}</Text>
-    <Text style={styles.headerTitle}>{profile.title}</Text>
-  </View>
-)
-
 const MainHeader = ({ profile }: { profile: UserProfile }) => (
-  <View style={styles.header}>
+  <View style={styles.header} fixed>
     <Text style={styles.name}>{profile.name}</Text>
-    <Text style={styles.title}>{profile.title}</Text>
+    {profile.title && <Text style={styles.title}>{profile.title}</Text>}
     <Text style={styles.contact}>
-      {profile.location} | {profile.email} {profile.website && `| ${profile.website}`}
+      {profile.location && `${profile.location} | `}
+      {profile.email}
+      {profile.website && ` | ${profile.website}`}
     </Text>
     <View style={styles.socialLinks}>
       {profile.github && <Text style={styles.socialLink}>GitHub: @{profile.github}</Text>}
@@ -32,26 +26,36 @@ const MainHeader = ({ profile }: { profile: UserProfile }) => (
   </View>
 )
 
-const ProfessionalSummary = ({ bio, isLong }: { bio?: string; isLong: boolean }) => {
+// Compact header for continuation pages
+const ContinuationHeader = ({ profile }: { profile: UserProfile }) => (
+  <View style={styles.continuationHeader} fixed render={({ pageNumber }) => pageNumber > 1}>
+    <Text style={styles.headerName}>{profile.name}</Text>
+    <Text style={styles.headerTitle}>{profile.title || ''}</Text>
+  </View>
+)
+
+const ProfessionalSummary = ({ bio }: { bio: string }) => {
   const cleanBio = removeEmojis(bio)
 
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Professional Summary</Text>
-      <Text style={styles.content}>{isLong ? cleanBio.slice(0, 500) + '...' : cleanBio}</Text>
+      <Text style={styles.content}>{cleanBio}</Text>
     </View>
   )
 }
 
-const ProfessionalSummaryContinued = ({ bio }: { bio?: string }) => {
-  const cleanBio = removeEmojis(bio)
-
-  return (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>Professional Summary (Continued)</Text>
-      <Text style={styles.content}>{cleanBio.slice(500)}</Text>
-    </View>
+// Helper function to extract skills from profile sections
+const extractSkills = (profile: UserProfile) => {
+  const skillsSection = profile.user_profile_sections.find(
+    (section) => section.slug === 'skills' || section.name.toLowerCase().includes('skill')
   )
+
+  if (!skillsSection) return []
+
+  return skillsSection.user_profile_section_items.map((item) => ({
+    name: item.metadata.name || item.metadata.skill || Object.values(item.metadata)[0] || ''
+  }))
 }
 
 const SkillsSection = ({ skills }: { skills: { name: string }[] }) => (
@@ -67,191 +71,146 @@ const SkillsSection = ({ skills }: { skills: { name: string }[] }) => (
   </View>
 )
 
-const JobExperience = ({ job, index }: { job: WorkExperience; index: number }) => (
-  <View key={index} style={styles.experience}>
-    <View style={styles.experienceHeader}>
-      <Text style={styles.jobTitle}>{job.role}</Text>
-      <Text style={styles.dates}>
-        {formatDate(job.startDate)} - {job.current ? 'Present' : formatDate(job.endDate || '')}
-      </Text>
+const ProfileSectionItem = ({
+  item,
+  sectionName
+}: {
+  item: {
+    id: string
+    metadata: { [key: string]: string }
+  }
+  sectionName: string
+}) => {
+  // Extract common fields
+  const title = item.metadata.title || item.metadata.role || item.metadata.position || ''
+  const subtitle =
+    item.metadata.subtitle || item.metadata.company || item.metadata.organization || ''
+  const description = item.metadata.description || ''
+  const startDate = item.metadata.startDate || item.metadata.start_date || ''
+  const endDate = item.metadata.endDate || item.metadata.end_date || ''
+  const current = item.metadata.current === 'true'
+  const dateDisplay = startDate
+    ? `${formatDate(startDate)} - ${current ? 'Present' : endDate ? formatDate(endDate) : ''}`
+    : ''
+
+  return (
+    <View style={styles.experience}>
+      <View style={styles.experienceHeader}>
+        <Text style={styles.jobTitle}>{title}</Text>
+        {dateDisplay && <Text style={styles.dates}>{dateDisplay}</Text>}
+      </View>
+      {subtitle && <Text style={styles.companyName}>{subtitle}</Text>}
+      {description && <Text style={styles.description}>{description}</Text>}
+
+      {/* Handle achievements or bullet points if they exist */}
+      {item.metadata.achievements && (
+        <View style={styles.achievements}>
+          {item.metadata.achievements.split('\n').map((achievement, idx) => (
+            <Text key={idx} style={styles.achievement}>
+              • {achievement.trim()}
+            </Text>
+          ))}
+        </View>
+      )}
+
+      {/* For projects: show technologies */}
+      {sectionName.toLowerCase().includes('project') && item.metadata.technologies && (
+        <Text style={styles.technologies}>Technologies: {item.metadata.technologies}</Text>
+      )}
+
+      {/* For projects: show links */}
+      {sectionName.toLowerCase().includes('project') &&
+        (item.metadata.url || item.metadata.repo) && (
+          <View style={styles.projectLinks}>
+            {item.metadata.url && (
+              <Text style={styles.projectLink}>
+                Demo: <Link src={item.metadata.url}>{item.metadata.url}</Link>
+              </Text>
+            )}
+            {item.metadata.repo && (
+              <Text style={styles.projectLink}>
+                Repository: <Link src={item.metadata.repo}>{item.metadata.repo}</Link>
+              </Text>
+            )}
+          </View>
+        )}
     </View>
-    <Text style={styles.companyName}>{job.company}</Text>
-    <Text style={styles.description}>{job.description}</Text>
-    {job.achievements && job.achievements.length > 0 && (
-      <View style={styles.achievements}>
-        {job.achievements.map((achievement, idx) => (
-          <Text key={idx} style={styles.achievement}>
-            • {achievement}
-          </Text>
-        ))}
-      </View>
-    )}
-  </View>
-)
+  )
+}
 
-const WorkExperienceSection = ({
-  experiences,
-  continued = false
-}: {
-  experiences: WorkExperience[]
-  continued?: boolean
-}) => (
+const ProfileSection = ({ section }: { section: UserProfile['user_profile_sections'][0] }) => (
   <View style={styles.section}>
-    <Text style={styles.sectionTitle}>
-      Professional Experience{continued ? ' (Continued)' : ''}
-    </Text>
-    {experiences.map((job, index) => (
-      <JobExperience key={index} job={job} index={index} />
-    ))}
-  </View>
-)
-
-const ProjectItem = ({ project, index }: { project: Project; index: number }) => (
-  <View key={index} style={styles.project}>
-    <Text style={styles.projectTitle}>{project.title}</Text>
-    <Text style={styles.description}>{project.description}</Text>
-    {project.technologies && project.technologies.length > 0 && (
-      <Text style={styles.technologies}>Technologies: {project.technologies.join(', ')}</Text>
-    )}
-    {(project.url || project.repo) && (
-      <View style={styles.projectLinks}>
-        {project.url && (
-          <Text style={styles.projectLink}>
-            Demo: <Link src={project.url}>{project.url}</Link>
-          </Text>
-        )}
-        {project.repo && (
-          <Text style={styles.projectLink}>
-            Repository: <Link src={project.repo}>{project.repo}</Link>
-          </Text>
-        )}
-      </View>
-    )}
-  </View>
-)
-
-const ProjectsSection = ({ projects }: { projects: Project[] }) => (
-  <View style={styles.section}>
-    <Text style={styles.sectionTitle}>Projects</Text>
-    {projects.map((project, index) => (
-      <ProjectItem key={index} project={project} index={index} />
-    ))}
-  </View>
-)
-
-const CustomSectionComponent = ({
-  section,
-  index,
-  isEducation = false
-}: {
-  section: { title: string; items: CustomSectionItem[] }
-  index: number
-  isEducation?: boolean
-}) => (
-  <View key={index} style={styles.section}>
-    <Text style={styles.sectionTitle}>{section.title}</Text>
-    {section.items.map((item, idx) => (
-      <View key={idx} style={isEducation ? styles.educationItem : styles.customItem}>
-        <Text style={isEducation ? styles.educationTitle : styles.customItemTitle}>
-          {item.title}
-        </Text>
-        {item.subtitle && (
-          <Text style={isEducation ? styles.educationSubtitle : styles.customItemSubtitle}>
-            {item.subtitle}
-          </Text>
-        )}
-        {item.date && <Text style={styles.dates}>{item.date}</Text>}
-        {item.description && <Text style={styles.description}>{item.description}</Text>}
-      </View>
+    <Text style={styles.sectionTitle}>{section.name}</Text>
+    {section.user_profile_section_items.map((item, index) => (
+      <ProfileSectionItem key={index} item={item} sectionName={section.name} />
     ))}
   </View>
 )
 
 export const ResumeTemplate = ({ profile }: ResumeTemplateProps) => {
-  // Calculate if content needs multiple pages
-  const longBio = profile.bio?.length > 500
-  const hasProjects = profile.projects && profile.projects.length > 0
-  const hasWorkExperience = profile.workExperience && profile.workExperience.length > 0
-  const hasCustomSections = profile.customSections && profile.customSections.length > 0
-  const needsSecondPage = hasProjects || (hasWorkExperience && profile.workExperience.length > 2)
-  const needsThirdPage = hasCustomSections && profile.customSections.length > 2
+  // Extract skills
+  const skills = extractSkills(profile)
 
-  // Filter custom sections by category
-  const educationSections =
-    profile.customSections?.filter(
-      (section) =>
-        section.title.toLowerCase().includes('education') ||
-        section.title.toLowerCase().includes('certification')
-    ) || []
+  // Group sections by type
+  const experienceSections = profile.user_profile_sections.filter(
+    (section) => section.slug === 'experience' || section.name.toLowerCase().includes('experience')
+  )
 
-  const activitiesSections =
-    profile.customSections?.filter(
-      (section) =>
-        section.title.toLowerCase().includes('activities') ||
-        section.title.toLowerCase().includes('volunteer')
-    ) || []
+  const projectSections = profile.user_profile_sections.filter(
+    (section) => section.slug === 'projects' || section.name.toLowerCase().includes('project')
+  )
 
-  const otherSections =
-    profile.customSections?.filter(
-      (section) =>
-        !section.title.toLowerCase().includes('education') &&
-        !section.title.toLowerCase().includes('certification') &&
-        !section.title.toLowerCase().includes('activities') &&
-        !section.title.toLowerCase().includes('volunteer')
-    ) || []
+  const educationSections = profile.user_profile_sections.filter(
+    (section) =>
+      section.slug === 'education' ||
+      section.name.toLowerCase().includes('education') ||
+      section.name.toLowerCase().includes('certification')
+  )
+
+  const otherSections = profile.user_profile_sections.filter(
+    (section) =>
+      !section.slug.match(/(experience|projects|skills|education)/) &&
+      !section.name.toLowerCase().match(/(experience|project|skill|education|certification)/)
+  )
 
   return (
     <Document>
-      {/* First Page */}
       <Page size='A4' style={styles.page}>
+        {/* Main content */}
         <MainHeader profile={profile} />
-        <ProfessionalSummary bio={profile.bio} isLong={longBio} />
 
-        {profile.skills && profile.skills.length > 0 && <SkillsSection skills={profile.skills} />}
+        {/* Essential content */}
+        <ProfessionalSummary bio={profile.bio} />
 
-        {hasWorkExperience && (
-          <WorkExperienceSection experiences={profile.workExperience.slice(0, 2)} />
-        )}
+        {skills.length > 0 && <SkillsSection skills={skills} />}
+
+        {/* Content sections */}
+        {experienceSections.map((section, index) => (
+          <ProfileSection key={`exp-${index}`} section={section} />
+        ))}
+
+        {projectSections.map((section, index) => (
+          <ProfileSection key={`proj-${index}`} section={section} />
+        ))}
+
+        {educationSections.map((section, index) => (
+          <ProfileSection key={`edu-${index}`} section={section} />
+        ))}
+
+        {otherSections.map((section, index) => (
+          <ProfileSection key={`other-${index}`} section={section} />
+        ))}
+
+        {/* Page number */}
+        <Text
+          style={styles.pageNumber}
+          render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
+          fixed
+        />
+
+        {/* Header for continuation pages - only shows on pages > 1 */}
+        <ContinuationHeader profile={profile} />
       </Page>
-
-      {/* Second Page */}
-      {(needsSecondPage || longBio) && (
-        <Page size='A4' style={styles.page}>
-          <PageHeader profile={profile} />
-
-          {longBio && <ProfessionalSummaryContinued bio={profile.bio} />}
-
-          {hasWorkExperience && profile.workExperience.length > 2 && (
-            <WorkExperienceSection experiences={profile.workExperience.slice(2)} continued={true} />
-          )}
-
-          {hasProjects && <ProjectsSection projects={profile.projects} />}
-        </Page>
-      )}
-
-      {/* Third Page */}
-      {needsThirdPage && (
-        <Page size='A4' style={styles.page}>
-          <PageHeader profile={profile} />
-
-          {educationSections.map((section, index) => (
-            <CustomSectionComponent
-              key={index}
-              section={section}
-              index={index}
-              isEducation={true}
-            />
-          ))}
-
-          {activitiesSections.map((section, index) => (
-            <CustomSectionComponent key={index} section={section} index={index} />
-          ))}
-
-          {otherSections.map((section, index) => (
-            <CustomSectionComponent key={index} section={section} index={index} />
-          ))}
-        </Page>
-      )}
     </Document>
   )
 }

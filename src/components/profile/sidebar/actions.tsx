@@ -1,14 +1,14 @@
 'use client'
 
-import { User, Check, Copy, Download } from 'lucide-react'
+import { User, Check, Copy } from 'lucide-react'
 import { useAuth } from '@clerk/nextjs'
-import { PDFDownloadLink } from '@react-pdf/renderer'
 
 import { Button } from '@/components/ui/button'
 import { useProfile } from '@/components/profile/provider'
-import { ResumeTemplate } from '@/components/profile/pdf/resume'
+
 import { ShareProfileDialog } from '@/components/profile/sidebar/share'
 import { AddSectionDialog } from '@/components/profile/sidebar/section'
+import { ResumeDialog } from '@/components/profile/sidebar/dialog/resume'
 
 import { useClipboard } from '@/hooks/use-clipboard'
 
@@ -25,26 +25,7 @@ export const ProfileSidebarActions = () => {
           <User className='mr-2' /> Profile Actions
         </h2>
         <div className='grid grid-cols-1 gap-3'>
-          <PDFDownloadLink
-            document={<ResumeTemplate profile={profile} />}
-            fileName={`${profile.name.replace(/\s+/g, '_')}_Resume.pdf`}
-          >
-            {({ loading }) => (
-              <Button
-                className='w-full bg-[#ff6b6b] hover:bg-[#ff5252] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'
-                disabled={loading}
-              >
-                {loading ? (
-                  'Generating...'
-                ) : (
-                  <>
-                    <Download className='h-5 w-5 mr-2' />
-                    Download Resume
-                  </>
-                )}
-              </Button>
-            )}
-          </PDFDownloadLink>
+          <ResumeDialog profile={profile} />
           <ShareProfileDialog profileUrl={profile.profile_url} profileName={profile.name} />
         </div>
       </div>
