@@ -27,7 +27,7 @@ export const PortfolioCard = ({ portfolio }: PortfolioCardProps) => {
             style={{ backgroundColor: '#fb5607' }}
           >
             <div className='flex flex-col items-center'>
-              <Palette className='h-12 w-12 text-white mb-2' />
+              <Palette className='h-12 w-12 text-black mb-2' />
             </div>
           </div>
         )}

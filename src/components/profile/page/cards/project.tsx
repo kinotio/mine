@@ -20,7 +20,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             style={{ backgroundColor: '#4cc9f0' }}
           >
             <div className='flex flex-col items-center'>
-              <Code className='h-10 w-10 text-white mb-2' />
+              <Code className='h-10 w-10 text-black mb-2' />
             </div>
           </div>
         )}

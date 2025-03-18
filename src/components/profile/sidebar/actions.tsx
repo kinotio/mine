@@ -12,13 +12,9 @@ import { AddSectionDialog } from '@/components/profile/sidebar/section'
 
 import { useClipboard } from '@/hooks/use-clipboard'
 
-interface ProfileActionsProps {
-  onAddNewSection: () => void
-}
-
-export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) => {
+export const ProfileSidebarActions = () => {
   const { profile } = useProfile()
-  const { isSignedIn } = useAuth()
+  const { isSignedIn, userId } = useAuth()
   const { copyToClipboard, copied } = useClipboard()
 
   return (
@@ -70,7 +66,7 @@ export const ProfileSidebarActions = ({ onAddNewSection }: ProfileActionsProps) 
       </div>
 
       {/* Add New Section Button (Only for signed-in users) */}
-      {isSignedIn ? <AddSectionDialog onAddSection={onAddNewSection} /> : null}
+      {isSignedIn && profile.user_id === userId ? <AddSectionDialog /> : null}
     </div>
   )
 }
