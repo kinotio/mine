@@ -9,6 +9,7 @@ import {
   deleteProfileSection
 } from '@/server/actions/profile'
 import { updateUser, deleteUser, getUserByUsername, createUser } from '@/server/actions/user'
+import { sendFeedback } from '@/server/actions/email'
 
 export {
   // File
@@ -28,5 +29,8 @@ export {
   updateUser,
   deleteUser,
   getUserByUsername,
-  createUser
+  createUser,
+
+  // Email
+  sendFeedback
 }

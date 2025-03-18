@@ -28,6 +28,8 @@ import {
 
 import { FeedbackRating } from '@/components/profile/feedback/rating'
 
+import { sendFeedback } from '@/server/actions'
+
 import { useToast } from '@/hooks/use-toast'
 
 // Feedback form schema
@@ -49,7 +51,6 @@ export const FeedbackDialog = ({ trigger }: FeedbackDialogProps) => {
   const [open, setOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Initialize form with react-hook-form and zod validation
   const form = useForm<FeedbackFormValues>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
@@ -59,22 +60,40 @@ export const FeedbackDialog = ({ trigger }: FeedbackDialogProps) => {
     }
   })
 
-  // Form submission
   const onSubmit = async (data: FeedbackFormValues) => {
     setIsSubmitting(true)
 
-    console.log('Feedback submitted:', data)
+    sendFeedback({
+      to: 'contact@kinotio.io',
+      subject: 'Mine Feedback',
+      data: {
+        email: data.email,
+        feedback: data.feedback,
+        rating: data.rating
+      }
+    }).then(({ success, data, error }) => {
+      if (success && data) {
+        toast({
+          title: 'Feedback submitted',
+          description: "Thank you for your feedback! We'll review it shortly."
+        })
+      }
 
-    // Show success message
-    toast({
-      title: 'Feedback submitted',
-      description: "Thank you for your feedback! We'll review it shortly."
+      if (!success && error) {
+        console.log(error)
+
+        toast({
+          title: 'Failed to submit feedback',
+          description: 'An error occurred while submitting your feedback. Please try again later.',
+          variant: 'destructive'
+        })
+      }
+
+      form.reset()
+      setIsSubmitting(false)
+      setOpen(false)
+      setIsSubmitting(false)
     })
-
-    // Reset form and close dialog
-    form.reset()
-    setIsSubmitting(false)
-    setOpen(false)
   }
 
   return (
