@@ -107,7 +107,7 @@ export const styles = StyleSheet.create({
   skillsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 5
+    gap: 4
   },
   skill: {
     fontSize: 9,
@@ -127,7 +127,7 @@ export const styles = StyleSheet.create({
   },
   companyName: {
     fontSize: 10,
-    fontFamily: fonts.bodyBold,
+    fontFamily: fonts.body,
     marginBottom: 2
   },
   jobTitle: {
@@ -355,5 +355,24 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     padding: 5,
     marginBottom: 8
+  },
+
+  languagesContainer: {
+    marginTop: 5
+  },
+
+  languageItem: {
+    fontSize: 10,
+    marginBottom: 4,
+    display: 'flex',
+    flexDirection: 'row'
+  },
+
+  languageName: {
+    fontWeight: 'bold'
+  },
+
+  languageLevel: {
+    fontWeight: 'normal'
   }
 })
