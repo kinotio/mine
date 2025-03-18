@@ -1,4 +1,6 @@
 import '@/app/globals.css'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
+import 'react-pdf/dist/Page/TextLayer.css'
 
 import { Work_Sans } from 'next/font/google'
 import { ClerkProvider, ClerkLoaded } from '@clerk/nextjs'
