@@ -1,5 +1,5 @@
 // Function to generate a random color from a predefined neobrutalist palette
-export function getRandomNeobrutalistColor(): string {
+export const getRandomNeobrutalistColor = (): string => {
   const neobrutalistColors = [
     '#ffde59', // yellow
     '#4cc9f0', // blue
@@ -15,7 +15,7 @@ export function getRandomNeobrutalistColor(): string {
 }
 
 // Function to generate a consistent color based on a string (like a name)
-export function getColorFromString(str: string): string {
+export const getColorFromString = (str: string): string => {
   const neobrutalistColors = [
     '#ffde59', // yellow
     '#4cc9f0', // blue
@@ -39,7 +39,7 @@ export function getColorFromString(str: string): string {
 }
 
 // Function to get a lighter version of a color for backgrounds
-export function getLighterColor(hexColor: string): string {
+export const getLighterColor = (hexColor: string): string => {
   // Convert hex to RGB
   const r = Number.parseInt(hexColor.slice(1, 3), 16)
   const g = Number.parseInt(hexColor.slice(3, 5), 16)
@@ -55,7 +55,7 @@ export function getLighterColor(hexColor: string): string {
 }
 
 // Function to get a darker version of a color for text or borders
-export function getDarkerColor(hexColor: string): string {
+export const getDarkerColor = (hexColor: string): string => {
   // Convert hex to RGB
   const r = Number.parseInt(hexColor.slice(1, 3), 16)
   const g = Number.parseInt(hexColor.slice(3, 5), 16)
@@ -71,13 +71,13 @@ export function getDarkerColor(hexColor: string): string {
 }
 
 // Function to create a gradient from a base color
-export function getGradientFromColor(hexColor: string): string {
+export const getGradientFromColor = (hexColor: string): string => {
   const lighterColor = getLighterColor(hexColor)
   return `linear-gradient(135deg, ${hexColor} 0%, ${lighterColor} 100%)`
 }
 
 // Function to determine if text should be white or black based on background color
-export function getTextColorForBackground(hexColor: string): string {
+export const getTextColorForBackground = (hexColor: string): string => {
   // Convert hex to RGB
   const r = Number.parseInt(hexColor.slice(1, 3), 16)
   const g = Number.parseInt(hexColor.slice(3, 5), 16)

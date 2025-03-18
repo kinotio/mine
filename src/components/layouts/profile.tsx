@@ -7,6 +7,7 @@ import { Mine } from '@/components/icons'
 import { ProfileProvider } from '@/components/profile/provider'
 import { ProfileWrapper } from '@/components/profile/wrapper'
 import { Toaster } from '@/components/ui/toaster'
+import { FeedbackDialog } from '@/components/profile/feedback/dialog'
 
 export const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -31,7 +32,9 @@ const Header = () => {
         </div>
 
         {isSignedIn ? (
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-5'>
+            <FeedbackDialog />
+
             <div className='relative'>
               <UserButton />
             </div>

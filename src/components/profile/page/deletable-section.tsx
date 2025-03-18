@@ -14,7 +14,7 @@ interface DeletableSectionProps {
   onDelete: (userId: string, sectionId: string) => Promise<void>
 }
 
-export function DeletableSection({ sectionId, sectionName, onDelete }: DeletableSectionProps) {
+export const DeletableSection = ({ sectionId, sectionName, onDelete }: DeletableSectionProps) => {
   const { user } = useProfile()
 
   const [isOpen, setIsOpen] = useState(false)

@@ -15,7 +15,7 @@ interface ResumeDialogProps {
   trigger?: React.ReactNode
 }
 
-export function ResumeDialog({ profile }: ResumeDialogProps) {
+export const ResumeDialog = ({ profile }: ResumeDialogProps) => {
   const [scale, setScale] = useState(1.0)
   const [open, setOpen] = useState(false)
 
