@@ -22,6 +22,13 @@
       "when": 1742108033927,
       "tag": "0002_living_turbo",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1742394582615,
+      "tag": "0003_salty_war_machine",
+      "breakpoints": true
     }
   ]
 }

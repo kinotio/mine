@@ -1,4 +1,4 @@
-import { pgTable, timestamp, uuid, varchar, text, jsonb } from 'drizzle-orm/pg-core'
+import { pgTable, timestamp, uuid, varchar, text, jsonb, integer } from 'drizzle-orm/pg-core'
 
 // Common Columns
 const baseColumns = {
@@ -76,6 +76,7 @@ export const userProfileSections = pgTable('user_profile_sections', {
   profile_section_template_id: uuid()
     .notNull()
     .references(() => profileSectionTemplates.id),
+  order: integer().notNull().default(0),
   ...baseColumns
 })
 
@@ -88,5 +89,6 @@ export const userProfileSectionItems = pgTable('user_profile_section_items', {
     .notNull()
     .references(() => userProfileSections.id, { onDelete: 'cascade' }),
   metadata: jsonb(),
+  order: integer().notNull().default(0),
   ...baseColumns
 })
