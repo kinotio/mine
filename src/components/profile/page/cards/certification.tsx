@@ -17,6 +17,7 @@ export const CertificationCard = ({ certification }: CertificationCardProps) => 
               src={certification.image}
               alt={certification.issuer}
               className='w-full h-full object-cover'
+              fill
             />
           ) : (
             <div
