@@ -2,8 +2,13 @@
 
 import { eq } from 'drizzle-orm'
 
-import { userProfiles, users, userProfileSections } from '@/server/databases/tables'
-import { UserProfile, UserProfileSection } from '@/server/databases/types'
+import {
+  userProfiles,
+  users,
+  userProfileSections,
+  userProfileSectionItems
+} from '@/server/databases/tables'
+import { UserProfile, UserProfileSection, UserProfileSectionItem } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { ProfileValidation } from '@/server/services/validation/profile'
 
@@ -98,6 +103,87 @@ export const updateProfileSection = async (
       success: false,
       error:
         error instanceof Error ? error.message : 'An error occurred while updating profile section'
+    }
+  }
+}
+
+export const updateProfileSectionItem = async (
+  userId: string,
+  sectionId: string,
+  itemId: string,
+  payload: Record<string, unknown>
+): Promise<ActionResponse<UserProfileSectionItem>> => {
+  'use server'
+
+  try {
+    // Perform validation if needed
+    const validation = ProfileValidation.safeParse(payload)
+
+    if (!validation.success) {
+      return {
+        success: false,
+        error: validation.error.issues[0].message
+      }
+    }
+
+    // First ensure the user exists
+    const user = await database.query.users.findFirst({
+      where: eq(users.id, userId)
+    })
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'User not found'
+      }
+    }
+
+    // Check if section exists and belongs to the user's profile
+    const section = await database.query.userProfileSections.findFirst({
+      where: eq(userProfileSections.id, sectionId),
+      with: {
+        user_profile: true
+      }
+    })
+
+    if (!section || section.user_profile.user_id !== userId) {
+      return {
+        success: false,
+        error: 'Section not found or access denied'
+      }
+    }
+
+    // Update the section item
+    const updated = await database
+      .update(userProfileSectionItems) // Assuming this table is imported
+      .set({
+        metadata: payload,
+        updated: new Date()
+      })
+      .where(eq(userProfileSectionItems.id, itemId))
+      .returning()
+
+    if (!updated.length) {
+      return {
+        success: false,
+        error: 'An error occurred while finding profile section item'
+      }
+    }
+
+    // Invalidate the cache
+    await cache.invalidate(`user:${user.username}`)
+
+    return {
+      success: true,
+      data: updated[0] as UserProfileSectionItem
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while updating profile section item'
     }
   }
 }

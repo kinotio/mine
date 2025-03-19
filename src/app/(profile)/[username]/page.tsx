@@ -18,7 +18,7 @@ import {
   VolunteerCard,
   DefaultCard
 } from '@/components/profile/page/cards'
-import { DeletableItem } from '@/components/profile/page/deletable-item'
+import { ActionItemCard } from '@/components/profile/page/action-item'
 
 import { adaptToType, DynamicObject } from '@/lib/utils'
 import {
@@ -44,7 +44,8 @@ import {
   createProfileSectionItem,
   deleteProfileSectionItem,
   deleteProfileSection,
-  updateProfileSection
+  updateProfileSection,
+  updateProfileSectionItem
 } from '@/server/actions'
 import { ProfileSectionTemplate } from '@/server/databases/types'
 
@@ -57,7 +58,7 @@ const Page = () => {
 
   const [templates, setTemplates] = useState<ProfileSectionTemplate[]>([])
 
-  const handleDeleteSection = async (sectionId: string) => {
+  const handleDeleteSection = async (sectionId: string): Promise<void> => {
     deleteProfileSection(user.id, sectionId).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -74,25 +75,31 @@ const Page = () => {
     })
   }
 
-  const handleCreateSectionItem = async (sectionId: string, payload: DynamicObject) => {
-    const formData = new FormData()
-    formData.append('file', payload.image as File)
-    formData.append('bucket', 'images')
+  const handleCreateSectionItem = async (
+    sectionId: string,
+    payload: DynamicObject
+  ): Promise<void> => {
+    // Handle image upload if present
+    if (payload.image instanceof File) {
+      const formData = new FormData()
+      formData.append('file', payload.image as File)
+      formData.append('bucket', 'images')
 
-    const { success, data } = await uploadFile(formData)
+      const { success, data } = await uploadFile(formData)
 
-    if (success && data?.url) {
-      await saveFile({
-        file_url: data.url,
-        file_name: data.name,
-        file_type: data.type,
-        file_size: data.size.toString(),
-        tag: 'image',
-        user_profile_id: profile.id
-      })
+      if (success && data?.url) {
+        await saveFile({
+          file_url: data.url,
+          file_name: data.name,
+          file_type: data.type,
+          file_size: data.size.toString(),
+          tag: 'image',
+          user_profile_id: profile.id
+        })
+      }
+
+      payload.image = data?.url ?? ''
     }
-
-    payload.image = data?.url ?? ''
 
     createProfileSectionItem(user.id, profile.id, sectionId, payload).then(
       ({ success, data, error }) => {
@@ -112,7 +119,7 @@ const Page = () => {
     )
   }
 
-  const handleEditSection = async (sectionId: string, newName: string) => {
+  const handleEditSection = async (sectionId: string, newName: string): Promise<void> => {
     updateProfileSection(user.id, sectionId, { name: newName }).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -129,7 +136,7 @@ const Page = () => {
     })
   }
 
-  const handleDeleteSectionItem = async (itemId: string, sectionId: string) => {
+  const handleDeleteSectionItem = async (itemId: string, sectionId: string): Promise<void> => {
     deleteProfileSectionItem(user.id, sectionId, itemId).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -146,7 +153,52 @@ const Page = () => {
     })
   }
 
-  // Helper function to get item name for the Deletable component
+  const handleEditSectionItem = async (
+    itemId: string,
+    sectionId: string,
+    updatedData: Record<string, unknown>
+  ): Promise<void> => {
+    // Handle image upload if changed
+    if (updatedData.image instanceof File) {
+      const formData = new FormData()
+      formData.append('file', updatedData.image)
+      formData.append('bucket', 'images')
+
+      const { success, data } = await uploadFile(formData)
+
+      if (success && data?.url) {
+        await saveFile({
+          file_url: data.url,
+          file_name: data.name,
+          file_type: data.type,
+          file_size: data.size.toString(),
+          tag: 'image',
+          user_profile_id: profile.id
+        })
+
+        updatedData.image = data.url
+      }
+    }
+
+    updateProfileSectionItem(user.id, sectionId, itemId, updatedData).then(
+      ({ success, data, error }) => {
+        if (success && data) {
+          toast({
+            title: 'Updated',
+            description: `The item has been updated successfully.`
+          })
+        }
+
+        if (!success && error) {
+          toast({ title: 'Error', description: error, variant: 'destructive' })
+        }
+
+        emit('profile:updated', {})
+      }
+    )
+  }
+
+  // Helper to determine the display name for each item type
   const getItemName = (
     metadata: Record<string, unknown>,
     templateSlug: string | undefined
@@ -183,9 +235,9 @@ const Page = () => {
     sectionName: string,
     metadata: Record<string, unknown>,
     templateSlug: string | undefined
-  ) => {
-    // Get appropriate card based on templateSlug
+  ): JSX.Element => {
     let card
+
     switch (templateSlug) {
       case 'projects':
         card = <ProjectCard project={adaptToType<ProjectData>(metadata)} />
@@ -222,21 +274,25 @@ const Page = () => {
         break
     }
 
-    // Wrap card with DeletableItem component
+    // Add sectionType prop and remove editableFields prop
     return (
-      <DeletableItem
-        canDelete={isSignedIn && hasPermission}
+      <ActionItemCard
+        canEditAndDelete={isSignedIn && hasPermission}
         itemId={itemId}
         sectionId={sectionId}
         sectionName={sectionName}
         itemName={getItemName(metadata, templateSlug)}
+        sectionType={templateSlug || 'default'} // Pass the template slug as sectionType
         onDelete={handleDeleteSectionItem}
+        onEdit={handleEditSectionItem}
+        metadata={metadata}
       >
         {card}
-      </DeletableItem>
+      </ActionItemCard>
     )
   }
 
+  // Load section templates on component mount
   useEffect(() => {
     getProfileSectionTemplates().then(({ success, data, error }) => {
       if (success && data) setTemplates(data)
