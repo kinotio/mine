@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { Search, Home } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Search, Home, Users } from 'lucide-react'
 
 interface ProfileNotFoundProps {
   username?: string
@@ -17,9 +17,7 @@ export const ProfileNotFound = ({ username, onSearch }: ProfileNotFoundProps) =>
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    if (onSearch && searchQuery.trim()) {
-      onSearch(searchQuery.trim())
-    }
+    if (onSearch && searchQuery.trim()) onSearch(searchQuery.trim())
   }
 
   return (
@@ -46,7 +44,7 @@ export const ProfileNotFound = ({ username, onSearch }: ProfileNotFoundProps) =>
             {/* Right - Content */}
             <div className='flex-1'>
               <h1 className='text-2xl font-black mb-4'>
-                {username ? `@${username} doesn't exist` : 'Profile not found'}
+                {username ? `${username} doesn't exist` : 'Profile not found'}
               </h1>
 
               <div className='bg-[#ffde5920] border-l-4 border-[#ffde59] p-4 mb-6'>
@@ -62,7 +60,7 @@ export const ProfileNotFound = ({ username, onSearch }: ProfileNotFoundProps) =>
                 <div className='flex gap-2'>
                   <Input
                     type='text'
-                    placeholder='Search for a profile...'
+                    placeholder='@...'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className='flex-1 border-[3px] border-black focus-visible:ring-0 focus-visible:ring-offset-0'
@@ -88,14 +86,6 @@ export const ProfileNotFound = ({ username, onSearch }: ProfileNotFoundProps) =>
                       Go to the homepage
                     </Link>
                   </li>
-                  <li className='flex items-center'>
-                    <div className='w-8 h-8 bg-[#f72585] border-[2px] border-black rounded-md flex items-center justify-center mr-3'>
-                      <Users className='h-4 w-4 text-white' />
-                    </div>
-                    <Link href='/explore' className='text-[#4cc9f0] hover:underline font-medium'>
-                      Explore other profiles
-                    </Link>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -106,7 +96,10 @@ export const ProfileNotFound = ({ username, onSearch }: ProfileNotFoundProps) =>
         <div className='bg-[#f6f8fa] border-t-[3px] border-black p-4 text-center'>
           <p className='text-sm'>
             If you believe this is an error, please{' '}
-            <Link href='/contact' className='text-[#4cc9f0] hover:underline font-medium'>
+            <Link
+              href='mailto:contact@kinotio.io'
+              className='text-[#4cc9f0] hover:underline font-medium'
+            >
               contact support
             </Link>
             .
