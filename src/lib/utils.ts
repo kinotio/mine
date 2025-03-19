@@ -36,3 +36,13 @@ export const adaptToType = <T>(data: Record<string, unknown>): T => {
 export interface DynamicObject {
   [key: string]: unknown
 }
+
+export const decodeParamsUsername = (encodedUsername: string): string => {
+  if (encodedUsername.startsWith('@')) return encodedUsername
+
+  if (encodedUsername.startsWith('%40')) {
+    return '@' + encodedUsername.substring(3)
+  }
+
+  return '@' + encodedUsername
+}
