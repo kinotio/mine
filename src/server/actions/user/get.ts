@@ -72,8 +72,11 @@ export const getUserByUsername = async (
             user_profile: {
               with: {
                 user_profile_sections: {
+                  orderBy: (sections, { asc }) => [asc(sections.order)],
                   with: {
-                    user_profile_section_items: true
+                    user_profile_section_items: {
+                      orderBy: (items, { asc }) => [asc(items.order)]
+                    }
                   }
                 }
               }

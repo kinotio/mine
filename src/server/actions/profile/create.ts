@@ -104,12 +104,21 @@ export const createProfileSection = async (
       }
     }
 
+    // Find the highest order value to place the new section at the end
+    const highestOrderSection = await database.query.userProfileSections.findFirst({
+      where: (sections, { eq }) => eq(sections.user_profile_id, user_profile_id),
+      orderBy: (sections, { desc }) => [desc(sections.order)]
+    })
+
+    const nextOrder = highestOrderSection ? highestOrderSection.order + 1 : 0
+
     // Create the section
     const data = {
       user_profile_id,
       profile_section_template_id,
       name,
-      slug
+      slug,
+      order: nextOrder
     }
 
     const created = await database.insert(userProfileSections).values(data).returning()
@@ -175,6 +184,14 @@ export const createProfileSectionItem = async (
       }
     }
 
+    // Find the highest order value within this section to place the new item at the end
+    const highestOrderItem = await database.query.userProfileSectionItems.findFirst({
+      where: (items, { eq }) => eq(items.user_profile_section_id, user_profile_section_id),
+      orderBy: (items, { desc }) => [desc(items.order)]
+    })
+
+    const nextOrder = highestOrderItem ? highestOrderItem.order + 1 : 0
+
     // Sanitize payload: Remove any null or undefined values
     const sanitizedPayload = Object.fromEntries(
       Object.entries(payload).filter(([, value]) => value !== null && value !== undefined)
@@ -184,7 +201,8 @@ export const createProfileSectionItem = async (
     const data = {
       user_profile_id,
       user_profile_section_id,
-      metadata: sanitizedPayload // This will be stored as JSONB in PostgreSQL
+      metadata: sanitizedPayload, // This will be stored as JSONB in PostgreSQL
+      order: nextOrder
     }
 
     // Insert the item

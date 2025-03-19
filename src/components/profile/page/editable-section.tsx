@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Pencil } from 'lucide-react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -49,19 +49,17 @@ export const EditableSection = ({ sectionId, sectionName, onEdit }: EditableSect
 
     setIsLoading(true)
 
-    await onEdit(sectionId, values.name).finally(() => setIsLoading(false))
+    await onEdit(sectionId, values.name).finally(() => {
+      setIsLoading(false)
+      setIsOpen(false)
+      form.reset({ name: sectionName })
+    })
   }
 
-  const handleReset = () => form.reset({ name: sectionName })
+  useEffect(() => form.reset({ name: sectionName }), [form, sectionName])
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => {
-        if (open) handleReset()
-        setIsOpen(open)
-      }}
-    >
+    <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
       <Button
         onClick={() => setIsOpen(true)}
         size='icon'

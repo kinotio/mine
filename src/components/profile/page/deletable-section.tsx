@@ -14,8 +14,16 @@ interface DeletableSectionProps {
 
 export const DeletableSection = ({ sectionId, sectionName, onDelete }: DeletableSectionProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleDelete = () => onDelete(sectionId).finally(() => setIsOpen(false))
+  const handleDelete = () => {
+    setIsLoading(true)
+
+    onDelete(sectionId).finally(() => {
+      setIsLoading(false)
+      setIsOpen(false)
+    })
+  }
 
   return (
     <div className='group relative'>
@@ -29,7 +37,6 @@ export const DeletableSection = ({ sectionId, sectionName, onDelete }: Deletable
         <Trash2 className='h-4 w-4' />
       </Button>
 
-      {/* Delete confirmation dialog embedded directly */}
       <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
         <DialogContent className='sm:max-w-[425px] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] bg-white'>
           <DialogHeader>
@@ -47,12 +54,14 @@ export const DeletableSection = ({ sectionId, sectionName, onDelete }: Deletable
               variant='neutral'
               onClick={() => setIsOpen(false)}
               className='border-[2px] border-black font-bold'
+              disabled={isLoading}
             >
               Cancel
             </Button>
             <Button
               type='button'
               variant='neutral'
+              disabled={isLoading}
               onClick={handleDelete}
               className='font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all bg-red-500 hover:bg-red-600'
             >
