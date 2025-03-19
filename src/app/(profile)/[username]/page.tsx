@@ -251,7 +251,7 @@ const Page = () => {
               sectionName={section.name}
               onSubmit={handleCreateSectionItem}
               onDelete={handleDeleteSection}
-              canCreateOrDelete={isSignedIn && hasPermission}
+              isSignedInAndHasPermissionSection={isSignedIn && hasPermission}
             />
 
             <ScrollableSection>
