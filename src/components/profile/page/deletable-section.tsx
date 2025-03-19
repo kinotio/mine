@@ -6,20 +6,16 @@ import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
-import { useProfile } from '@/components/profile/provider'
-
 interface DeletableSectionProps {
   sectionId: string
   sectionName: string
-  onDelete: (userId: string, sectionId: string) => Promise<void>
+  onDelete: (sectionId: string) => Promise<void>
 }
 
 export const DeletableSection = ({ sectionId, sectionName, onDelete }: DeletableSectionProps) => {
-  const { user } = useProfile()
-
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleDelete = () => onDelete(user.id, sectionId).finally(() => setIsOpen(false))
+  const handleDelete = () => onDelete(sectionId).finally(() => setIsOpen(false))
 
   return (
     <div className='group relative'>

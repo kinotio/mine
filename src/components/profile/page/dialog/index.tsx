@@ -48,8 +48,6 @@ import {
   PortfolioFormValues
 } from '@/components/profile/page/dialog/types'
 
-import { useProfile } from '@/components/profile/provider'
-
 import { DynamicObject } from '@/lib/utils'
 
 interface SectionItemDialogProps {
@@ -59,7 +57,7 @@ interface SectionItemDialogProps {
   buttonText: string
   buttonColor: string
   buttonTextColor?: string
-  onSubmit: (userId: string, sectionId: string, data: DynamicObject) => Promise<void>
+  onSubmit: (sectionId: string, data: DynamicObject) => Promise<void>
   trigger?: React.ReactNode
 }
 
@@ -73,8 +71,6 @@ export const SectionItemDialog = ({
   onSubmit,
   trigger
 }: SectionItemDialogProps) => {
-  const { user } = useProfile()
-
   const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -121,7 +117,7 @@ export const SectionItemDialog = ({
 
     setIsLoading(true)
 
-    onSubmit(user.id, sectionId, data).finally(() => {
+    onSubmit(sectionId, data).finally(() => {
       setOpen(false)
       form.reset(defaultValues as FormValues)
       setImagePreview(null)

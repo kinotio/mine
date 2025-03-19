@@ -4,6 +4,7 @@ import { Icon } from '@/components/icon'
 import { SectionItemDialog } from '@/components/profile/page/dialog'
 
 import { DeletableSection } from '@/components/profile/page/deletable-section'
+import { EditableSection } from '@/components/profile/page/editable-section'
 
 import { DynamicObject } from '@/lib/utils'
 
@@ -16,8 +17,9 @@ interface SectionHeaderProps {
   buttonTextColor?: string
   sectionType: string
   sectionName: string
-  onSubmit: (userId: string, sectionId: string, data: DynamicObject) => Promise<void>
-  onDelete: (userId: string, sectionId: string) => Promise<void>
+  onSubmit: (sectionId: string, data: DynamicObject) => Promise<void>
+  onDelete: (sectionId: string) => Promise<void>
+  onEdit: (sectionId: string, newName: string) => Promise<void>
   isSignedInAndHasPermissionSection: boolean
 }
 
@@ -32,6 +34,7 @@ export const SectionHeader = ({
   sectionName,
   onSubmit,
   onDelete,
+  onEdit,
   isSignedInAndHasPermissionSection
 }: SectionHeaderProps) => {
   return (
@@ -53,6 +56,7 @@ export const SectionHeader = ({
             onSubmit={onSubmit}
           />
 
+          <EditableSection sectionId={sectionId} sectionName={sectionName} onEdit={onEdit} />
           <DeletableSection sectionId={sectionId} sectionName={sectionName} onDelete={onDelete} />
         </div>
       ) : null}
