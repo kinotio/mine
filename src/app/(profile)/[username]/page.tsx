@@ -43,7 +43,8 @@ import {
   getProfileSectionTemplates,
   createProfileSectionItem,
   deleteProfileSectionItem,
-  deleteProfileSection
+  deleteProfileSection,
+  updateProfileSection
 } from '@/server/actions'
 import { ProfileSectionTemplate } from '@/server/databases/types'
 
@@ -56,8 +57,8 @@ const Page = () => {
 
   const [templates, setTemplates] = useState<ProfileSectionTemplate[]>([])
 
-  const handleDeleteSection = async (userId: string, sectionId: string) => {
-    deleteProfileSection(userId, sectionId).then(({ success, data, error }) => {
+  const handleDeleteSection = async (sectionId: string) => {
+    deleteProfileSection(user.id, sectionId).then(({ success, data, error }) => {
       if (success && data) {
         toast({
           title: 'Deleted',
@@ -73,11 +74,7 @@ const Page = () => {
     })
   }
 
-  const handleCreateSectionItem = async (
-    userId: string,
-    sectionId: string,
-    payload: DynamicObject
-  ) => {
+  const handleCreateSectionItem = async (sectionId: string, payload: DynamicObject) => {
     const formData = new FormData()
     formData.append('file', payload.image as File)
     formData.append('bucket', 'images')
@@ -97,7 +94,7 @@ const Page = () => {
 
     payload.image = data?.url ?? ''
 
-    createProfileSectionItem(userId, profile.id, sectionId, payload).then(
+    createProfileSectionItem(user.id, profile.id, sectionId, payload).then(
       ({ success, data, error }) => {
         if (success && data) {
           toast({
@@ -113,6 +110,23 @@ const Page = () => {
         emit('profile:updated', {})
       }
     )
+  }
+
+  const handleEditSection = async (sectionId: string, newName: string) => {
+    updateProfileSection(user.id, sectionId, { name: newName }).then(({ success, data, error }) => {
+      if (success && data) {
+        toast({
+          title: 'Updated',
+          description: `The section has been updated.`
+        })
+      }
+
+      if (!success && error) {
+        toast({ title: 'Error', description: error, variant: 'destructive' })
+      }
+
+      emit('profile:updated', {})
+    })
   }
 
   const handleDeleteSectionItem = async (itemId: string, sectionId: string) => {
@@ -251,6 +265,7 @@ const Page = () => {
               sectionName={section.name}
               onSubmit={handleCreateSectionItem}
               onDelete={handleDeleteSection}
+              onEdit={handleEditSection}
               isSignedInAndHasPermissionSection={isSignedIn && hasPermission}
             />
 

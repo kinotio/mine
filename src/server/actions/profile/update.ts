@@ -2,8 +2,8 @@
 
 import { eq } from 'drizzle-orm'
 
-import { userProfiles, users } from '@/server/databases/tables'
-import { UserProfile } from '@/server/databases/types'
+import { userProfiles, users, userProfileSections } from '@/server/databases/tables'
+import { UserProfile, UserProfileSection } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { ProfileValidation } from '@/server/services/validation/profile'
 
@@ -51,6 +51,53 @@ export const updateProfile = async (
     return {
       success: false,
       error: error instanceof Error ? error.message : 'An error occurred while updating profile'
+    }
+  }
+}
+
+export const updateProfileSection = async (
+  userId: string,
+  sectionId: string,
+  section: Partial<UserProfileSection>
+): Promise<ActionResponse<UserProfileSection>> => {
+  try {
+    const validation = ProfileValidation.safeParse(section)
+
+    if (!validation.success) {
+      return {
+        success: false,
+        error: validation.error.issues[0].message
+      }
+    }
+
+    const updated = await database
+      .update(userProfileSections) // Assuming userProfileSections table exists
+      .set(section)
+      .where(eq(userProfileSections.id, sectionId))
+      .returning()
+
+    if (!updated.length) {
+      return {
+        success: false,
+        error: 'An error occurred while finding profile section'
+      }
+    }
+
+    const user = await database.query.users.findFirst({
+      where: eq(users.id, userId)
+    })
+
+    if (user) await cache.invalidate(`user:${user.username}`)
+
+    return {
+      success: true,
+      data: updated[0]
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : 'An error occurred while updating profile section'
     }
   }
 }
