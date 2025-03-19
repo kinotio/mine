@@ -13,7 +13,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     <div className='w-[300px] bg-white border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-5px] hover:shadow-[5px_10px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'>
       <div className='h-[150px] border-b-[3px] border-black overflow-hidden relative group'>
         {project.image ? (
-          <Image src={project.image} alt={project.title} className='w-full h-full object-cover' />
+          <Image
+            src={project.image}
+            alt={project.title}
+            className='w-full h-full object-cover'
+            fill
+          />
         ) : (
           <div
             className='w-full h-full flex items-center justify-center'

@@ -99,6 +99,7 @@ export const SectionItemDialog = ({
           const result = event.target?.result as string
           setImagePreview(result)
           field.onChange(result)
+          form.setValue('image', result, { shouldValidate: true })
         }
         reader.readAsDataURL(file)
       }

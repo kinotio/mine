@@ -80,8 +80,6 @@ export const FeedbackDialog = ({ trigger }: FeedbackDialogProps) => {
       }
 
       if (!success && error) {
-        console.log(error)
-
         toast({
           title: 'Failed to submit feedback',
           description: 'An error occurred while submitting your feedback. Please try again later.',

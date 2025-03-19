@@ -47,6 +47,8 @@ import {
 } from '@/server/actions'
 import { ProfileSectionTemplate } from '@/server/databases/types'
 
+import { saveFile, uploadFile } from '@/server/actions'
+
 const Page = () => {
   const { profile, user, hasPermission, isSignedIn } = useProfile()
   const { emit } = useEventEmitter()
@@ -74,9 +76,28 @@ const Page = () => {
   const handleCreateSectionItem = async (
     userId: string,
     sectionId: string,
-    data: DynamicObject
+    payload: DynamicObject
   ) => {
-    createProfileSectionItem(userId, profile.id, sectionId, data).then(
+    const formData = new FormData()
+    formData.append('file', payload.image as File)
+    formData.append('bucket', 'images')
+
+    const { success, data } = await uploadFile(formData)
+
+    if (success && data?.url) {
+      await saveFile({
+        file_url: data.url,
+        file_name: data.name,
+        file_type: data.type,
+        file_size: data.size.toString(),
+        tag: 'image',
+        user_profile_id: profile.id
+      })
+    }
+
+    payload.image = data?.url ?? ''
+
+    createProfileSectionItem(userId, profile.id, sectionId, payload).then(
       ({ success, data, error }) => {
         if (success && data) {
           toast({
