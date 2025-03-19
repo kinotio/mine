@@ -3,7 +3,7 @@
 import { useState, ChangeEvent } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, ControllerRenderProps, Resolver } from 'react-hook-form'
-import { Fan, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { z } from 'zod'
 
 import {
