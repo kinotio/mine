@@ -18,7 +18,7 @@ import {
   VolunteerCard,
   DefaultCard
 } from '@/components/profile/page/cards'
-import { DeletableItem } from '@/components/profile/page/deletable-item'
+import { ActionItemCard } from '@/components/profile/page/action-item'
 
 import { adaptToType, DynamicObject } from '@/lib/utils'
 import {
@@ -44,7 +44,8 @@ import {
   createProfileSectionItem,
   deleteProfileSectionItem,
   deleteProfileSection,
-  updateProfileSection
+  updateProfileSection,
+  updateProfileSectionItem
 } from '@/server/actions'
 import { ProfileSectionTemplate } from '@/server/databases/types'
 
@@ -57,7 +58,7 @@ const Page = () => {
 
   const [templates, setTemplates] = useState<ProfileSectionTemplate[]>([])
 
-  const handleDeleteSection = async (sectionId: string) => {
+  const handleDeleteSection = async (sectionId: string): Promise<void> => {
     deleteProfileSection(user.id, sectionId).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -74,25 +75,31 @@ const Page = () => {
     })
   }
 
-  const handleCreateSectionItem = async (sectionId: string, payload: DynamicObject) => {
-    const formData = new FormData()
-    formData.append('file', payload.image as File)
-    formData.append('bucket', 'images')
+  const handleCreateSectionItem = async (
+    sectionId: string,
+    payload: DynamicObject
+  ): Promise<void> => {
+    // Handle image upload if present
+    if (payload.image instanceof File) {
+      const formData = new FormData()
+      formData.append('file', payload.image as File)
+      formData.append('bucket', 'images')
 
-    const { success, data } = await uploadFile(formData)
+      const { success, data } = await uploadFile(formData)
 
-    if (success && data?.url) {
-      await saveFile({
-        file_url: data.url,
-        file_name: data.name,
-        file_type: data.type,
-        file_size: data.size.toString(),
-        tag: 'image',
-        user_profile_id: profile.id
-      })
+      if (success && data?.url) {
+        await saveFile({
+          file_url: data.url,
+          file_name: data.name,
+          file_type: data.type,
+          file_size: data.size.toString(),
+          tag: 'image',
+          user_profile_id: profile.id
+        })
+      }
+
+      payload.image = data?.url ?? ''
     }
-
-    payload.image = data?.url ?? ''
 
     createProfileSectionItem(user.id, profile.id, sectionId, payload).then(
       ({ success, data, error }) => {
@@ -112,7 +119,7 @@ const Page = () => {
     )
   }
 
-  const handleEditSection = async (sectionId: string, newName: string) => {
+  const handleEditSection = async (sectionId: string, newName: string): Promise<void> => {
     updateProfileSection(user.id, sectionId, { name: newName }).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -129,7 +136,7 @@ const Page = () => {
     })
   }
 
-  const handleDeleteSectionItem = async (itemId: string, sectionId: string) => {
+  const handleDeleteSectionItem = async (itemId: string, sectionId: string): Promise<void> => {
     deleteProfileSectionItem(user.id, sectionId, itemId).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -146,7 +153,52 @@ const Page = () => {
     })
   }
 
-  // Helper function to get item name for the Deletable component
+  const handleEditSectionItem = async (
+    itemId: string,
+    sectionId: string,
+    updatedData: Record<string, unknown>
+  ): Promise<void> => {
+    // Handle image upload if changed
+    if (updatedData.image instanceof File) {
+      const formData = new FormData()
+      formData.append('file', updatedData.image)
+      formData.append('bucket', 'images')
+
+      const { success, data } = await uploadFile(formData)
+
+      if (success && data?.url) {
+        await saveFile({
+          file_url: data.url,
+          file_name: data.name,
+          file_type: data.type,
+          file_size: data.size.toString(),
+          tag: 'image',
+          user_profile_id: profile.id
+        })
+
+        updatedData.image = data.url
+      }
+    }
+
+    updateProfileSectionItem(user.id, sectionId, itemId, updatedData).then(
+      ({ success, data, error }) => {
+        if (success && data) {
+          toast({
+            title: 'Updated',
+            description: `The item has been updated successfully.`
+          })
+        }
+
+        if (!success && error) {
+          toast({ title: 'Error', description: error, variant: 'destructive' })
+        }
+
+        emit('profile:updated', {})
+      }
+    )
+  }
+
+  // Helper to determine the display name for each item type
   const getItemName = (
     metadata: Record<string, unknown>,
     templateSlug: string | undefined
@@ -177,15 +229,98 @@ const Page = () => {
     }
   }
 
+  // Define editable fields based on section type
+  const getEditableFields = (templateSlug: string | undefined) => {
+    switch (templateSlug) {
+      case 'projects':
+        return [
+          { key: 'title', label: 'Project Title', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' },
+          { key: 'tags', label: 'Tags', type: 'text' },
+          { key: 'image', label: 'Image', type: 'file' },
+          { key: 'sourceUrl', label: 'Source URL', type: 'url' },
+          { key: 'liveUrl', label: 'Live URL', type: 'url' }
+        ]
+      case 'skills':
+        return [
+          { key: 'name', label: 'Skill Name', type: 'text' },
+          { key: 'level', label: 'Skill Level (1-100)', type: 'range', min: 1, max: 100 }
+        ]
+      case 'experience':
+        return [
+          { key: 'company', label: 'Company', type: 'text' },
+          { key: 'position', label: 'Position', type: 'text' },
+          { key: 'period', label: 'Employment Period', type: 'text' },
+          { key: 'description', label: 'Job Description', type: 'textarea' }
+        ]
+      case 'certifications':
+        return [
+          { key: 'title', label: 'Certification Name', type: 'text' },
+          { key: 'issuer', label: 'Issuing Organization', type: 'text' },
+          { key: 'date', label: 'Issue Date', type: 'text' },
+          { key: 'image', label: 'Certificate Image', type: 'file' }
+        ]
+      case 'education':
+        return [
+          { key: 'institution', label: 'Institution', type: 'text' },
+          { key: 'degree', label: 'Degree/Course', type: 'text' },
+          { key: 'period', label: 'Study Period', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' }
+        ]
+      case 'achievements':
+        return [
+          { key: 'title', label: 'Achievement Title', type: 'text' },
+          { key: 'issuer', label: 'Issuing Organization', type: 'text' },
+          { key: 'date', label: 'Date Achieved', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' }
+        ]
+      case 'portfolio':
+        return [
+          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'category', label: 'Category', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' },
+          { key: 'image', label: 'Portfolio Image', type: 'file' },
+          { key: 'url', label: 'Portfolio URL', type: 'url' }
+        ]
+      case 'publications':
+        return [
+          { key: 'title', label: 'Publication Title', type: 'text' },
+          { key: 'publisher', label: 'Publisher', type: 'text' },
+          { key: 'date', label: 'Publication Date', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' },
+          { key: 'url', label: 'Publication URL', type: 'url' }
+        ]
+      case 'languages':
+        return [
+          { key: 'name', label: 'Language', type: 'text' },
+          { key: 'proficiency', label: 'Proficiency Description', type: 'text' },
+          { key: 'level', label: 'Proficiency Level (1-100)', type: 'range', min: 1, max: 100 }
+        ]
+      case 'volunteer':
+        return [
+          { key: 'organization', label: 'Organization', type: 'text' },
+          { key: 'role', label: 'Role', type: 'text' },
+          { key: 'period', label: 'Volunteering Period', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' }
+        ]
+      default:
+        return [
+          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' }
+        ]
+    }
+  }
+
+  // Render appropriate card for each item type
   const renderCard = (
     itemId: string,
     sectionId: string,
     sectionName: string,
     metadata: Record<string, unknown>,
     templateSlug: string | undefined
-  ) => {
-    // Get appropriate card based on templateSlug
+  ): JSX.Element => {
     let card
+
     switch (templateSlug) {
       case 'projects':
         card = <ProjectCard project={adaptToType<ProjectData>(metadata)} />
@@ -222,21 +357,25 @@ const Page = () => {
         break
     }
 
-    // Wrap card with DeletableItem component
+    // Wrap card with EditableItemCard component
     return (
-      <DeletableItem
-        canDelete={isSignedIn && hasPermission}
+      <ActionItemCard
+        canEdit={isSignedIn && hasPermission}
         itemId={itemId}
         sectionId={sectionId}
         sectionName={sectionName}
         itemName={getItemName(metadata, templateSlug)}
         onDelete={handleDeleteSectionItem}
+        onEdit={handleEditSectionItem}
+        editableFields={getEditableFields(templateSlug)}
+        metadata={metadata}
       >
         {card}
-      </DeletableItem>
+      </ActionItemCard>
     )
   }
 
+  // Load section templates on component mount
   useEffect(() => {
     getProfileSectionTemplates().then(({ success, data, error }) => {
       if (success && data) setTemplates(data)
