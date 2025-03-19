@@ -66,7 +66,7 @@ const SkillsSection = ({ skills }: { skills: { name: string; level: number | nul
       {skills.map((skill, index) => (
         <Text key={index} style={styles.skill}>
           {skill.name}
-          {skill.level ? ` (${skill.level}%)` : ''}
+          {/* {skill.level ? ` (${skill.level}%)` : ''} */}
         </Text>
       ))}
     </View>
@@ -223,7 +223,7 @@ const LanguagesSection = ({ section }: { section: UserProfile['user_profile_sect
           <Text style={styles.languageName}>{item.metadata.name}: </Text>
           <Text style={styles.languageLevel}>
             {item.metadata.proficiency}
-            {item.metadata.level ? ` (${item.metadata.level}%)` : ''}
+            {/* {item.metadata.level ? ` (${item.metadata.level}%)` : ''} */}
           </Text>
         </Text>
       ))}

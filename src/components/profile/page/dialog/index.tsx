@@ -3,7 +3,7 @@
 import { useState, ChangeEvent } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, ControllerRenderProps, Resolver } from 'react-hook-form'
-import { Plus } from 'lucide-react'
+import { Fan, Plus } from 'lucide-react'
 import { z } from 'zod'
 
 import {
@@ -75,6 +75,7 @@ export const SectionItemDialog = ({
 }: SectionItemDialogProps) => {
   const { user } = useProfile()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
@@ -118,10 +119,13 @@ export const SectionItemDialog = ({
       data.tags = (data.tags as string).split(',').map((tag: string) => tag.trim())
     }
 
+    setIsLoading(true)
+
     onSubmit(user.id, sectionId, data).finally(() => {
       setOpen(false)
       form.reset(defaultValues as FormValues)
       setImagePreview(null)
+      setIsLoading(false)
     })
   }
 
@@ -205,6 +209,7 @@ export const SectionItemDialog = ({
                 variant='neutral'
                 onClick={() => setOpen(false)}
                 className='border-[2px] border-black font-bold'
+                disabled={isLoading}
               >
                 Cancel
               </Button>
@@ -215,6 +220,7 @@ export const SectionItemDialog = ({
                   backgroundColor: buttonColor,
                   color: buttonTextColor === 'black' ? 'black' : 'white'
                 }}
+                disabled={isLoading}
               >
                 Save
               </Button>
