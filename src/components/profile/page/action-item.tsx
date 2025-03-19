@@ -72,8 +72,9 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const form = useForm({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(getSchemaForType(sectionType) as z.ZodType<any>),
-    defaultValues: metadata as any
+    defaultValues: metadata
   })
 
   // Set image preview if it exists in metadata
