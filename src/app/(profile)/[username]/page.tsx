@@ -229,89 +229,6 @@ const Page = () => {
     }
   }
 
-  // Define editable fields based on section type
-  const getEditableFields = (templateSlug: string | undefined) => {
-    switch (templateSlug) {
-      case 'projects':
-        return [
-          { key: 'title', label: 'Project Title', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' },
-          { key: 'tags', label: 'Tags', type: 'text' },
-          { key: 'image', label: 'Image', type: 'file' },
-          { key: 'sourceUrl', label: 'Source URL', type: 'url' },
-          { key: 'liveUrl', label: 'Live URL', type: 'url' }
-        ]
-      case 'skills':
-        return [
-          { key: 'name', label: 'Skill Name', type: 'text' },
-          { key: 'level', label: 'Skill Level (1-100)', type: 'range', min: 1, max: 100 }
-        ]
-      case 'experience':
-        return [
-          { key: 'company', label: 'Company', type: 'text' },
-          { key: 'position', label: 'Position', type: 'text' },
-          { key: 'period', label: 'Employment Period', type: 'text' },
-          { key: 'description', label: 'Job Description', type: 'textarea' }
-        ]
-      case 'certifications':
-        return [
-          { key: 'title', label: 'Certification Name', type: 'text' },
-          { key: 'issuer', label: 'Issuing Organization', type: 'text' },
-          { key: 'date', label: 'Issue Date', type: 'text' },
-          { key: 'image', label: 'Certificate Image', type: 'file' }
-        ]
-      case 'education':
-        return [
-          { key: 'institution', label: 'Institution', type: 'text' },
-          { key: 'degree', label: 'Degree/Course', type: 'text' },
-          { key: 'period', label: 'Study Period', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' }
-        ]
-      case 'achievements':
-        return [
-          { key: 'title', label: 'Achievement Title', type: 'text' },
-          { key: 'issuer', label: 'Issuing Organization', type: 'text' },
-          { key: 'date', label: 'Date Achieved', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' }
-        ]
-      case 'portfolio':
-        return [
-          { key: 'title', label: 'Title', type: 'text' },
-          { key: 'category', label: 'Category', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' },
-          { key: 'image', label: 'Portfolio Image', type: 'file' },
-          { key: 'url', label: 'Portfolio URL', type: 'url' }
-        ]
-      case 'publications':
-        return [
-          { key: 'title', label: 'Publication Title', type: 'text' },
-          { key: 'publisher', label: 'Publisher', type: 'text' },
-          { key: 'date', label: 'Publication Date', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' },
-          { key: 'url', label: 'Publication URL', type: 'url' }
-        ]
-      case 'languages':
-        return [
-          { key: 'name', label: 'Language', type: 'text' },
-          { key: 'proficiency', label: 'Proficiency Description', type: 'text' },
-          { key: 'level', label: 'Proficiency Level (1-100)', type: 'range', min: 1, max: 100 }
-        ]
-      case 'volunteer':
-        return [
-          { key: 'organization', label: 'Organization', type: 'text' },
-          { key: 'role', label: 'Role', type: 'text' },
-          { key: 'period', label: 'Volunteering Period', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' }
-        ]
-      default:
-        return [
-          { key: 'title', label: 'Title', type: 'text' },
-          { key: 'description', label: 'Description', type: 'textarea' }
-        ]
-    }
-  }
-
-  // Render appropriate card for each item type
   const renderCard = (
     itemId: string,
     sectionId: string,
@@ -357,17 +274,17 @@ const Page = () => {
         break
     }
 
-    // Wrap card with EditableItemCard component
+    // Add sectionType prop and remove editableFields prop
     return (
       <ActionItemCard
-        canEdit={isSignedIn && hasPermission}
+        canEditAndDelete={isSignedIn && hasPermission}
         itemId={itemId}
         sectionId={sectionId}
         sectionName={sectionName}
         itemName={getItemName(metadata, templateSlug)}
+        sectionType={templateSlug || 'default'} // Pass the template slug as sectionType
         onDelete={handleDeleteSectionItem}
         onEdit={handleEditSectionItem}
-        editableFields={getEditableFields(templateSlug)}
         metadata={metadata}
       >
         {card}
