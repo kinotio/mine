@@ -90,7 +90,7 @@ export const EditableSection = ({ sectionId, sectionName, onEdit }: EditableSect
               )}
             />
 
-            <DialogFooter className='pt-4'>
+            <DialogFooter className='pt-4 flex justify-end gap-3 border-t border-gray-200'>
               <Button
                 type='button'
                 onClick={() => setIsOpen(false)}

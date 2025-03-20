@@ -258,7 +258,7 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
             <form className='space-y-4' onSubmit={form.handleSubmit(handleSubmit)}>
               {renderForm()}
 
-              <DialogFooter className='pt-4'>
+              <DialogFooter className='pt-4 flex justify-end gap-3 border-t border-gray-200'>
                 <Button type='button' variant='neutral' onClick={() => setIsEditDialogOpen(false)}>
                   Cancel
                 </Button>

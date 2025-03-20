@@ -39,13 +39,18 @@ export const SectionHeader = ({
 }: SectionHeaderProps) => {
   return (
     <div className='flex justify-between items-center mb-6'>
-      <h2 className='font-black flex items-center gap-2'>
-        <Icon name={icon as keyof typeof icons} size={24} />
-        <span className='text-xl'>{name}</span>
+      <h2 className='font-black flex flex-wrap items-center gap-1 sm:gap-2 text-sm sm:text-base md:text-lg'>
+        <div className='flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6'>
+          <Icon name={icon as keyof typeof icons} size={20} className='sm:hidden' />
+          <Icon name={icon as keyof typeof icons} size={24} className='hidden sm:block' />
+        </div>
+        <span className='text-base sm:text-lg md:text-xl truncate max-w-[15ch] sm:max-w-[20ch] md:max-w-full'>
+          {name}
+        </span>
       </h2>
 
       {isSignedInAndHasPermissionSection ? (
-        <div className='flex items-center gap-4 mt-3 mr-6'>
+        <div className='flex items-center gap-4 mr-6'>
           <SectionItemDialog
             sectionId={sectionId}
             sectionType={sectionType}
@@ -55,7 +60,6 @@ export const SectionHeader = ({
             buttonTextColor={buttonTextColor}
             onSubmit={onSubmit}
           />
-
           <EditableSection sectionId={sectionId} sectionName={sectionName} onEdit={onEdit} />
           <DeletableSection sectionId={sectionId} sectionName={sectionName} onDelete={onDelete} />
         </div>
