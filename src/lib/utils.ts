@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import { isEmpty } from 'lodash'
 
 import { getGradientFromColor } from '@/lib/colors'
+import { UserProfile } from '@/lib/types/profile'
 
 export const cn: typeof clsx = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
@@ -45,4 +46,43 @@ export const decodeParamsUsername = (encodedUsername: string): string => {
   }
 
   return '@' + encodedUsername
+}
+
+export const calculateProfileStats = (profile: UserProfile) => {
+  if (!profile) {
+    return {
+      projects: 0,
+      experience: 0,
+      clients: 0,
+      awards: 0
+    }
+  }
+
+  const projectsSection = profile.user_profile_sections?.find(
+    (section: { slug: string }) => section.slug === 'projects'
+  )
+  const projects = projectsSection?.user_profile_section_items?.length || 0
+
+  let experience = 0
+  const experienceMatch = profile.bio?.match(/(\d+)\+?\s*years?/i)
+  if (experienceMatch) {
+    experience = parseInt(experienceMatch[1], 10)
+  }
+
+  const workSection = profile.user_profile_sections?.find(
+    (section: { slug: string }) => section.slug === 'work-experience'
+  )
+  const clients = workSection?.user_profile_section_items?.length || 0
+
+  const certSection = profile.user_profile_sections?.find(
+    (section: { slug: string }) => section.slug === 'certifications'
+  )
+  const awards = certSection?.user_profile_section_items?.length || 0
+
+  return {
+    projects,
+    experience,
+    clients,
+    awards
+  }
 }

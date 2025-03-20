@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react'
 
-import { useProfile } from '@/components/profile/provider'
 import { ProfileSidebarHeader } from '@/components/profile/sidebar/header'
-
 import { ProfileSidebarBio } from '@/components/profile/sidebar/bio'
 import { ProfileSidebarContact } from '@/components/profile/sidebar/contact'
 import { ProfileSidebarActions } from '@/components/profile/sidebar/actions'
+import { ProfileSidebarStats } from '@/components/profile/sidebar/stats'
+
+import { useProfile } from '@/components/profile/provider'
 
 export const ProfileSidebar = () => {
   const { profile } = useProfile()
@@ -36,6 +37,7 @@ export const ProfileSidebar = () => {
         <ProfileSidebarHeader profile={profile} isScrolled={isScrolled} />
 
         <div className='p-6 pt-4'>
+          <ProfileSidebarStats profile={profile} />
           <ProfileSidebarBio bio={profile?.bio} />
 
           <ProfileSidebarContact
