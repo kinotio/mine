@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { Rocket } from 'lucide-react'
 import { SignInButton, SignedOut, SignUpButton } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { Heart, Kinotio, Mine, Github } from '@/components/icons'
@@ -23,12 +25,15 @@ export const RootLayout = ({
 }
 
 const Header = () => {
+  const router = useRouter()
+
   return (
     <header className='sticky top-0 z-40 border-b-4 border-black bg-white'>
       <div className='flex h-16 items-center justify-between px-4 md:px-6'>
         <Link href='/' className='flex items-center gap-2'>
           <Mine width={100} height={50} />
         </Link>
+
         <nav className='hidden gap-6 lg:flex'>
           {DATA.shared.quickLinks.map((link, index) => (
             <Link
@@ -40,7 +45,13 @@ const Header = () => {
             </Link>
           ))}
         </nav>
-        <div className='flex items-center gap-4'>
+
+        <div className='flex items-center gap-4 justify-between'>
+          <Button className='bg-sky-300' onClick={() => router.push('/explore')}>
+            <Rocket className='w-5 h-5' />
+            <span>Explore</span>
+          </Button>
+
           <Button variant='neutral'>
             <Github />
           </Button>
