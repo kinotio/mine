@@ -1,0 +1,46 @@
+{
+  "showcase_profiles": [
+    {
+      "name": "Alex Johnson",
+      "role": "Frontend Developer",
+      "image": "",
+      "skills": ["React", "TypeScript", "Tailwind CSS"],
+      "projects": [
+        {
+          "title": "E-commerce Platform",
+          "description": "A modern e-commerce platform with cart functionality and payment integration.",
+          "image": "/placeholder.svg?height=300&width=500",
+          "color": "bg-orange-500"
+        }
+      ]
+    },
+    {
+      "name": "Maria Garcia",
+      "role": "Full Stack Developer",
+      "image": "",
+      "skills": ["Node.js", "MongoDB", "Vue.js"],
+      "projects": [
+        {
+          "title": "Task Management App",
+          "description": "A collaborative task management application with real-time updates.",
+          "image": "/placeholder.svg?height=300&width=500",
+          "color": "bg-teal-500"
+        }
+      ]
+    },
+    {
+      "name": "David Kim",
+      "role": "Backend Engineer",
+      "image": "",
+      "skills": ["Python", "Django", "PostgreSQL"],
+      "projects": [
+        {
+          "title": "API Gateway Service",
+          "description": "A high-performance API gateway with authentication and rate limiting.",
+          "image": "/placeholder.svg?height=300&width=500",
+          "color": "bg-yellow-500"
+        }
+      ]
+    }
+  ]
+}

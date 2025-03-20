@@ -2,58 +2,17 @@
 
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { Github } from '@/components/icons'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 
+import { showcase_profiles } from '@/data/showcase.json'
+
 export const Showcase = () => {
-  const profiles = [
-    {
-      name: 'Alex Johnson',
-      role: 'Frontend Developer',
-      image: '',
-      skills: ['React', 'TypeScript', 'Tailwind CSS'],
-      projects: [
-        {
-          title: 'E-commerce Platform',
-          description:
-            'A modern e-commerce platform with cart functionality and payment integration.',
-          image: '/placeholder.svg?height=300&width=500',
-          color: 'bg-orange-500'
-        }
-      ]
-    },
-    {
-      name: 'Maria Garcia',
-      role: 'Full Stack Developer',
-      image: '',
-      skills: ['Node.js', 'MongoDB', 'Vue.js'],
-      projects: [
-        {
-          title: 'Task Management App',
-          description: 'A collaborative task management application with real-time updates.',
-          image: '/placeholder.svg?height=300&width=500',
-          color: 'bg-teal-500'
-        }
-      ]
-    },
-    {
-      name: 'David Kim',
-      role: 'Backend Engineer',
-      image: '',
-      skills: ['Python', 'Django', 'PostgreSQL'],
-      projects: [
-        {
-          title: 'API Gateway Service',
-          description: 'A high-performance API gateway with authentication and rate limiting.',
-          image: '/placeholder.svg?height=300&width=500',
-          color: 'bg-yellow-500'
-        }
-      ]
-    }
-  ]
+  const router = useRouter()
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -99,7 +58,7 @@ export const Showcase = () => {
           whileInView='visible'
           viewport={{ once: true }}
         >
-          {profiles.map((profile, index) => {
+          {showcase_profiles.map((profile, index) => {
             // Get a consistent color for this profile
             const profileColor = getColorFromString(profile.name)
             // Determine if text should be black or white
@@ -208,7 +167,10 @@ export const Showcase = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
         >
-          <Button className='bg-main text-white border-4 border-black font-bold px-8 py-6 text-xl transform hover:rotate-1 transition-transform'>
+          <Button
+            className='bg-main text-white border-4 border-black font-bold px-8 py-6 text-xl transform hover:rotate-1 transition-transform'
+            onClick={() => router.push('/explore')}
+          >
             View More Developers
           </Button>
         </motion.div>

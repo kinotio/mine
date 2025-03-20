@@ -12,7 +12,8 @@ export default clerkMiddleware(async (auth, request) => {
     (userId && request.nextUrl.pathname === '/') ||
     (userId && request.nextUrl.pathname.startsWith('/legal')) ||
     (userId && request.nextUrl.pathname.startsWith('/sign-in')) ||
-    (userId && request.nextUrl.pathname.startsWith('/sign-up'))
+    (userId && request.nextUrl.pathname.startsWith('/sign-up')) ||
+    (userId && request.nextUrl.pathname.startsWith('/explore'))
   ) {
     url.pathname = `/@${sessionClaims?.username}`
     return NextResponse.redirect(url)
