@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { PlusCircle } from 'lucide-react'
 
 import { ScrollableSection } from '@/components/profile/page/scrollable'
 import { SectionHeader } from '@/components/profile/page/section-header'
@@ -19,6 +20,7 @@ import {
   DefaultCard
 } from '@/components/profile/page/cards'
 import { ActionItemCard } from '@/components/profile/page/action-item'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 import { adaptToType, DynamicObject } from '@/lib/utils'
 import {
@@ -302,55 +304,68 @@ const Page = () => {
 
   return (
     <>
-      {profile.user_profile_sections.map((section) => {
-        const template = templates.find((t) => t.id === section.profile_section_template_id)
-        const textColor = ['#f72585', '#7209b7', '#e63946'].includes(template?.color as string)
-          ? 'white'
-          : 'black'
+      {profile.user_profile_sections.length === 0 && isSignedIn && hasPermission ? (
+        <Alert className='my-8 border-2 border-dashed px-8 py-10'>
+          <div className='flex flex-col items-center text-center'>
+            <PlusCircle className='mb-2 h-8 w-8' />
+            <AlertTitle className='mb-2 text-xl'>No sections added yet</AlertTitle>
+            <AlertDescription className='mb-4 text-base'>
+              Your profile looks empty. Add sections like Experience, Skills, or Projects to
+              showcase your talents.
+            </AlertDescription>
+          </div>
+        </Alert>
+      ) : (
+        profile.user_profile_sections.map((section) => {
+          const template = templates.find((t) => t.id === section.profile_section_template_id)
+          const textColor = ['#f72585', '#7209b7', '#e63946'].includes(template?.color as string)
+            ? 'white'
+            : 'black'
 
-        return (
-          <section key={section.id} className='mb-10'>
-            <SectionHeader
-              sectionId={section.id}
-              icon={template?.icon as string}
-              buttonColor={template?.color}
-              name={section.name}
-              buttonText={`Add ${section.name}`}
-              buttonTextColor={textColor}
-              sectionType={template?.slug ?? ''}
-              sectionName={section.name}
-              onSubmit={handleCreateSectionItem}
-              onDelete={handleDeleteSection}
-              onEdit={handleEditSection}
-              isSignedInAndHasPermissionSection={isSignedIn && hasPermission}
-            />
+          return (
+            <section key={section.id} className='mb-10'>
+              <SectionHeader
+                sectionId={section.id}
+                icon={template?.icon as string}
+                buttonColor={template?.color}
+                name={section.name}
+                buttonText={`Add ${section.name}`}
+                buttonTextColor={textColor}
+                sectionType={template?.slug ?? ''}
+                sectionName={section.name}
+                onSubmit={handleCreateSectionItem}
+                onDelete={handleDeleteSection}
+                onEdit={handleEditSection}
+                isSignedInAndHasPermissionSection={isSignedIn && hasPermission}
+              />
 
-            <ScrollableSection>
-              {Array.isArray(section.user_profile_section_items) &&
-              section.user_profile_section_items.length > 0 ? (
-                section.user_profile_section_items.map((item) => {
-                  const metadata =
-                    typeof item.metadata === 'string'
-                      ? JSON.parse(item.metadata)
-                      : (item.metadata as Record<string, unknown>)
+              <ScrollableSection>
+                {Array.isArray(section.user_profile_section_items) &&
+                section.user_profile_section_items.length > 0 ? (
+                  section.user_profile_section_items.map((item) => {
+                    const metadata =
+                      typeof item.metadata === 'string'
+                        ? JSON.parse(item.metadata)
+                        : (item.metadata as Record<string, unknown>)
 
-                  return (
-                    <div key={item.id}>
-                      {renderCard(item.id, section.id, section.name, metadata, template?.slug)}
-                    </div>
-                  )
-                })
-              ) : (
-                <div className='w-full py-8 text-center'>
-                  <p className='text-md font-bold'>
-                    {`No items yet. Click "Add ${section.name}" to get started.`}
-                  </p>
-                </div>
-              )}
-            </ScrollableSection>
-          </section>
-        )
-      })}
+                    return (
+                      <div key={item.id}>
+                        {renderCard(item.id, section.id, section.name, metadata, template?.slug)}
+                      </div>
+                    )
+                  })
+                ) : (
+                  <div className='w-full py-8 text-center'>
+                    <p className='text-md font-bold'>
+                      {`No items yet. Click "Add ${section.name}" to get started.`}
+                    </p>
+                  </div>
+                )}
+              </ScrollableSection>
+            </section>
+          )
+        })
+      )}
     </>
   )
 }

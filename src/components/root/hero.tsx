@@ -69,7 +69,12 @@ export const Hero = () => {
 
               <div className='flex flex-col gap-4'>
                 <div className='flex items-center gap-4'>
-                  <div className='h-16 w-16 rounded-full bg-blue-400 border-4 border-black'></div>
+                  <div className='h-16 w-16 flex items-center justify-center rounded-full border-4 border-black font-bold text-xl bg-blue-400'>
+                    {'Jane Developer'
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')}
+                  </div>
                   <div>
                     <h3 className='text-xl font-bold'>Jane Developer</h3>
                     <p className='text-gray-600'>Full Stack Engineer</p>
