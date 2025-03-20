@@ -185,8 +185,8 @@ export const SectionItemDialog = ({
               color: buttonTextColor === 'black' ? 'black' : 'white'
             }}
           >
-            <Plus className='mr-2 h-5 w-5' />
-            {buttonText}
+            <Plus className='lg:mr-2 h-5 w-5' />
+            <span className='hidden sm:inline'>{buttonText}</span>
           </Button>
         )}
       </DialogTrigger>
