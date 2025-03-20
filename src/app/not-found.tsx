@@ -1,10 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@clerk/nextjs'
 
 import { Button } from '@/components/ui/button'
 
 const NotFound = () => {
+  const { userId } = useAuth()
   const router = useRouter()
 
   return (
@@ -17,10 +19,14 @@ const NotFound = () => {
           </p>
 
           <div className='flex items-center justify-center space-x-4'>
-            <Button onClick={() => router.push('/')}>Go to Home</Button>
-            <Button variant='neutral' onClick={() => router.push('/sign-up')}>
-              Create an Account
+            <Button variant='neutral' onClick={() => router.push('/')}>
+              Go to Home
             </Button>
+            {userId ? (
+              <Button onClick={() => router.push('/')}>Go to Profile</Button>
+            ) : (
+              <Button onClick={() => router.push('/sign-in')}> Create an Account</Button>
+            )}
           </div>
         </div>
       </div>
