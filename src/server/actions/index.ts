@@ -8,7 +8,8 @@ import {
   getProfileSectionTemplates,
   deleteProfileSection,
   updateProfileSection,
-  updateProfileSectionItem
+  updateProfileSectionItem,
+  getAllProfiles
 } from '@/server/actions/profile'
 import { updateUser, deleteUser, getUserByUsername, createUser } from '@/server/actions/user'
 import { sendFeedback } from '@/server/actions/email'
@@ -28,6 +29,7 @@ export {
   deleteProfileSection,
   updateProfileSection,
   updateProfileSectionItem,
+  getAllProfiles,
 
   // User
   updateUser,
