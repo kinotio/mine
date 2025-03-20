@@ -47,14 +47,18 @@ const Header = () => {
         </nav>
 
         <div className='flex items-center gap-4 justify-between'>
-          <Button className='bg-sky-300' onClick={() => router.push('/explore')}>
-            <Rocket className='w-5 h-5' />
-            <span>Explore</span>
-          </Button>
+          <SignedOut>
+            <Button className='bg-sky-300' onClick={() => router.push('/explore')}>
+              <Rocket className='w-5 h-5' />
+              <span>Explore</span>
+            </Button>
+          </SignedOut>
 
-          <Button variant='neutral'>
-            <Github />
-          </Button>
+          <SignedOut>
+            <Button variant='neutral'>
+              <Github />
+            </Button>
+          </SignedOut>
 
           <SignedOut>
             <SignInButton>
