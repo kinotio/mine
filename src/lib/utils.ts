@@ -77,6 +77,7 @@ export const calculateProfileStats = (profile: UserProfile) => {
     // Track unique years to avoid double-counting overlapping jobs
     const yearsWorked = new Set<number>()
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     workSection.user_profile_section_items.forEach((item: any) => {
       if (item.metadata?.period) {
         // Extract start and end years from period string (e.g., "2018 - 2021" or "2023 - Present")
