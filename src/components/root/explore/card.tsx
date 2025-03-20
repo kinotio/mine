@@ -73,7 +73,7 @@ export const Card = ({ profile, viewMode, onClick }: CardProps) => {
           <div className='mb-4'>
             <h4 className='font-bold mb-2 text-sm'>Top Skills</h4>
             <div className='flex flex-wrap gap-2'>
-              {profile.skills.slice(0, 3).map((skill, index) => (
+              {profile.skills.map((skill, index) => (
                 <span
                   key={index}
                   className='bg-[#f8f8f8] border-[2px] border-black px-2 py-1 text-xs font-bold'

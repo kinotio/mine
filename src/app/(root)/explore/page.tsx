@@ -12,9 +12,9 @@ import { Filters } from '@/components/root/explore/filters'
 import { Pagination } from '@/components/root/explore/pagination'
 
 import { UserProfile } from '@/lib/types/profile'
+import { calculateProfileStats } from '@/lib/utils'
 
-// Import mock profiles (would be from API in production)
-import profilesData from '@/data/profiles.json'
+import { getAllProfiles } from '@/server/actions'
 
 export interface AdaptedProfile {
   id: string
@@ -25,6 +25,7 @@ export interface AdaptedProfile {
   bio: string
   stats: ProfileStats
   skills: ProfileSkill[]
+  url: string
 }
 
 export interface ProfileStats {
@@ -52,22 +53,16 @@ const adaptProfiles = (profiles: UserProfile[]) => {
           .length || 0,
       experience: getYearsOfExperience(profile)
     },
-    skills: getSkills(profile)
+    skills: getSkills(profile),
+    url: profile.profile_url
   }))
 }
 
 // Helper to extract years of experience
 const getYearsOfExperience = (profile: UserProfile) => {
-  const experienceSection = profile.user_profile_sections.find((s) => s.slug === 'work-experience')
-  if (!experienceSection) return 0
-
-  // Count total years across all experience items
-  return experienceSection.user_profile_section_items.reduce((total, item) => {
-    const metadata = typeof item.metadata === 'string' ? JSON.parse(item.metadata) : item.metadata
-    const period = metadata.period || ''
-    const years = period.match(/\d+/g) || [0]
-    return total + parseInt(years[0])
-  }, 0)
+  // Use the existing utility function to calculate stats
+  const stats = calculateProfileStats(profile)
+  return stats.experience
 }
 
 // Helper to extract skills
@@ -86,10 +81,9 @@ const getSkills = (profile: UserProfile) => {
 
 const Page = () => {
   const router = useRouter()
-  const adaptedProfiles = adaptProfiles(profilesData.profiles as UserProfile[])
 
-  const [profiles] = useState(adaptedProfiles)
-  const [filteredProfiles, setFilteredProfiles] = useState(adaptedProfiles)
+  const [profiles, setProfiles] = useState<AdaptedProfile[]>([])
+  const [filteredProfiles, setFilteredProfiles] = useState(profiles)
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
@@ -111,6 +105,14 @@ const Page = () => {
   const indexOfLastProfile = currentPage * profilesPerPage
   const indexOfFirstProfile = indexOfLastProfile - profilesPerPage
   const currentProfiles = filteredProfiles.slice(indexOfFirstProfile, indexOfLastProfile)
+
+  // Fething profiles
+  useEffect(() => {
+    getAllProfiles().then(({ success, data, error }) => {
+      if (success && data) setProfiles(adaptProfiles(data as UserProfile[]))
+      if (!success && error) console.error(error)
+    })
+  }, [])
 
   // Handle search and filtering
   useEffect(() => {
@@ -198,6 +200,13 @@ const Page = () => {
     activeFilters.skills.length +
     activeFilters.locations.length +
     (activeFilters.experienceLevel ? 1 : 0)
+
+  const getUsernameFromUrl = (url: string): string => {
+    // Find the position of @ in the string
+    const atIndex = url.lastIndexOf('@')
+    if (atIndex !== -1) return url.substring(atIndex + 1)
+    return url
+  }
 
   return (
     <div className='min-h-screen bg-[#f0f0f0] p-6 md:p-10'>
@@ -303,7 +312,7 @@ const Page = () => {
                     key={profile.id}
                     profile={profile}
                     viewMode={viewMode}
-                    onClick={() => router.push(`/@${profile.id}`)}
+                    onClick={() => router.push(`/@${getUsernameFromUrl(profile.url)}`)}
                   />
                 ))}
               </div>
