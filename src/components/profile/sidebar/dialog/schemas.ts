@@ -16,7 +16,11 @@ export const bioSchema = z.object({
 
 export const contactSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
-  website: z.string().url({ message: 'Please enter a valid website url' }).optional(),
+  website: z
+    .string()
+    .url({ message: 'Please enter a valid website url' })
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
   github: z.string().optional(),
   x: z.string().optional(),
   linkedin: z.string().optional(),

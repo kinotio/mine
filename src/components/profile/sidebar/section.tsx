@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Icon } from '@/components/icon'
+import { Loader } from '@/components/loader'
 
 import { useToast } from '@/hooks/use-toast'
 import { useProfile } from '@/components/profile/provider'
@@ -37,6 +38,7 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
   const { profile } = useProfile()
   const { emit } = useEventEmitter()
 
+  const [isLoading, setIsLoading] = useState(true)
   const [open, setOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<SectionTemplate | null>(null)
   const [customName, setCustomName] = useState('')
@@ -79,6 +81,7 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
       getProfileSectionTemplates()
         .then(({ data }) => setSectionTemplates(data as SectionTemplate[]))
         .catch((error) => console.error(error))
+        .finally(() => setIsLoading(false))
     }
   }, [open])
 
@@ -92,75 +95,81 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
         )}
       </DialogTrigger>
       <DialogContent className='sm:max-w-[600px] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] bg-white'>
-        <DialogHeader>
-          <DialogTitle className='text-2xl font-black'>Add New Section</DialogTitle>
-        </DialogHeader>
-
         <div className='mt-4'>
-          {!selectedTemplate ? (
-            <>
-              <p className='mb-4'>Choose a section type to add to your profile:</p>
-              <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
-                {sectionTemplates.map((template) => (
-                  <div
-                    key={template.id}
-                    className='border-[3px] border-black p-4 cursor-pointer hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
-                    style={{ backgroundColor: `${template.color}20` }}
-                    onClick={() => handleSelectTemplate(template)}
-                  >
-                    <div
-                      className='w-10 h-10 rounded-full flex items-center justify-center mb-2 border-[2px] border-black'
-                      style={{ backgroundColor: template.color }}
-                    >
-                      <Icon name={template.icon as keyof typeof icons} size={16} />
-                    </div>
-                    <h3 className='font-bold'>{template.name}</h3>
-                  </div>
-                ))}
-              </div>
-            </>
+          {isLoading ? (
+            <Loader size='lg' />
           ) : (
-            <div className='space-y-4'>
-              <div className='flex items-center gap-3 mb-4'>
-                <div
-                  className='w-12 h-12 rounded-full flex items-center justify-center border-[3px] border-black'
-                  style={{ backgroundColor: selectedTemplate.color }}
-                >
-                  <Icon name={selectedTemplate.icon as keyof typeof icons} size={16} />
-                </div>
-                <div>
-                  <h3 className='font-bold text-lg'>{selectedTemplate.name}</h3>
-                  <p className='text-sm text-gray-600'>{selectedTemplate.description}</p>
-                </div>
-              </div>
+            <>
+              <DialogHeader>
+                <DialogTitle className='text-2xl font-black'>Add New Section</DialogTitle>
+              </DialogHeader>
 
-              <div className='space-y-2'>
-                <label className='font-bold'>Section Name</label>
-                <Input
-                  value={customName}
-                  onChange={(e) => setCustomName(e.target.value)}
-                  className='border-[3px] border-black focus-visible:ring-0 focus-visible:ring-offset-0'
-                  placeholder='Enter section name'
-                />
-              </div>
+              {!selectedTemplate ? (
+                <>
+                  <p className='mb-4'>Choose a section type to add to your profile:</p>
+                  <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+                    {sectionTemplates.map((template) => (
+                      <div
+                        key={template.id}
+                        className='border-[3px] border-black p-4 cursor-pointer hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
+                        style={{ backgroundColor: `${template.color}20` }}
+                        onClick={() => handleSelectTemplate(template)}
+                      >
+                        <div
+                          className='w-10 h-10 rounded-full flex items-center justify-center mb-2 border-[2px] border-black'
+                          style={{ backgroundColor: template.color }}
+                        >
+                          <Icon name={template.icon as keyof typeof icons} size={16} />
+                        </div>
+                        <h3 className='font-bold'>{template.name}</h3>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className='space-y-4'>
+                  <div className='flex items-center gap-3 mb-4'>
+                    <div
+                      className='w-12 h-12 rounded-full flex items-center justify-center border-[3px] border-black'
+                      style={{ backgroundColor: selectedTemplate.color }}
+                    >
+                      <Icon name={selectedTemplate.icon as keyof typeof icons} size={16} />
+                    </div>
+                    <div>
+                      <h3 className='font-bold text-lg'>{selectedTemplate.name}</h3>
+                      <p className='text-sm text-gray-600'>{selectedTemplate.description}</p>
+                    </div>
+                  </div>
 
-              <div className='pt-4 flex gap-3 justify-end'>
-                <Button
-                  variant='neutral'
-                  onClick={() => setSelectedTemplate(null)}
-                  className='border-[2px] border-black font-bold'
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={handleAddSection}
-                  className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
-                  disabled={!customName.trim()}
-                >
-                  Add Section
-                </Button>
-              </div>
-            </div>
+                  <div className='space-y-2'>
+                    <label className='font-bold'>Section Name</label>
+                    <Input
+                      value={customName}
+                      onChange={(e) => setCustomName(e.target.value)}
+                      className='border-[3px] border-black focus-visible:ring-0 focus-visible:ring-offset-0'
+                      placeholder='Enter section name'
+                    />
+                  </div>
+
+                  <div className='pt-4 flex gap-3 justify-end'>
+                    <Button
+                      variant='neutral'
+                      onClick={() => setSelectedTemplate(null)}
+                      className='border-[2px] border-black font-bold'
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      onClick={handleAddSection}
+                      className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
+                      disabled={!customName.trim()}
+                    >
+                      Add Section
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </DialogContent>
