@@ -21,6 +21,7 @@ import {
 } from '@/components/profile/page/cards'
 import { ActionItemCard } from '@/components/profile/page/action-item'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
 
 import { adaptToType, DynamicObject } from '@/lib/utils'
 import {
@@ -305,7 +306,7 @@ const Page = () => {
   return (
     <>
       {profile.user_profile_sections.length === 0 && isSignedIn && hasPermission ? (
-        <Alert className='my-8 border-2 border-dashed px-8 py-10'>
+        <Alert className='my-8 px-8 py-10 bg-white'>
           <div className='flex flex-col items-center text-center'>
             <PlusCircle className='mb-2 h-8 w-8' />
             <AlertTitle className='mb-2 text-xl'>No sections added yet</AlertTitle>
@@ -313,6 +314,14 @@ const Page = () => {
               Your profile looks empty. Add sections like Experience, Skills, or Projects to
               showcase your talents.
             </AlertDescription>
+
+            <Button
+              onClick={() => emit('profile:section:create', {})}
+              className='mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-4'
+            >
+              <PlusCircle className='w-5 h-5' />
+              Add New Section
+            </Button>
           </div>
         </Alert>
       ) : (

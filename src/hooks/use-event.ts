@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators'
 // Define the event map type with unknown payload types
 export interface EventMap {
   'profile:updated': Record<string, unknown>
+  'profile:section:create': Record<string, unknown>
 }
 
 // Event type helper

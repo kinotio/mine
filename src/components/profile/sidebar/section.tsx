@@ -17,7 +17,7 @@ import { Loader } from '@/components/loader'
 
 import { useToast } from '@/hooks/use-toast'
 import { useProfile } from '@/components/profile/provider'
-import { useEventEmitter } from '@/hooks/use-event'
+import { useEventEmitter, useEventSubscription } from '@/hooks/use-event'
 
 import { getProfileSectionTemplates, createProfileSection } from '@/server/actions'
 
@@ -84,6 +84,8 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
         .finally(() => setIsLoading(false))
     }
   }, [open])
+
+  useEventSubscription('profile:section:create', () => setOpen(true))
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
