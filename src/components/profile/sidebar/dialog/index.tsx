@@ -310,6 +310,7 @@ export const ProfileDialogEdit = () => {
                 variant='neutral'
                 onClick={() => setOpen(false)}
                 className='border-[2px] border-black font-bold hover:bg-gray-100'
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
