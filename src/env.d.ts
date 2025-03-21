@@ -8,6 +8,7 @@ declare global {
       NEXT_PUBLIC_MINIO_URL: string
       NEXT_PUBLIC_MINIO_ENDPOINT: string
       NEXT_PUBLIC_MINIO_PORT: string
+      NEXT_PUBLIC_MINIO_USE_SSL: string
 
       DATABASE_URL: string
       CLERK_SECRET_KEY: string
