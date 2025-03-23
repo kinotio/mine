@@ -22,6 +22,7 @@ interface EditableSectionProps {
   sectionId: string
   sectionName: string
   onEdit: (sectionId: string, newName: string) => Promise<void>
+  isLoading: boolean
 }
 
 const formSchema = z.object({
@@ -33,9 +34,13 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
-export const EditableSection = ({ sectionId, sectionName, onEdit }: EditableSectionProps) => {
+export const EditableSection = ({
+  sectionId,
+  sectionName,
+  onEdit,
+  isLoading
+}: EditableSectionProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -47,10 +52,7 @@ export const EditableSection = ({ sectionId, sectionName, onEdit }: EditableSect
   const handleSubmit = async (values: FormValues) => {
     if (values.name === sectionName) return setIsOpen(false)
 
-    setIsLoading(true)
-
-    await onEdit(sectionId, values.name).finally(() => {
-      setIsLoading(false)
+    onEdit(sectionId, values.name).finally(() => {
       setIsOpen(false)
       form.reset({ name: sectionName })
     })

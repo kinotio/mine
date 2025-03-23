@@ -49,10 +49,39 @@ interface ActionItemCardProps {
   sectionName: string
   itemName: string
   sectionType: string
-  onDelete: (itemId: string, sectionId: string) => void
-  onEdit: (itemId: string, sectionId: string, updatedData: Record<string, unknown>) => void
+  onDelete: (itemId: string, sectionId: string) => Promise<void>
+  onEdit: (itemId: string, sectionId: string, updatedData: Record<string, unknown>) => Promise<void>
   metadata: Record<string, unknown>
   children: React.ReactNode
+  isLoading: boolean
+}
+
+// Function to get the appropriate schema - now returns any schema type
+const getSchemaForType = (type: string) => {
+  switch (type) {
+    case 'projects':
+      return projectSchema
+    case 'skills':
+      return skillSchema
+    case 'experience':
+      return experienceSchema
+    case 'certifications':
+      return certificationSchema
+    case 'education':
+      return educationSchema
+    case 'achievements':
+      return achievementSchema
+    case 'portfolio':
+      return portfolioSchema
+    case 'publications':
+      return publicationSchema
+    case 'languages':
+      return languageSchema
+    case 'volunteer':
+      return volunteerSchema
+    default:
+      return defaultSchema
+  }
 }
 
 export const ActionItemCard: React.FC<ActionItemCardProps> = ({
@@ -87,73 +116,82 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
   // Reset form when dialog opens
   useEffect(() => {
     if (isEditDialogOpen) {
-      form.reset(metadata as unknown)
-      if (metadata.image && typeof metadata.image === 'string') {
-        setImagePreview(metadata.image as string)
+      // Clone the metadata
+      const formData = { ...metadata }
+
+      // Convert tags array to comma-separated string for the form
+      if (sectionType === 'projects' && 'tags' in formData && Array.isArray(formData.tags)) {
+        formData.tags = formData.tags.join(', ')
+      }
+
+      // Handle image field - ensure it's a string
+      if ('image' in formData) {
+        // If it's a File object or other non-string object, we might already have the preview URL
+        if (formData.image && typeof formData.image !== 'string') {
+          // If we have an existing preview URL, use that
+          if (imagePreview) {
+            formData.image = imagePreview
+          } else {
+            // Otherwise, just clear it to avoid type errors
+            formData.image = ''
+          }
+        }
+      }
+
+      // Now reset the form with the prepared data
+      form.reset(formData as unknown)
+
+      // Set image preview if available
+      if (formData.image && typeof formData.image === 'string') {
+        setImagePreview(formData.image as string)
       }
     }
-  }, [isEditDialogOpen, metadata, form])
+  }, [isEditDialogOpen, metadata, form, sectionType, imagePreview])
 
   // Handle image upload
   const handleImageUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: { onChange: (value: File) => void }
+    field: { onChange: (value: string) => void }
   ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
       const reader = new FileReader()
 
       reader.onloadend = () => {
-        setImagePreview(reader.result as string)
+        const result = reader.result as string
+        setImagePreview(result)
+        field.onChange(result) // Pass the string result to form state
       }
       reader.readAsDataURL(file)
-
-      field.onChange(file) // Pass the file to form state
-    }
-  }
-
-  // Function to get the appropriate schema - now returns any schema type
-  function getSchemaForType(type: string) {
-    switch (type) {
-      case 'projects':
-        return projectSchema
-      case 'skills':
-        return skillSchema
-      case 'experience':
-        return experienceSchema
-      case 'certifications':
-        return certificationSchema
-      case 'education':
-        return educationSchema
-      case 'achievements':
-        return achievementSchema
-      case 'portfolio':
-        return portfolioSchema
-      case 'publications':
-        return publicationSchema
-      case 'languages':
-        return languageSchema
-      case 'volunteer':
-        return volunteerSchema
-      default:
-        return defaultSchema
     }
   }
 
   // Handle delete action
   const handleDelete = (): void => {
-    onDelete(itemId, sectionId)
-    setIsDeleteDialogOpen(false)
+    onDelete(itemId, sectionId).finally(() => {
+      setIsDeleteDialogOpen(false)
+    })
   }
 
   // Handle form submission
   const handleSubmit = (data: Record<string, unknown>): void => {
+    // Convert tags string to array for projects
     if (sectionType === 'projects' && 'tags' in data && typeof data.tags === 'string') {
       data.tags = (data.tags as string).split(',').map((tag: string) => tag.trim())
     }
 
-    onEdit(itemId, sectionId, data)
-    setIsEditDialogOpen(false)
+    // Ensure image is a string
+    if ('image' in data && data.image && typeof data.image !== 'string') {
+      if (imagePreview) {
+        data.image = imagePreview
+      } else {
+        delete data.image
+      }
+    }
+
+    onEdit(itemId, sectionId, data).finally(() => {
+      setIsEditDialogOpen(false)
+    })
   }
 
   // Render the appropriate form component

@@ -59,6 +59,7 @@ interface SectionItemDialogProps {
   buttonTextColor?: string
   onSubmit: (sectionId: string, data: DynamicObject) => Promise<void>
   trigger?: React.ReactNode
+  isLoading: boolean
 }
 
 export const SectionItemDialog = ({
@@ -69,9 +70,9 @@ export const SectionItemDialog = ({
   buttonText,
   buttonTextColor = 'black',
   onSubmit,
-  trigger
+  trigger,
+  isLoading
 }: SectionItemDialogProps) => {
-  const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
@@ -115,13 +116,10 @@ export const SectionItemDialog = ({
       data.tags = (data.tags as string).split(',').map((tag: string) => tag.trim())
     }
 
-    setIsLoading(true)
-
     onSubmit(sectionId, data).finally(() => {
-      setOpen(false)
       form.reset(defaultValues as FormValues)
       setImagePreview(null)
-      setIsLoading(false)
+      setOpen(false)
     })
   }
 
