@@ -168,14 +168,14 @@ export const ProfileDialogEdit = () => {
 
   const handleFileUpload = async (
     file: File,
-    bucket: 'avatars' | 'banners',
+    type: 'avatars' | 'banners',
     updateField: 'avatar_url' | 'banner_url'
   ) => {
     if (!file) return
 
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('bucket', bucket)
+    formData.append('type', type)
 
     const { success, data } = await uploadFile(formData)
 
@@ -186,7 +186,7 @@ export const ProfileDialogEdit = () => {
         file_name: data.name,
         file_type: data.type,
         file_size: data.size.toString(),
-        tag: bucket.slice(0, -1),
+        tag: type.slice(0, -1),
         user_profile_id: profile.id
       })
     }

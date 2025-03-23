@@ -86,7 +86,7 @@ const Page = () => {
     if (payload.image instanceof File) {
       const formData = new FormData()
       formData.append('file', payload.image as File)
-      formData.append('bucket', 'images')
+      formData.append('type', 'images')
 
       const { success, data } = await uploadFile(formData)
 
@@ -165,7 +165,7 @@ const Page = () => {
     if (updatedData.image instanceof File) {
       const formData = new FormData()
       formData.append('file', updatedData.image)
-      formData.append('bucket', 'images')
+      formData.append('type', 'images')
 
       const { success, data } = await uploadFile(formData)
 
