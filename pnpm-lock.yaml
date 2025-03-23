@@ -159,9 +159,6 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
     devDependencies:
-      '4':
-        specifier: ^0.0.0
-        version: 0.0.0
       '@types/chalk':
         specifier: ^2.2.4
         version: 2.2.4
@@ -206,9 +203,6 @@ importers:
         version: 5.8.2
 
 packages:
-
-  4@0.0.0:
-    resolution: {integrity: sha512-JWaJnETbU+8EfG4hPw1PFwEHsd7Fjlp0oNRYUYynn8t54P0459HAUiu1jgOnvgOYMZH9YnhfT+bgqcazmbMF5Q==}
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -4587,8 +4581,6 @@ packages:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
 snapshots:
-
-  4@0.0.0: {}
 
   '@alloc/quick-lru@5.2.0': {}
 

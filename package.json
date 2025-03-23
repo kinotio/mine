@@ -69,7 +69,6 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "4": "^0.0.0",
     "@types/chalk": "^2.2.4",
     "@types/lodash": "^4.17.16",
     "@types/mime-types": "^2.1.4",
