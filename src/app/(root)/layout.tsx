@@ -6,7 +6,7 @@ import { DATA } from '@/data'
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
   title: {
-    default: DATA.name,
+    default: `${DATA.name}: build and share your awesomes skills and works`,
     template: `%s | ${DATA.name}`
   },
   description: DATA.description,

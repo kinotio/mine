@@ -1,5 +1,5 @@
 export const DATA = {
-  name: 'Mine: build and share your awesomes skills and works',
+  name: 'Mine',
   url: 'https://mine.kinotio.io',
   description: 'A Developer hub for building and sharing your awesome skills and works',
   social_url: {
