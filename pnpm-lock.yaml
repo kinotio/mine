@@ -172,8 +172,8 @@ importers:
         specifier: ^2.1.4
         version: 2.1.4
       '@types/node':
-        specifier: ^20
-        version: 20.17.25
+        specifier: ^22
+        version: 22.13.11
       '@types/pg':
         specifier: ^8.11.11
         version: 8.11.11
@@ -2178,9 +2178,6 @@ packages:
 
   '@types/mime-types@2.1.4':
     resolution: {integrity: sha512-lfU4b34HOri+kAY5UheuFMWPDOI+OPceBSHZKp69gEyTL/mmJ4cnU6Y/rlme3UL3GyOn6Y42hyIEw0/q8sWx5w==}
-
-  '@types/node@20.17.25':
-    resolution: {integrity: sha512-bT+r2haIlplJUYtlZrEanFHdPIZTeiMeh/fSOEbOOfWf9uTn+lg8g0KU6Q3iMgjd9FLuuMAgfCNSkjUbxL6E3Q==}
 
   '@types/node@22.13.11':
     resolution: {integrity: sha512-iEUCUJoU0i3VnrCmgoWCXttklWcvoCIx4jzcP22fioIVSdTmjgoEvmAO/QPw6TcS9k5FrNgn4w7q5lGOd1CT5g==}
@@ -4438,9 +4435,6 @@ packages:
   unbox-primitive@1.1.0:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
-
-  undici-types@6.19.8:
-    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
 
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
@@ -6792,17 +6786,13 @@ snapshots:
 
   '@types/mime-types@2.1.4': {}
 
-  '@types/node@20.17.25':
-    dependencies:
-      undici-types: 6.19.8
-
   '@types/node@22.13.11':
     dependencies:
       undici-types: 6.20.0
 
   '@types/pg@8.11.11':
     dependencies:
-      '@types/node': 20.17.25
+      '@types/node': 22.13.11
       pg-protocol: 1.8.0
       pg-types: 4.0.2
 
@@ -9371,8 +9361,6 @@ snapshots:
       has-bigints: 1.1.0
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
-
-  undici-types@6.19.8: {}
 
   undici-types@6.20.0: {}
 
