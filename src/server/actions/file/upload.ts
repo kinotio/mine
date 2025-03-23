@@ -103,9 +103,9 @@ export const uploadFile = async (formData: FormData): Promise<ActionResponse<R2U
     // Process the image based on bucket type
     let processedImage
 
-    if (type === 'avatars') {
+    if (type === 'avatar') {
       processedImage = await compressAvatar(buffer, fileName)
-    } else if (type === 'banners') {
+    } else if (type === 'banner') {
       processedImage = await compressBanner(buffer, fileName)
     } else {
       processedImage = await compressImage(buffer, fileName)
@@ -120,14 +120,14 @@ export const uploadFile = async (formData: FormData): Promise<ActionResponse<R2U
       }
     })
 
-    await r2.upload(processedImage.filename, processedImage.buffer, processedImage.mimetype)
+    await r2.upload(type, processedImage.filename, processedImage.buffer, processedImage.mimetype)
 
     log.debug('Image uploaded successfully', {
       context: 'uploadFileAction',
       data: { type, filename: processedImage.filename }
     })
 
-    const url = r2.getPermanentUrl(processedImage.filename)
+    const url = r2.getPermanentUrl(type, processedImage.filename)
 
     return {
       success: true,

@@ -1,12 +1,23 @@
 import { S3Client, PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3'
 
-import { config, bucket } from '@/server/services/r2/config'
+import { config, bucket, project } from '@/server/services/r2/config'
 import { log } from '@/server/utils/logger'
 import { applyCorsToBucket, checkBucketExists } from '@/server/services/r2/helpers'
 
 export const r2 = new S3Client(config)
 
-export const getPermanentUrl = (key: string): string => {
+export const upload = async (
+  type: string,
+  filename: string,
+  file: Buffer | Blob | ReadableStream,
+  contentType?: string
+) => {
+  const key = `${project}/${type}/${filename}`
+
+  return uploadFile(key, file, contentType)
+}
+
+export const getPermanentUrl = (type: string, key: string): string => {
   // For Cloudflare R2, use the public bucket URL
   const publicEndpoint = process.env.R2_PUBLIC_URL
 
@@ -15,10 +26,10 @@ export const getPermanentUrl = (key: string): string => {
     throw new Error('R2_PUBLIC_URL environment variable is not set')
   }
 
-  return `${publicEndpoint}/${key}`
+  return `${publicEndpoint}/${project}/${type}/${key}`
 }
 
-export const upload = async (
+export const uploadFile = async (
   key: string,
   file: Buffer | Blob | ReadableStream,
   contentType?: string
