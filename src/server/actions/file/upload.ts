@@ -1,21 +1,25 @@
 'use server'
 
-import { minioClient, getBucketPolicy, MinioUploadResult } from '@/server/services/minio'
+import { randomUUID } from 'crypto'
+
+import r2, { type R2UploadResult } from '@/server/services/r2'
 import { FileValidation } from '@/server/services/validation/file'
 import { ActionResponse } from '@/server/utils/types'
 import { compressImage, compressAvatar, compressBanner } from '@/server/utils/image-processor'
 
-export const uploadFile = async (
-  formData: FormData
-): Promise<ActionResponse<MinioUploadResult>> => {
-  try {
-    const fileData = formData.get('file')
-    const bucket = formData.get('bucket') as string
+import { log } from '@/server/utils/logger'
 
-    if (!fileData || !bucket) {
+export const uploadFile = async (formData: FormData): Promise<ActionResponse<R2UploadResult>> => {
+  try {
+    log.info('Processing file upload request', { context: 'uploadFileAction' })
+
+    const fileData = formData.get('file')
+    const type = formData.get('type') as string
+
+    if (!fileData) {
       return {
         success: false,
-        error: 'File and bucket are required'
+        error: 'File are required'
       }
     }
 
@@ -27,10 +31,12 @@ export const uploadFile = async (
 
     // Check if fileData is a File object or a string (data URL)
     if (typeof fileData === 'string' && fileData.startsWith('data:')) {
+      log.debug('Processing data URL file upload', { context: 'uploadFileAction' })
       // Extract mime type from data URL
       const matches = fileData.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
 
       if (!matches || matches.length !== 3) {
+        log.warn('Invalid data URL format', { context: 'uploadFileAction' })
         return {
           success: false,
           error: 'Invalid data URL format'
@@ -42,10 +48,16 @@ export const uploadFile = async (
       buffer = Buffer.from(base64Data, 'base64')
       fileSize = buffer.length
 
-      // Generate a filename since we don't have one
+      // Generate a filename with UUID since we don't have one
       const extension = fileType.split('/')[1] || 'png'
-      fileName = `${Date.now()}.${extension}`
+      fileName = `${Date.now()}-${randomUUID()}.${extension}`
+
+      log.debug('Created filename for data URL upload', {
+        context: 'uploadFileAction',
+        data: { fileName, fileType, fileSize }
+      })
     } else if (fileData instanceof File) {
+      log.debug('Processing File object upload', { context: 'uploadFileAction' })
       fileName = fileData.name
       fileType = fileData.type
       fileSize = fileData.size
@@ -53,13 +65,23 @@ export const uploadFile = async (
       // Convert File to Buffer
       const arrayBuffer = await fileData.arrayBuffer()
       buffer = Buffer.from(arrayBuffer)
+
+      log.debug('Processed File object', {
+        context: 'uploadFileAction',
+        data: { fileName, fileType, fileSize }
+      })
     } else {
+      log.warn('Invalid file format', {
+        context: 'uploadFileAction',
+        data: { fileDataType: typeof fileData }
+      })
       return {
         success: false,
         error: 'Invalid file format'
       }
     }
 
+    // Validate the file
     const validation = FileValidation.safeParse({
       type: fileType,
       size: fileSize,
@@ -67,54 +89,61 @@ export const uploadFile = async (
     })
 
     if (!validation.success) {
+      const errorMessage = validation.error.issues[0].message
+      log.warn('File validation failed', {
+        context: 'uploadFileAction',
+        data: { error: errorMessage, fileType, fileSize, fileName }
+      })
       return {
         success: false,
-        error: validation.error.issues[0].message
+        error: errorMessage
       }
     }
 
-    const bucketExists = await minioClient.bucketExists(bucket)
-    if (!bucketExists) {
-      await minioClient.makeBucket(bucket, 'us-east-1')
-    }
-
-    await minioClient.setBucketPolicy(bucket, JSON.stringify(getBucketPolicy(bucket)))
-
+    // Process the image based on bucket type
     let processedImage
 
-    if (bucket === 'avatars') {
+    if (type === 'avatar') {
       processedImage = await compressAvatar(buffer, fileName)
-    } else if (bucket === 'banners') {
+    } else if (type === 'banner') {
       processedImage = await compressBanner(buffer, fileName)
     } else {
       processedImage = await compressImage(buffer, fileName)
     }
 
-    await minioClient.putObject(
-      bucket,
-      processedImage.filename,
-      processedImage.buffer,
-      processedImage.size,
-      {
-        'Content-Type': processedImage.mimetype,
-        'Cache-Control': 'max-age=31536000' // Cache for 1 year
+    log.debug('Image processed successfully', {
+      context: 'uploadFileAction',
+      data: {
+        originalSize: fileSize,
+        compressedSize: processedImage.size,
+        filename: processedImage.filename
       }
-    )
+    })
 
-    // Generate URL
-    const baseUrl = process.env.NEXT_PUBLIC_MINIO_URL
-    const url = `${baseUrl}/${bucket}/${processedImage.filename}`
+    await r2.upload(type, processedImage.filename, processedImage.buffer, processedImage.mimetype)
+
+    log.debug('Image uploaded successfully', {
+      context: 'uploadFileAction',
+      data: { type, filename: processedImage.filename }
+    })
+
+    const url = r2.getPermanentUrl(type, processedImage.filename)
 
     return {
       success: true,
       data: {
         url,
-        name: fileName.toLowerCase(),
+        name: processedImage.filename.toLowerCase(),
         type: processedImage.mimetype,
         size: processedImage.size
       }
     }
   } catch (error) {
+    log.error('Error in file upload', {
+      context: 'uploadFileAction',
+      error: error instanceof Error ? error : new Error(String(error))
+    })
+
     return {
       success: false,
       error: error instanceof Error ? error.message : 'An error occurred while uploading file.'

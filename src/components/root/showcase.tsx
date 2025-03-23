@@ -9,7 +9,7 @@ import { Github } from '@/components/icons'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
 
-import { showcase_profiles } from '@/data/showcase.json'
+import showcaseData from '@/data/showcase.json'
 
 export const Showcase = () => {
   const router = useRouter()
@@ -58,7 +58,7 @@ export const Showcase = () => {
           whileInView='visible'
           viewport={{ once: true }}
         >
-          {showcase_profiles.map((profile, index) => {
+          {showcaseData.showcase_profiles.map((profile, index) => {
             // Get a consistent color for this profile
             const profileColor = getColorFromString(profile.name)
             // Determine if text should be black or white

@@ -21,7 +21,7 @@ $ pnpm install
 And then install Infisical CLI [here](https://infisical.com/docs/cli/overview), then run the following command:
 
 ```bash
-$ infisical run -- pnpm run dev
+$ infisical run --env=dev --watch --recursive -- pnpm dev
 ```
 
 ## License
