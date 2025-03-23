@@ -59,9 +59,12 @@ const Page = () => {
   const { emit } = useEventEmitter()
   const { toast } = useToast()
 
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [templates, setTemplates] = useState<ProfileSectionTemplate[]>([])
 
   const handleDeleteSection = async (sectionId: string): Promise<void> => {
+    setIsLoading(true)
+
     deleteProfileSection(user.id, sectionId).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -75,6 +78,7 @@ const Page = () => {
       }
 
       emit('profile:updated', {})
+      setIsLoading(false)
     })
   }
 
@@ -104,6 +108,8 @@ const Page = () => {
       payload.image = data?.url ?? ''
     }
 
+    setIsLoading(true)
+
     createProfileSectionItem(user.id, profile.id, sectionId, payload).then(
       ({ success, data, error }) => {
         if (success && data) {
@@ -118,11 +124,14 @@ const Page = () => {
         }
 
         emit('profile:updated', {})
+        setIsLoading(false)
       }
     )
   }
 
   const handleEditSection = async (sectionId: string, newName: string): Promise<void> => {
+    setIsLoading(true)
+
     updateProfileSection(user.id, sectionId, { name: newName }).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -136,10 +145,13 @@ const Page = () => {
       }
 
       emit('profile:updated', {})
+      setIsLoading(false)
     })
   }
 
   const handleDeleteSectionItem = async (itemId: string, sectionId: string): Promise<void> => {
+    setIsLoading(true)
+
     deleteProfileSectionItem(user.id, sectionId, itemId).then(({ success, data, error }) => {
       if (success && data) {
         toast({
@@ -153,6 +165,7 @@ const Page = () => {
       }
 
       emit('profile:updated', {})
+      setIsLoading(false)
     })
   }
 
@@ -183,6 +196,8 @@ const Page = () => {
       }
     }
 
+    setIsLoading(true)
+
     updateProfileSectionItem(user.id, sectionId, itemId, updatedData).then(
       ({ success, data, error }) => {
         if (success && data) {
@@ -197,6 +212,7 @@ const Page = () => {
         }
 
         emit('profile:updated', {})
+        setIsLoading(false)
       }
     )
   }
@@ -297,9 +313,13 @@ const Page = () => {
 
   // Load section templates on component mount
   useEffect(() => {
+    setIsLoading(true)
+
     getProfileSectionTemplates().then(({ success, data, error }) => {
       if (success && data) setTemplates(data)
       else console.error('Failed to fetch section templates:', error)
+
+      setIsLoading(false)
     })
   }, [])
 
@@ -346,6 +366,7 @@ const Page = () => {
                 onDelete={handleDeleteSection}
                 onEdit={handleEditSection}
                 isSignedInAndHasPermissionSection={isSignedIn && hasPermission}
+                isLoading={isLoading}
               />
 
               <ScrollableSection>

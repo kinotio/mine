@@ -10,17 +10,19 @@ interface DeletableSectionProps {
   sectionId: string
   sectionName: string
   onDelete: (sectionId: string) => Promise<void>
+  isLoading: boolean
 }
 
-export const DeletableSection = ({ sectionId, sectionName, onDelete }: DeletableSectionProps) => {
+export const DeletableSection = ({
+  sectionId,
+  sectionName,
+  onDelete,
+  isLoading
+}: DeletableSectionProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const handleDelete = () => {
-    setIsLoading(true)
-
     onDelete(sectionId).finally(() => {
-      setIsLoading(false)
       setIsOpen(false)
     })
   }

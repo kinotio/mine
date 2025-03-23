@@ -21,6 +21,7 @@ interface SectionHeaderProps {
   onDelete: (sectionId: string) => Promise<void>
   onEdit: (sectionId: string, newName: string) => Promise<void>
   isSignedInAndHasPermissionSection: boolean
+  isLoading: boolean
 }
 
 export const SectionHeader = ({
@@ -35,7 +36,8 @@ export const SectionHeader = ({
   onSubmit,
   onDelete,
   onEdit,
-  isSignedInAndHasPermissionSection
+  isSignedInAndHasPermissionSection,
+  isLoading
 }: SectionHeaderProps) => {
   return (
     <div className='flex justify-between items-center mb-6'>
@@ -59,9 +61,20 @@ export const SectionHeader = ({
             buttonColor={buttonColor}
             buttonTextColor={buttonTextColor}
             onSubmit={onSubmit}
+            isLoading={isLoading}
           />
-          <EditableSection sectionId={sectionId} sectionName={sectionName} onEdit={onEdit} />
-          <DeletableSection sectionId={sectionId} sectionName={sectionName} onDelete={onDelete} />
+          <EditableSection
+            sectionId={sectionId}
+            sectionName={sectionName}
+            onEdit={onEdit}
+            isLoading={isLoading}
+          />
+          <DeletableSection
+            sectionId={sectionId}
+            sectionName={sectionName}
+            onDelete={onDelete}
+            isLoading={isLoading}
+          />
         </div>
       ) : null}
     </div>

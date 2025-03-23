@@ -38,7 +38,8 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
   const { profile } = useProfile()
   const { emit } = useEventEmitter()
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isCreateLoading, setIsCreateLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [selectedTemplate, setSelectedTemplate] = useState<SectionTemplate | null>(null)
   const [customName, setCustomName] = useState('')
@@ -51,6 +52,8 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
 
   const handleAddSection = async () => {
     if (selectedTemplate) {
+      setIsCreateLoading(true)
+
       // Create the section to the user's profile
       createProfileSection(profile.user_id, profile.id, selectedTemplate.id, customName)
         .then(({ success, error }) => {
@@ -68,6 +71,7 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
           }
         })
         .finally(() => {
+          setIsCreateLoading(false)
           emit('profile:updated', {})
           setOpen(false)
           setSelectedTemplate(null)
@@ -78,6 +82,8 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
 
   useEffect(() => {
     if (open) {
+      setIsLoading(true)
+
       getProfileSectionTemplates()
         .then(({ data }) => setSectionTemplates(data as SectionTemplate[]))
         .catch((error) => console.error(error))
@@ -97,13 +103,13 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
         )}
       </DialogTrigger>
       <DialogContent className='sm:max-w-[600px] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] bg-white'>
-        <div className='mt-4'>
+        <div>
           {isLoading ? (
             <Loader size='lg' />
           ) : (
             <>
               <DialogHeader>
-                <DialogTitle className='text-2xl font-black'>Add New Section</DialogTitle>
+                <DialogTitle className='text-2xl font-black mb-4'>Add New Section</DialogTitle>
               </DialogHeader>
 
               {!selectedTemplate ? (
@@ -158,13 +164,14 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
                       variant='neutral'
                       onClick={() => setSelectedTemplate(null)}
                       className='border-[2px] border-black font-bold'
+                      disabled={isCreateLoading}
                     >
                       Back
                     </Button>
                     <Button
                       onClick={handleAddSection}
                       className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
-                      disabled={!customName.trim()}
+                      disabled={!customName.trim() || isCreateLoading}
                     >
                       Add Section
                     </Button>
