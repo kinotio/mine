@@ -53,6 +53,7 @@ interface ActionItemCardProps {
   onEdit: (itemId: string, sectionId: string, updatedData: Record<string, unknown>) => Promise<void>
   metadata: Record<string, unknown>
   children: React.ReactNode
+  isLoading: boolean
 }
 
 // Function to get the appropriate schema - now returns any schema type
@@ -98,7 +99,6 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const form = useForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -146,7 +146,7 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
         setImagePreview(formData.image as string)
       }
     }
-  }, [isEditDialogOpen, metadata, form])
+  }, [isEditDialogOpen, metadata, form, sectionType, imagePreview])
 
   // Handle image upload
   const handleImageUpload = (
@@ -168,10 +168,7 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
 
   // Handle delete action
   const handleDelete = (): void => {
-    setIsLoading(true)
-
     onDelete(itemId, sectionId).finally(() => {
-      setIsLoading(false)
       setIsDeleteDialogOpen(false)
     })
   }
@@ -192,10 +189,7 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
       }
     }
 
-    setIsLoading(true)
-
     onEdit(itemId, sectionId, data).finally(() => {
-      setIsLoading(false)
       setIsEditDialogOpen(false)
     })
   }

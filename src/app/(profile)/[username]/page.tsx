@@ -305,6 +305,7 @@ const Page = () => {
         onDelete={handleDeleteSectionItem}
         onEdit={handleEditSectionItem}
         metadata={metadata}
+        isLoading={isLoading}
       >
         {card}
       </ActionItemCard>

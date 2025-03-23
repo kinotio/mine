@@ -7,13 +7,13 @@ import { log } from '@/server/utils/logger'
 export const client = createClient(config)
 
 // Set up error handling
-client.on('error', (err) => {
-  log.error('Cache', { context: 'Redis Error', error: err as Error })
+client.on('error', (error) => {
+  log.error('Cache', { context: 'Redis Error', error: error as Error })
 })
 
 // Connect to Redis
-client.connect().catch((err) => {
-  log.error('Cache', { context: 'Redis Connection', error: err as Error })
+client.connect().catch((error) => {
+  log.error('Cache', { context: 'Redis Connection', error: error as Error })
 })
 
 // Helper to add prefix to keys
