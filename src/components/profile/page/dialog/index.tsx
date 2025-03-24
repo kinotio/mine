@@ -133,12 +133,13 @@ export const SectionItemDialog = ({
             imagePreview={imagePreview}
             setImagePreview={setImagePreview}
             handleImageUpload={projectImageHandler}
+            isLoading={isLoading}
           />
         )
       case 'skills':
-        return <SkillForm form={form as SkillFormProps['form']} />
+        return <SkillForm form={form as SkillFormProps['form']} isLoading={isLoading} />
       case 'experience':
-        return <ExperienceForm form={form as ExperienceFormProps['form']} />
+        return <ExperienceForm form={form as ExperienceFormProps['form']} isLoading={isLoading} />
       case 'certifications':
         return (
           <CertificationForm
@@ -146,12 +147,13 @@ export const SectionItemDialog = ({
             imagePreview={imagePreview}
             setImagePreview={setImagePreview}
             handleImageUpload={certificationImageHandler}
+            isLoading={isLoading}
           />
         )
       case 'education':
-        return <EducationForm form={form as EducationFormProps['form']} />
+        return <EducationForm form={form as EducationFormProps['form']} isLoading={isLoading} />
       case 'achievements':
-        return <AchievementForm form={form as AchievementFormProps['form']} />
+        return <AchievementForm form={form as AchievementFormProps['form']} isLoading={isLoading} />
       case 'portfolio':
         return (
           <PortfolioForm
@@ -159,16 +161,17 @@ export const SectionItemDialog = ({
             imagePreview={imagePreview}
             setImagePreview={setImagePreview}
             handleImageUpload={portfolioImageHandler}
+            isLoading={isLoading}
           />
         )
       case 'publications':
-        return <PublicationForm form={form as PublicationFormProps['form']} />
+        return <PublicationForm form={form as PublicationFormProps['form']} isLoading={isLoading} />
       case 'languages':
-        return <LanguageForm form={form as LanguageFormProps['form']} />
+        return <LanguageForm form={form as LanguageFormProps['form']} isLoading={isLoading} />
       case 'volunteer':
-        return <VolunteerForm form={form as VolunteerFormProps['form']} />
+        return <VolunteerForm form={form as VolunteerFormProps['form']} isLoading={isLoading} />
       default:
-        return <DefaultForm form={form as DefaultFormProps['form']} />
+        return <DefaultForm form={form as DefaultFormProps['form']} isLoading={isLoading} />
     }
   }
 
