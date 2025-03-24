@@ -4,7 +4,7 @@ import { Slider } from '@/components/ui/slider'
 
 import { LanguageFormProps } from '@/components/profile/page/dialog/types'
 
-export const LanguageForm: React.FC<LanguageFormProps> = ({ form }) => {
+export const LanguageForm: React.FC<LanguageFormProps> = ({ form, isLoading }) => {
   return (
     <>
       <FormField
@@ -14,7 +14,7 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Language</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -32,6 +32,7 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form }) => {
                 {...field}
                 className='border-[2px] border-black'
                 placeholder='Native, Fluent, Intermediate, Basic'
+                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
@@ -53,6 +54,7 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form }) => {
                 defaultValue={[field.value]}
                 onValueChange={(value) => field.onChange(value[0])}
                 className='py-4'
+                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />

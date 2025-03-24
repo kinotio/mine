@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Pencil, Trash2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -94,11 +94,14 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
   onDelete,
   onEdit,
   metadata,
-  children
+  children,
+  isLoading
 }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const hasImageChanged = useRef<boolean>(false)
 
   const form = useForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,16 +109,13 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
     defaultValues: metadata
   })
 
-  // Set image preview if it exists in metadata
-  useEffect(() => {
-    if (metadata.image && typeof metadata.image === 'string') {
-      setImagePreview(metadata.image as string)
-    }
-  }, [metadata])
-
-  // Reset form when dialog opens
+  // Initialize form when dialog opens - only run once when dialog opens
   useEffect(() => {
     if (isEditDialogOpen) {
+      // Reset the image change tracker when dialog opens
+      hasImageChanged.current = false
+      setImageFile(null)
+
       // Clone the metadata
       const formData = { ...metadata }
 
@@ -124,29 +124,17 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
         formData.tags = formData.tags.join(', ')
       }
 
-      // Handle image field - ensure it's a string
-      if ('image' in formData) {
-        // If it's a File object or other non-string object, we might already have the preview URL
-        if (formData.image && typeof formData.image !== 'string') {
-          // If we have an existing preview URL, use that
-          if (imagePreview) {
-            formData.image = imagePreview
-          } else {
-            // Otherwise, just clear it to avoid type errors
-            formData.image = ''
-          }
-        }
-      }
-
-      // Now reset the form with the prepared data
-      form.reset(formData as unknown)
-
-      // Set image preview if available
-      if (formData.image && typeof formData.image === 'string') {
+      // Initialize image preview from metadata
+      if ('image' in formData && formData.image && typeof formData.image === 'string') {
         setImagePreview(formData.image as string)
+      } else {
+        setImagePreview(null)
       }
+
+      // Reset the form with the prepared data
+      form.reset(formData as unknown)
     }
-  }, [isEditDialogOpen, metadata, form, sectionType, imagePreview])
+  }, [isEditDialogOpen, metadata, form, sectionType])
 
   // Handle image upload
   const handleImageUpload = (
@@ -159,39 +147,58 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
 
       reader.onloadend = () => {
         const result = reader.result as string
+
+        // Mark that the image has been changed
+        hasImageChanged.current = true
+
+        // Store the File object separately
+        setImageFile(file)
+
+        // Update preview
         setImagePreview(result)
-        field.onChange(result) // Pass the string result to form state
+
+        // Store the data URL string in the form field
+        // This is important - the form field should always be a string
+        field.onChange(result)
       }
       reader.readAsDataURL(file)
     }
   }
 
   // Handle delete action
-  const handleDelete = (): void => {
-    onDelete(itemId, sectionId).finally(() => {
-      setIsDeleteDialogOpen(false)
-    })
+  const handleDelete = async () => {
+    await onDelete(itemId, sectionId)
+    setIsDeleteDialogOpen(false)
   }
 
   // Handle form submission
-  const handleSubmit = (data: Record<string, unknown>): void => {
+  const handleSubmit = async (data: Record<string, unknown>) => {
+    // Create a clone of the data to modify
+    const submissionData = { ...data }
+
     // Convert tags string to array for projects
-    if (sectionType === 'projects' && 'tags' in data && typeof data.tags === 'string') {
-      data.tags = (data.tags as string).split(',').map((tag: string) => tag.trim())
+    if (
+      sectionType === 'projects' &&
+      'tags' in submissionData &&
+      typeof submissionData.tags === 'string'
+    ) {
+      submissionData.tags = (submissionData.tags as string)
+        .split(',')
+        .map((tag: string) => tag.trim())
+        .filter((tag: string) => tag.length > 0)
     }
 
-    // Ensure image is a string
-    if ('image' in data && data.image && typeof data.image !== 'string') {
-      if (imagePreview) {
-        data.image = imagePreview
-      } else {
-        delete data.image
+    // If the image has been changed, use the stored File object for the submission
+    if (hasImageChanged.current && 'image' in submissionData) {
+      // If we have an actual File object stored, use it instead of the data URL
+      if (imageFile) {
+        submissionData.image = imageFile
       }
+      // Otherwise keep the data URL that's already in the form
     }
 
-    onEdit(itemId, sectionId, data).finally(() => {
-      setIsEditDialogOpen(false)
-    })
+    await onEdit(itemId, sectionId, submissionData)
+    setIsEditDialogOpen(false)
   }
 
   // Render the appropriate form component
@@ -200,7 +207,8 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
       form,
       imagePreview,
       setImagePreview,
-      handleImageUpload
+      handleImageUpload,
+      isLoading
     }
 
     switch (sectionType) {
@@ -297,12 +305,18 @@ export const ActionItemCard: React.FC<ActionItemCardProps> = ({
               {renderForm()}
 
               <DialogFooter className='pt-4 flex justify-end gap-3 border-t border-gray-200'>
-                <Button type='button' variant='neutral' onClick={() => setIsEditDialogOpen(false)}>
+                <Button
+                  type='button'
+                  variant='neutral'
+                  onClick={() => setIsEditDialogOpen(false)}
+                  disabled={isLoading}
+                >
                   Cancel
                 </Button>
                 <Button
                   type='submit'
                   className='bg-[#4cc9f0] hover:bg-[#4361ee] text-white font-bold border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
+                  disabled={isLoading}
                 >
                   Save Changes
                 </Button>

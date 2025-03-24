@@ -15,6 +15,7 @@ export const uploadFile = async (formData: FormData): Promise<ActionResponse<R2U
 
     const fileData = formData.get('file')
     const type = formData.get('type') as string
+    const profileId = formData.get('profileId') as string
 
     if (!fileData) {
       return {
@@ -75,6 +76,7 @@ export const uploadFile = async (formData: FormData): Promise<ActionResponse<R2U
         context: 'uploadFileAction',
         data: { fileDataType: typeof fileData }
       })
+
       return {
         success: false,
         error: 'Invalid file format'
@@ -90,10 +92,12 @@ export const uploadFile = async (formData: FormData): Promise<ActionResponse<R2U
 
     if (!validation.success) {
       const errorMessage = validation.error.issues[0].message
+
       log.warn('File validation failed', {
         context: 'uploadFileAction',
         data: { error: errorMessage, fileType, fileSize, fileName }
       })
+
       return {
         success: false,
         error: errorMessage
@@ -120,14 +124,20 @@ export const uploadFile = async (formData: FormData): Promise<ActionResponse<R2U
       }
     })
 
-    await r2.upload(type, processedImage.filename, processedImage.buffer, processedImage.mimetype)
+    await r2.upload(
+      profileId,
+      type,
+      processedImage.filename,
+      processedImage.buffer,
+      processedImage.mimetype
+    )
 
     log.debug('Image uploaded successfully', {
       context: 'uploadFileAction',
       data: { type, filename: processedImage.filename }
     })
 
-    const url = r2.getPermanentUrl(type, processedImage.filename)
+    const url = r2.getPermanentUrl(profileId, type, processedImage.filename)
 
     return {
       success: true,

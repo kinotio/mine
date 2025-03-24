@@ -10,9 +10,8 @@ const nextConfig = {
         pathname: '/**'
       },
       {
-        protocol: process.env.MINIO_PROTOCOL || 'https',
-        hostname: process.env.MINIO_ENDPOINT || 'your-minio-domain.com',
-        port: process.env.MINIO_PORT || '',
+        protocol: 'https',
+        hostname: 'bucket.kinotio.io',
         pathname: '/**'
       }
     ]

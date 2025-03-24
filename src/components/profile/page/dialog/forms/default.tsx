@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { DefaultFormProps } from '@/components/profile/page/dialog/types'
 
-export const DefaultForm: React.FC<DefaultFormProps> = ({ form }) => {
+export const DefaultForm: React.FC<DefaultFormProps> = ({ form, isLoading }) => {
   return (
     <>
       <FormField
@@ -14,7 +14,7 @@ export const DefaultForm: React.FC<DefaultFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Title</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -28,7 +28,11 @@ export const DefaultForm: React.FC<DefaultFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Description</FormLabel>
             <FormControl>
-              <Textarea {...field} className='min-h-[100px] border-[2px] border-black' />
+              <Textarea
+                {...field}
+                className='min-h-[100px] border-[2px] border-black'
+                disabled={isLoading}
+              />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>

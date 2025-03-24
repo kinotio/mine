@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { EducationFormProps } from '@/components/profile/page/dialog/types'
 
-export const EducationForm: React.FC<EducationFormProps> = ({ form }) => {
+export const EducationForm: React.FC<EducationFormProps> = ({ form, isLoading }) => {
   return (
     <>
       <FormField
@@ -14,7 +14,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Institution</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -28,7 +28,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Degree</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -42,7 +42,12 @@ export const EducationForm: React.FC<EducationFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Period</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' placeholder='2016 - 2020' />
+              <Input
+                {...field}
+                className='border-[2px] border-black'
+                placeholder='2016 - 2020'
+                disabled={isLoading}
+              />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -56,7 +61,11 @@ export const EducationForm: React.FC<EducationFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Description</FormLabel>
             <FormControl>
-              <Textarea {...field} className='min-h-[100px] border-[2px] border-black' />
+              <Textarea
+                {...field}
+                className='min-h-[100px] border-[2px] border-black'
+                disabled={isLoading}
+              />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>

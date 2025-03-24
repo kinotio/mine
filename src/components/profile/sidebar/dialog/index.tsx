@@ -176,6 +176,7 @@ export const ProfileDialogEdit = () => {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('type', type)
+    formData.append('profileId', profile.id)
 
     const { success, data } = await uploadFile(formData)
 

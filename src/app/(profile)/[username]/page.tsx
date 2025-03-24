@@ -87,10 +87,16 @@ const Page = () => {
     payload: DynamicObject
   ): Promise<void> => {
     // Handle image upload if present
-    if (payload.image instanceof File) {
+    setIsLoading(true)
+
+    if (
+      payload.image instanceof File ||
+      (typeof payload.image === 'string' && payload.image.startsWith('data:'))
+    ) {
       const formData = new FormData()
       formData.append('file', payload.image as File)
       formData.append('type', 'images')
+      formData.append('profileId', profile.id)
 
       const { success, data } = await uploadFile(formData)
 
@@ -107,8 +113,6 @@ const Page = () => {
 
       payload.image = data?.url ?? ''
     }
-
-    setIsLoading(true)
 
     createProfileSectionItem(user.id, profile.id, sectionId, payload).then(
       ({ success, data, error }) => {
@@ -174,15 +178,21 @@ const Page = () => {
     sectionId: string,
     updatedData: Record<string, unknown>
   ): Promise<void> => {
+    setIsLoading(true)
+
     // Handle image upload if changed
-    if (updatedData.image instanceof File) {
+    if (
+      updatedData.image instanceof File ||
+      (typeof updatedData.image === 'string' && updatedData.image !== '')
+    ) {
       const formData = new FormData()
       formData.append('file', updatedData.image)
       formData.append('type', 'images')
+      formData.append('profileId', profile.id)
 
       const { success, data } = await uploadFile(formData)
 
-      if (success && data?.url) {
+      if (success && data) {
         await saveFile({
           file_url: data.url,
           file_name: data.name,
@@ -192,11 +202,9 @@ const Page = () => {
           user_profile_id: profile.id
         })
 
-        updatedData.image = data.url
+        updatedData.image = data.url ?? ''
       }
     }
-
-    setIsLoading(true)
 
     updateProfileSectionItem(user.id, sectionId, itemId, updatedData).then(
       ({ success, data, error }) => {
