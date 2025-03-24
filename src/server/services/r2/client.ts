@@ -7,17 +7,18 @@ import { applyCorsToBucket, checkBucketExists } from '@/server/services/r2/helpe
 export const r2 = new S3Client(config)
 
 export const upload = async (
+  profileId: string,
   type: string,
   filename: string,
   file: Buffer | Blob | ReadableStream,
   contentType?: string
 ) => {
-  const key = `${project}/${type}/${filename}`
+  const key = `${project}/${type}/${profileId}/${filename}`
 
   return uploadFile(key, file, contentType)
 }
 
-export const getPermanentUrl = (type: string, key: string): string => {
+export const getPermanentUrl = (profileId: string, type: string, key: string): string => {
   // For Cloudflare R2, use the public bucket URL
   const publicEndpoint = process.env.R2_PUBLIC_URL
 
@@ -26,7 +27,7 @@ export const getPermanentUrl = (type: string, key: string): string => {
     throw new Error('R2_PUBLIC_URL environment variable is not set')
   }
 
-  return `${publicEndpoint}/${project}/${type}/${key}`
+  return `${publicEndpoint}/${project}/${type}/${profileId}/${key}`
 }
 
 export const uploadFile = async (

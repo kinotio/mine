@@ -10,7 +10,8 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
   form,
   imagePreview,
   setImagePreview,
-  handleImageUpload
+  handleImageUpload,
+  isLoading
 }) => {
   return (
     <>
@@ -21,7 +22,7 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
           <FormItem>
             <FormLabel className='font-bold'>Certification Title</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -35,7 +36,7 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
           <FormItem>
             <FormLabel className='font-bold'>Issuing Organization</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -49,7 +50,12 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
           <FormItem>
             <FormLabel className='font-bold'>Date</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' placeholder='2023' />
+              <Input
+                {...field}
+                className='border-[2px] border-black'
+                placeholder='2023'
+                disabled={isLoading}
+              />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -76,6 +82,7 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
                     className='hidden'
                     accept='image/*'
                     onChange={(e) => handleImageUpload(e, field)}
+                    disabled={isLoading}
                   />
                   {imagePreview && (
                     <div className='absolute -top-2 -right-2 z-10'>
@@ -89,6 +96,7 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
                           setImagePreview(null)
                           field.onChange('')
                         }}
+                        disabled={isLoading}
                       >
                         <X className='h-3 w-3' />
                       </Button>

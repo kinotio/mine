@@ -4,7 +4,7 @@ import { Slider } from '@/components/ui/slider'
 
 import { SkillFormProps } from '@/components/profile/page/dialog/types'
 
-export const SkillForm: React.FC<SkillFormProps> = ({ form }) => {
+export const SkillForm: React.FC<SkillFormProps> = ({ form, isLoading }) => {
   return (
     <>
       <FormField
@@ -14,7 +14,7 @@ export const SkillForm: React.FC<SkillFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Skill Name</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -35,6 +35,7 @@ export const SkillForm: React.FC<SkillFormProps> = ({ form }) => {
                 defaultValue={[field.value]}
                 onValueChange={(value) => field.onChange(value[0])}
                 className='py-4'
+                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />

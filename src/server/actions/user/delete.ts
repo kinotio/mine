@@ -3,10 +3,9 @@
 import { eq } from 'drizzle-orm'
 
 import { users, userProfiles, userProfileFiles } from '@/server/databases/tables'
-import { User, UserProfile, UserProfileFile } from '@/server/databases/types'
+import { User, UserProfile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
-import { minioClient } from '@/server/services/minio'
 import database from '@/server/services/drizzle'
 import cache from '@/server/services/redis'
 
@@ -46,21 +45,21 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
         Array.isArray(user.user_profile?.user_profile_files) &&
         user.user_profile?.user_profile_files?.length > 0
       ) {
-        // Delete files from Minio
-        const deletePromises = user.user_profile.user_profile_files.map(
-          async (file: UserProfileFile) => {
-            try {
-              const [bucket, objectName] = file.file_url.split('/').slice(-2)
-              await minioClient.removeObject(bucket, objectName)
-            } catch (error) {
-              console.error(`Failed to delete file from storage: ${file.file_url}`, error)
-              // Continue with other deletions even if one fails
-            }
-          }
-        )
+        // Delete files from R2
+        // const deletePromises = user.user_profile.user_profile_files.map(
+        //   async (file: UserProfileFile) => {
+        //     try {
+        //       const [bucket, objectName] = file.file_url.split('/').slice(-2)
+        //       await minioClient.removeObject(bucket, objectName)
+        //     } catch (error) {
+        //       console.error(`Failed to delete file from storage: ${file.file_url}`, error)
+        //       // Continue with other deletions even if one fails
+        //     }
+        //   }
+        // )
 
         // Wait for all file deletions to complete
-        await Promise.allSettled(deletePromises)
+        // await Promise.allSettled(deletePromises)
 
         // Delete file records from database
         await tx

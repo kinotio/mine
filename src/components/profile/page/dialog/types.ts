@@ -69,10 +69,12 @@ export interface ProjectFormProps {
     e: ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<ProjectFormValues, 'image'>
   ) => void
+  isLoading: boolean
 }
 
 export interface AchievementFormProps {
   form: UseFormReturn<AchievementFormValues>
+  isLoading: boolean
 }
 
 export interface CertificationFormProps {
@@ -83,22 +85,27 @@ export interface CertificationFormProps {
     e: ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<CertificationFormValues, 'image'>
   ) => void
+  isLoading: boolean
 }
 
 export interface DefaultFormProps {
   form: UseFormReturn<DefaultFormValues>
+  isLoading: boolean
 }
 
 export interface EducationFormProps {
   form: UseFormReturn<EducationFormValues>
+  isLoading: boolean
 }
 
 export interface ExperienceFormProps {
   form: UseFormReturn<ExperienceFormValues>
+  isLoading: boolean
 }
 
 export interface LanguageFormProps {
   form: UseFormReturn<LanguageFormValues>
+  isLoading: boolean
 }
 
 export interface PortfolioFormProps {
@@ -109,16 +116,20 @@ export interface PortfolioFormProps {
     e: ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<PortfolioFormValues, 'image'>
   ) => void
+  isLoading: boolean
 }
 
 export interface PublicationFormProps {
   form: UseFormReturn<PublicationFormValues>
+  isLoading: boolean
 }
 
 export interface SkillFormProps {
   form: UseFormReturn<SkillFormValues>
+  isLoading: boolean
 }
 
 export interface VolunteerFormProps {
   form: UseFormReturn<VolunteerFormValues>
+  isLoading: boolean
 }

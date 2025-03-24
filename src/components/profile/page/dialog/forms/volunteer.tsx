@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { VolunteerFormProps } from '@/components/profile/page/dialog/types'
 
-export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form }) => {
+export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form, isLoading }) => {
   return (
     <>
       <FormField
@@ -14,7 +14,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Organization</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -28,7 +28,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Role</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' />
+              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -46,6 +46,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form }) => {
                 {...field}
                 className='border-[2px] border-black'
                 placeholder='2020 - Present'
+                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
@@ -60,7 +61,11 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form }) => {
           <FormItem>
             <FormLabel className='font-bold'>Description</FormLabel>
             <FormControl>
-              <Textarea {...field} className='min-h-[100px] border-[2px] border-black' />
+              <Textarea
+                {...field}
+                className='min-h-[100px] border-[2px] border-black'
+                disabled={isLoading}
+              />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>

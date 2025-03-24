@@ -13,14 +13,6 @@ declare global {
       NEXT_PUBLIC_CLERK_BASE_URL: string
       NEXT_PUBLIC_CLERK_REDIRECT_BASE: string
 
-      // Minio
-      MINIO_ACCESS_KEY: string
-      MINIO_SECRET_KEY: string
-      NEXT_PUBLIC_MINIO_URL: string
-      NEXT_PUBLIC_MINIO_ENDPOINT: string
-      NEXT_PUBLIC_MINIO_PORT: string
-      NEXT_PUBLIC_MINIO_USE_SSL: string
-
       // Redis
       REDIS_URL: string
 
