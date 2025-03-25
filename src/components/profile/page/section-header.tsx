@@ -4,7 +4,7 @@ import { Icon } from '@/components/icon'
 import { SectionItemDialog } from '@/components/profile/page/dialog'
 
 import { DeletableSection } from '@/components/profile/page/deletable-section'
-import { EditableSection } from '@/components/profile/page/editable-section'
+// import { EditableSection } from '@/components/profile/page/editable-section'
 
 import { DynamicObject } from '@/lib/utils'
 
@@ -35,7 +35,7 @@ export const SectionHeader = ({
   sectionName,
   onSubmit,
   onDelete,
-  onEdit,
+  // onEdit,
   isSignedInAndHasPermissionSection,
   isLoading
 }: SectionHeaderProps) => {
@@ -63,12 +63,12 @@ export const SectionHeader = ({
             onSubmit={onSubmit}
             isLoading={isLoading}
           />
-          <EditableSection
+          {/* <EditableSection
             sectionId={sectionId}
             sectionName={sectionName}
             onEdit={onEdit}
             isLoading={isLoading}
-          />
+          /> */}
           <DeletableSection
             sectionId={sectionId}
             sectionName={sectionName}
