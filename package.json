@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": "21"
+  },
   "name": "@kinotiodotio/mine",
   "version": "0.1.0",
   "private": true,
