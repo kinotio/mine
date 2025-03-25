@@ -1,11 +1,11 @@
 {
+  "engines": {
+    "node": "21"
+  },
   "name": "@kinotiodotio/mine",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.7.0",
-  "engines": {
-    "node": "21"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
