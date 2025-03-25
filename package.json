@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "21"
+    "node": "20"
   },
   "name": "@kinotiodotio/mine",
   "version": "0.1.0",
