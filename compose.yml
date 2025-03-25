@@ -13,19 +13,19 @@ services:
     networks:
       - mine_network
 
-  redis:
-    container_name: mine_redis
-    image: redis:latest
+  dragonfly:
+    container_name: mine_dragonfly
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
     ports:
       - 6379:6379
     volumes:
-      - mine_redis_data:/data
+      - mine_dragonfly_data:/data
     networks:
       - mine_network
 
 volumes:
   mine_postgres_data:
-  mine_redis_data:
+  mine_dragonfly_data:
 
 networks:
   mine_network:
