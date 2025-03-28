@@ -45,7 +45,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               href={project.liveUrl}
               target='_blank'
               rel='noopener noreferrer'
-              className='bg-[#ff6b6b] hover:bg-[#ff5252] text-black font-bold border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] p-2 rounded-md hover:translate-y-[-2px] hover:shadow-[2px_4px_0px_0px_rgba(0,0,0,1)] transition-all'
+              className='bg-[#4fc3f7] hover:bg-[#29b6f6] text-black font-bold border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] p-2 rounded-md hover:translate-y-[-2px] hover:shadow-[2px_4px_0px_0px_rgba(0,0,0,1)] transition-all'
             >
               <ExternalLink className='h-5 w-5' />
             </a>
