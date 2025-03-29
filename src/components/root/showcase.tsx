@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Github } from '@/components/icons'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
+import { getUserProfileInitial } from '@/lib/utils'
 
 import showcaseData from '@/data/showcase.json'
 
@@ -82,10 +83,7 @@ export const Showcase = () => {
                       color: textColor
                     }}
                   >
-                    {profile.name
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
+                    {getUserProfileInitial(profile.name)}
                   </div>
                   <div>
                     <h3 className='text-xl font-bold'>{profile.name}</h3>

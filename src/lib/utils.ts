@@ -131,3 +131,10 @@ export const calculateProfileStats = (profile: UserProfile) => {
     awards
   }
 }
+
+export const getUserProfileInitial = (profileName: string) => {
+  return profileName
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+}
