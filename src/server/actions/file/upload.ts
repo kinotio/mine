@@ -3,7 +3,7 @@
 import { randomUUID } from 'crypto'
 
 import r2, { type R2UploadResult } from '@/server/services/r2'
-import { FileValidation } from '@/server/services/validation/file'
+import { FileValidation } from '@/server/validations/file'
 import { ActionResponse } from '@/server/utils/types'
 import { compressImage, compressAvatar, compressBanner } from '@/server/utils/image-processor'
 
