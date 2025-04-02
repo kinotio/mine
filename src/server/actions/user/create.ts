@@ -7,7 +7,7 @@ import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { createProfile } from '@/server/actions/profile/create'
 
-import { UserValidation } from '@/server/services/validation/user'
+import { UserValidation } from '@/server/validations/user'
 import database from '@/server/services/drizzle'
 
 import { generateProfileUrl } from '@/lib/utils'

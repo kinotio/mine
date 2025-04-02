@@ -5,6 +5,7 @@ import { MapPin, Briefcase, Award } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
+import { getUserProfileInitial } from '@/lib/utils'
 import { AdaptedProfile } from '@/app/(root)/explore/page'
 
 interface CardProps {
@@ -16,14 +17,6 @@ interface CardProps {
 export const Card = ({ profile, viewMode, onClick }: CardProps) => {
   const avatarColor = getColorFromString(profile.name)
   const textColor = getTextColorForBackground(avatarColor)
-
-  // Get initials for avatar fallback
-  const getInitials = () => {
-    return profile.name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-  }
 
   // Check if avatar is valid
   const hasValidAvatar = profile.avatar && profile.avatar !== ''
@@ -44,7 +37,7 @@ export const Card = ({ profile, viewMode, onClick }: CardProps) => {
                   style={{ backgroundColor: avatarColor, color: textColor }}
                   className='text-xl font-bold'
                 >
-                  {getInitials()}
+                  {getUserProfileInitial(profile.name)}
                 </AvatarFallback>
               )}
             </Avatar>

@@ -1,4 +1,9 @@
-import { S3Client, PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3'
+import {
+  S3Client,
+  PutObjectCommand,
+  CreateBucketCommand,
+  DeleteObjectCommand
+} from '@aws-sdk/client-s3'
 
 import { config, bucket, project } from '@/server/services/r2/config'
 import { log } from '@/server/utils/logger'
@@ -89,6 +94,37 @@ export const uploadFile = async (
     return result
   } catch (error) {
     log.error('Error uploading file to R2', {
+      context: 'R2Client',
+      error: error instanceof Error ? error : new Error(String(error)),
+      data: { bucket, key }
+    })
+
+    throw error
+  }
+}
+
+export const removeFile = async (key: string) => {
+  try {
+    log.debug(`Deleting file from R2`, {
+      context: 'R2Client',
+      data: { bucket, key }
+    })
+
+    const command = new DeleteObjectCommand({
+      Bucket: bucket,
+      Key: key
+    })
+
+    const result = await r2.send(command)
+
+    log.success(`File deleted successfully from R2`, {
+      context: 'R2Client',
+      data: { bucket, key, deleteMarker: result.DeleteMarker }
+    })
+
+    return result
+  } catch (error) {
+    log.error('Error deleting file from R2', {
       context: 'R2Client',
       error: error instanceof Error ? error : new Error(String(error)),
       data: { bucket, key }

@@ -3,11 +3,12 @@
 import { eq } from 'drizzle-orm'
 
 import { users, userProfiles, userProfileFiles } from '@/server/databases/tables'
-import { User, UserProfile } from '@/server/databases/types'
+import { User, UserProfile, UserProfileFile } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import database from '@/server/services/drizzle'
 import cache from '@/server/services/redis'
+import r2 from '@/server/services/r2'
 
 type DeleteUserResponse = {
   user: User
@@ -46,20 +47,26 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
         user.user_profile?.user_profile_files?.length > 0
       ) {
         // Delete files from R2
-        // const deletePromises = user.user_profile.user_profile_files.map(
-        //   async (file: UserProfileFile) => {
-        //     try {
-        //       const [bucket, objectName] = file.file_url.split('/').slice(-2)
-        //       await minioClient.removeObject(bucket, objectName)
-        //     } catch (error) {
-        //       console.error(`Failed to delete file from storage: ${file.file_url}`, error)
-        //       // Continue with other deletions even if one fails
-        //     }
-        //   }
-        // )
+        const deletePromises = user.user_profile.user_profile_files.map(
+          async (file: UserProfileFile) => {
+            try {
+              // Extract the key from the file URL
+              // We need to get the full path after the public URL
+              const urlObj = new URL(file.file_url)
+              const key = urlObj.pathname.startsWith('/')
+                ? urlObj.pathname.substring(1) // Remove leading slash if present
+                : urlObj.pathname
+
+              await r2.removeFile(key)
+            } catch (error) {
+              console.log(error)
+              // Continue with other deletions even if one fails
+            }
+          }
+        )
 
         // Wait for all file deletions to complete
-        // await Promise.allSettled(deletePromises)
+        await Promise.allSettled(deletePromises)
 
         // Delete file records from database
         await tx

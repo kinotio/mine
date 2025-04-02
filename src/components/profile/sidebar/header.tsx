@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ProfileDialogEdit } from '@/components/profile/sidebar/dialog'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
-import { getBackgroundStyleByProfile, cn } from '@/lib/utils'
+import { getBackgroundStyleByProfile, cn, getUserProfileInitial } from '@/lib/utils'
 
 interface ProfileHeaderProps {
   profile: {
@@ -56,10 +56,7 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
                 style={{ backgroundColor: avatarColor, color: textColor }}
                 className='text-3xl font-bold'
               >
-                {profile.name
-                  .split(' ')
-                  .map((n) => n[0])
-                  .join('')}
+                {getUserProfileInitial(profile.name)}
               </AvatarFallback>
             ) : (
               <AvatarImage src={profile.avatar_url ?? ''} alt={profile.name} />
