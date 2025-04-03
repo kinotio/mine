@@ -6,7 +6,7 @@ import { SignInButton, SignedOut, SignUpButton } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
-import { Heart, Kinotio, Mine, Github } from '@/components/icons'
+import { Heart, Kinotio, Mine } from '@/components/icons'
 
 import { DATA } from '@/data'
 
@@ -51,12 +51,6 @@ const Header = () => {
             <Button className='bg-sky-300' onClick={() => router.push('/explore')}>
               <Rocket className='w-5 h-5' />
               <span>Explore</span>
-            </Button>
-          </SignedOut>
-
-          <SignedOut>
-            <Button variant='neutral'>
-              <Github />
             </Button>
           </SignedOut>
 
