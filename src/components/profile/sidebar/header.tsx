@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { MapPin } from 'lucide-react'
 import { isEmpty } from 'lodash'
@@ -8,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ProfileDialogEdit } from '@/components/profile/sidebar/dialog'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
-import { getBackgroundStyleByProfile, cn, getUserProfileInitial } from '@/lib/utils'
+import { cn, getUserProfileInitial } from '@/lib/utils'
 
 interface ProfileHeaderProps {
   profile: {
@@ -37,11 +38,22 @@ export const ProfileSidebarHeader = ({ profile, isScrolled }: ProfileHeaderProps
   return (
     <div
       className='sticky top-0 bg-white z-10 border-b-[3px] border-black transition-all duration-300 ease-in-out overflow-hidden'
-      style={getBackgroundStyleByProfile({
-        avatarColor: avatarColor,
-        bannerUrl: profile.banner_url ?? ''
-      })}
+      style={{
+        backgroundColor: profile.banner_url ? 'transparent' : avatarColor
+      }}
     >
+      {profile.banner_url && (
+        <Image
+          src={profile.banner_url}
+          alt='Profile banner'
+          fill
+          priority
+          sizes='100vw'
+          className='object-cover'
+          style={{ zIndex: -1 }}
+        />
+      )}
+
       <div className='relative'>
         <div className='absolute top-2 right-4 z-20'>
           <ProfileDialogEdit />
