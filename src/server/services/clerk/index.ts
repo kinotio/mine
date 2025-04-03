@@ -1,3 +1,2 @@
-import { initClient } from '@/server/services/clerk/client'
-const clerk = { initClient }
-export default clerk
+import { client } from '@/server/services/clerk/client'
+export default client

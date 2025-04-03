@@ -19,7 +19,6 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
   try {
     // Clean and validate input
     const validation = UserValidation.safeParse(payload)
-    const client = await clerk.initClient()
 
     if (!validation.success) {
       return {
@@ -66,7 +65,7 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
     if (!profile.success) {
       // You might want to delete the user if profile creation fails
       await database.delete(users).where(eq(users.id, created[0].id))
-      await client.users.deleteUser(created[0].id)
+      await clerk.users.deleteUser(created[0].id)
 
       return {
         success: false,
