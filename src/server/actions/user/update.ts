@@ -6,7 +6,7 @@ import { users } from '@/server/databases/tables'
 import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { updateProfile } from '@/server/actions/profile/update'
-import { UserValidation } from '@/server/services/validation/user'
+import { UserValidation } from '@/server/validations/user'
 
 import database from '@/server/services/drizzle'
 import cache from '@/server/services/redis'
