@@ -1,8 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { UserButton, useAuth } from '@clerk/nextjs'
+import { Rocket } from 'lucide-react'
+import { UserButton, useAuth, SignedOut, SignUpButton, SignInButton } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 
+import { Button } from '@/components/ui/button'
 import { Mine } from '@/components/icons'
 import { ProfileProvider } from '@/components/profile/provider'
 import { ProfileWrapper } from '@/components/profile/wrapper'
@@ -20,6 +23,7 @@ export const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
 }
 
 const Header = () => {
+  const router = useRouter()
   const { isSignedIn } = useAuth()
 
   return (
@@ -39,7 +43,27 @@ const Header = () => {
               <UserButton />
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div className='flex items-center gap-4 justify-between'>
+            <SignedOut>
+              <Button className='bg-sky-300' onClick={() => router.push('/explore')}>
+                <Rocket className='w-5 h-5' />
+                <span>Explore</span>
+              </Button>
+            </SignedOut>
+
+            <SignedOut>
+              <SignInButton>
+                <Button variant='neutral'>Sign In</Button>
+              </SignInButton>
+              <SignUpButton>
+                <Button className='transform -rotate-2 hover:rotate-0 transition-transform'>
+                  Sign Up
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+          </div>
+        )}
       </div>
     </header>
   )
