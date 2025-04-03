@@ -63,19 +63,21 @@ export const Card = ({ profile, viewMode, onClick }: CardProps) => {
             </div>
           </div>
 
-          <div className='mb-4'>
-            <h4 className='font-bold mb-2 text-sm'>Top Skills</h4>
-            <div className='flex flex-wrap gap-2'>
-              {profile.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className='bg-[#f8f8f8] border-[2px] border-black px-2 py-1 text-xs font-bold'
-                >
-                  {skill.name}
-                </span>
-              ))}
+          {Array.isArray(profile.skills) && profile.skills.length > 0 ? (
+            <div className='mb-4'>
+              <h4 className='font-bold mb-2 text-sm'>Top Skills</h4>
+              <div className='flex flex-wrap gap-2'>
+                {profile.skills.slice(0, 5).map((skill, index) => (
+                  <span
+                    key={index}
+                    className='bg-[#f8f8f8] border-[2px] border-black px-2 py-1 text-xs font-bold'
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
 
         <div className='bg-[#4cc9f0] text-black font-bold border-t-[3px] border-black p-3 text-center'>
@@ -98,7 +100,7 @@ export const Card = ({ profile, viewMode, onClick }: CardProps) => {
                 style={{ backgroundColor: avatarColor, color: textColor }}
                 className='text-xl font-bold'
               >
-                {getInitials()}
+                {getUserProfileInitial(profile.name)}
               </AvatarFallback>
             )}
           </Avatar>
