@@ -6,6 +6,7 @@ import { users } from '@/server/databases/tables'
 import { User } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 import { createProfile } from '@/server/actions/profile/create'
+import { sendJoined } from '@/server/actions/email/joined'
 
 import { UserValidation } from '@/server/validations/user'
 import database from '@/server/services/drizzle'
@@ -52,14 +53,14 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
     const created = await database.insert(users).values(data).returning()
 
     // Create associated profile
-    const profileResult = await createProfile({
+    const profile = await createProfile({
       user_id: created[0].id,
       name: `${payload.first_name} ${payload.last_name}`,
       email: payload.email,
       profile_url: generateProfileUrl(created[0].username)
     })
 
-    if (!profileResult.success) {
+    if (!profile.success) {
       // You might want to delete the user if profile creation fails
       await database.delete(users).where(eq(users.id, created[0].id))
 
@@ -68,6 +69,17 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
         error: 'An error occurred while creating the user profile.'
       }
     }
+
+    await sendJoined({
+      to: 'contact@kinotio.io',
+      subject: 'Joined Profile',
+      data: {
+        username: created[0].username,
+        email: created[0].email,
+        joinDate: created[0].created.toString(),
+        profileUrl: profile.data?.profile_url
+      }
+    })
 
     return {
       success: true,
