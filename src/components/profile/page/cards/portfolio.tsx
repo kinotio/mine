@@ -20,6 +20,7 @@ export const PortfolioCard = ({ portfolio }: PortfolioCardProps) => {
             src={portfolio.image}
             alt={portfolio.title}
             className='w-full h-full object-cover'
+            priority
             fill
           />
         ) : (
