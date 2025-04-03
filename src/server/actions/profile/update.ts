@@ -10,7 +10,7 @@ import {
 } from '@/server/databases/tables'
 import { UserProfile, UserProfileSection, UserProfileSectionItem } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
-import { ProfileValidation } from '@/server/services/validation/profile'
+import { ProfileValidation } from '@/server/validations/profile'
 
 import database from '@/server/services/drizzle'
 import cache from '@/server/services/redis'
