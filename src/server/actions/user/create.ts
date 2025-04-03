@@ -4,12 +4,14 @@ import { eq } from 'drizzle-orm'
 
 import { users } from '@/server/databases/tables'
 import { User } from '@/server/databases/types'
+
 import { ActionResponse } from '@/server/utils/types'
 import { createProfile } from '@/server/actions/profile/create'
 import { sendJoined } from '@/server/actions/email/joined'
 
 import { UserValidation } from '@/server/validations/user'
 import database from '@/server/services/drizzle'
+import clerk from '@/server/services/clerk'
 
 import { generateProfileUrl } from '@/lib/utils'
 
@@ -17,6 +19,7 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
   try {
     // Clean and validate input
     const validation = UserValidation.safeParse(payload)
+    const client = await clerk.initClient()
 
     if (!validation.success) {
       return {
@@ -63,6 +66,7 @@ export const createUser = async (payload: User): Promise<ActionResponse<User>> =
     if (!profile.success) {
       // You might want to delete the user if profile creation fails
       await database.delete(users).where(eq(users.id, created[0].id))
+      await client.users.deleteUser(created[0].id)
 
       return {
         success: false,
