@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ProfileDialogEdit } from '@/components/profile/sidebar/dialog'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
-import { getBackgroundStyleByProfile, cn, getUserProfileInitial } from '@/lib/utils'
+import { cn, getUserProfileInitial } from '@/lib/utils'
 
 interface ProfileHeaderProps {
   profile: {
