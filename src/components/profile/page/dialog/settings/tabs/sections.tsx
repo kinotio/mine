@@ -147,8 +147,7 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
       <div className='bg-[#f0f0f0] border-[2px] border-black p-4'>
         <h3 className='font-bold mb-2'>Section Tips</h3>
         <p className='text-sm'>
-          Only include sections that are relevant to the job you're applying for. Too many sections
-          can make your resume look cluttered.
+          {`Only include sections that are relevant to the job you're applying for.  Too many sections can make your resume look cluttered.`}
         </p>
       </div>
     </div>

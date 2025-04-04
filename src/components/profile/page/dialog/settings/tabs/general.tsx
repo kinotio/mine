@@ -1,13 +1,16 @@
 import { Settings as SettingsIcon } from 'lucide-react'
+
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
+
+import { GeneralSettingKey } from '@/components/profile/page/dialog/settings/types'
 
 interface GeneralSettingsProps {
   settings: {
     showPreviewResume: boolean
     showDownloadButton: boolean
   }
-  onSettingChange: (setting: string, checked: boolean) => void
+  onSettingChange: (setting: GeneralSettingKey, checked: boolean) => void
 }
 
 export const General = ({ settings, onSettingChange }: GeneralSettingsProps) => {

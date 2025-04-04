@@ -11,7 +11,7 @@ interface DownloadSettingsProps {
     includePortfolio: boolean
     fileFormat: 'pdf' | 'docx' | 'both'
   }
-  onSettingChange: (setting: string, value: any) => void
+  onSettingChange: (setting: string, value: unknown) => void
 }
 
 export const Download = ({ settings, onSettingChange }: DownloadSettingsProps) => {

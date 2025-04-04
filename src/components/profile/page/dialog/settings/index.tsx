@@ -22,40 +22,11 @@ import { General } from '@/components/profile/page/dialog/settings/tabs/general'
 // import { Download } from '@/components/profile/page/dialog/settings/tabs/download'
 // import { Sections } from '@/components/profile/page/dialog/settings/tabs/sections'
 
-interface SettingsProps {
-  trigger?: React.ReactNode
-}
-
-// Define a schema for the form data
-interface SettingsFormData {
-  general: {
-    showPreviewResume: boolean
-    showDownloadButton: boolean
-  }
-  // preview: {
-  //   showContactInfo: boolean
-  //   showSocialLinks: boolean
-  //   showProfilePhoto: boolean
-  //   enablePrint: boolean
-  // }
-  // download: {
-  //   includeCoverLetter: boolean
-  //   highResolution: boolean
-  //   includePortfolio: boolean
-  //   fileFormat: 'pdf' | 'docx' | 'both'
-  // }
-  // sections: {
-  //   skills: boolean
-  //   experience: boolean
-  //   education: boolean
-  //   projects: boolean
-  //   certifications: boolean
-  //   achievements: boolean
-  //   publications: boolean
-  //   languages: boolean
-  //   volunteer: boolean
-  // }
-}
+import {
+  SettingsFormData,
+  SettingsProps,
+  GeneralSettingKey
+} from '@/components/profile/page/dialog/settings/types'
 
 const visibleTabs = [
   { id: 'general', label: 'General' }
@@ -105,8 +76,8 @@ export const Settings = ({ trigger }: SettingsProps) => {
   })
 
   // Handlers for each tab section
-  const handleGeneralSettingChange = (setting: string, checked: boolean) => {
-    form.setValue(`general.${setting}` as any, checked, { shouldValidate: true })
+  const handleGeneralSettingChange = (setting: GeneralSettingKey, checked: boolean) => {
+    form.setValue(`general.${setting}`, checked, { shouldValidate: true })
   }
 
   // const handlePreviewSettingChange = (setting: string, checked: boolean) => {

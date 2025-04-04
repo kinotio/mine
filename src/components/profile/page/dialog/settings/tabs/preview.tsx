@@ -75,8 +75,8 @@ export const Preview = ({ settings, onSettingChange }: PreviewSettingsProps) => 
       <div className='bg-[#f0f0f0] border-[2px] border-black p-4'>
         <h3 className='font-bold mb-2'>Preview Tips</h3>
         <p className='text-sm'>
-          These settings only affect how your resume appears in the preview. They don't affect the
-          downloaded version unless the same settings are applied in the Download tab.
+          {`These settings only affect how your resume appears in the preview. They don't affect the
+       downloaded version unless the same settings are applied in the Download tab.`}
         </p>
       </div>
     </div>
