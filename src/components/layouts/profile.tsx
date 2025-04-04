@@ -11,6 +11,7 @@ import { ProfileProvider } from '@/components/profile/provider'
 import { ProfileWrapper } from '@/components/profile/wrapper'
 import { Toaster } from '@/components/ui/toaster'
 import { FeedbackDialog } from '@/components/profile/feedback/dialog'
+import { Settings } from '@/components/profile/page/dialog/settings'
 
 export const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -38,6 +39,8 @@ const Header = () => {
         {isSignedIn ? (
           <div className='flex items-center gap-5'>
             <FeedbackDialog />
+
+            <Settings />
 
             <div className='relative'>
               <UserButton />
