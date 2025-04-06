@@ -25,35 +25,39 @@ export const ResumeDialog = ({ profile }: ResumeDialogProps) => {
   return (
     <>
       {/* Preview Button */}
-      <Button
-        onClick={() => setOpen(true)}
-        className='w-full bg-[#4cc9f0] hover:bg-[#3db8df] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'
-      >
-        <Eye className='h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2' />
-        <span className='text-sm sm:text-base'>Preview Resume</span>
-      </Button>
+      {profile.user_profile_settings.metadata.general.showPreviewResume ? (
+        <Button
+          onClick={() => setOpen(true)}
+          className='w-full bg-[#4cc9f0] hover:bg-[#3db8df] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'
+        >
+          <Eye className='h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2' />
+          <span className='text-sm sm:text-base'>Preview Resume</span>
+        </Button>
+      ) : null}
 
       {/* Download Button */}
-      <PDFDownloadLink
-        document={<ResumeTemplate profile={profile} />}
-        fileName={`${profile.name.replace(/\s+/g, '_')}.pdf`}
-      >
-        {({ loading }) => (
-          <Button
-            className='w-full bg-[#ff6b6b] hover:bg-[#ff5252] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'
-            disabled={loading}
-          >
-            {loading ? (
-              <span className='text-sm sm:text-base'>Generating...</span>
-            ) : (
-              <>
-                <FileText className='h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2' />
-                <span className='text-sm sm:text-base'>Download Resume</span>
-              </>
-            )}
-          </Button>
-        )}
-      </PDFDownloadLink>
+      {profile.user_profile_settings.metadata.general.showDownloadButton ? (
+        <PDFDownloadLink
+          document={<ResumeTemplate profile={profile} />}
+          fileName={`${profile.name.replace(/\s+/g, '_')}.pdf`}
+        >
+          {({ loading }) => (
+            <Button
+              className='w-full bg-[#ff6b6b] hover:bg-[#ff5252] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out'
+              disabled={loading}
+            >
+              {loading ? (
+                <span className='text-sm sm:text-base'>Generating...</span>
+              ) : (
+                <>
+                  <FileText className='h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2' />
+                  <span className='text-sm sm:text-base'>Download Resume</span>
+                </>
+              )}
+            </Button>
+          )}
+        </PDFDownloadLink>
+      ) : null}
 
       {/* Preview Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
