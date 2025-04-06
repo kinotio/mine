@@ -19,7 +19,7 @@ export const General = ({ settings, onSettingChange }: GeneralSettingsProps) => 
       <div className='bg-[#f8f8f8] border-[2px] border-black p-4'>
         <h3 className='font-bold mb-4 flex items-center'>
           <SettingsIcon className='h-4 w-4 mr-2' />
-          Resume Display Options
+          Profile Actions Options
         </h3>
 
         <div className='space-y-4'>

@@ -6,6 +6,7 @@ import {
   userProfileFiles,
   userProfileSections,
   userProfileSectionItems,
+  userProfileSettings,
   profileSectionTemplates
 } from '@/server/databases/tables'
 
@@ -16,7 +17,11 @@ export const userRelations = relations(users, ({ one }) => ({
 export const userProfileRelations = relations(userProfiles, ({ one, many }) => ({
   user: one(users, { fields: [userProfiles.user_id], references: [users.id] }),
   user_profile_files: many(userProfileFiles),
-  user_profile_sections: many(userProfileSections)
+  user_profile_sections: many(userProfileSections),
+  user_profile_settings: one(userProfileSettings, {
+    fields: [userProfiles.id],
+    references: [userProfileSettings.user_profile_id]
+  })
 }))
 
 export const userProfileFileRelations = relations(userProfileFiles, ({ one }) => ({

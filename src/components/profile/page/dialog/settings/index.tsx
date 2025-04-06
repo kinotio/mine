@@ -16,6 +16,8 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 
 import { useToast } from '@/hooks/use-toast'
+import { useProfile } from '@/components/profile/provider' // Import profile provider
+import { useEventEmitter } from '@/hooks/use-event' // For emitting events after save
 
 import { General } from '@/components/profile/page/dialog/settings/tabs/general'
 // import { Preview } from '@/components/profile/page/dialog/settings/tabs/preview'
@@ -28,6 +30,8 @@ import {
   GeneralSettingKey
 } from '@/components/profile/page/dialog/settings/types'
 
+import { createOrUpdateSettings } from '@/server/actions/profile/create'
+
 const visibleTabs = [
   { id: 'general', label: 'General' }
   // { id: 'preview', label: 'Preview' }
@@ -37,10 +41,13 @@ const visibleTabs = [
 
 export const Settings = ({ trigger }: SettingsProps) => {
   const { toast } = useToast()
+  const { profile, user } = useProfile() // Get user and profile info
+  const { emit } = useEventEmitter() // For emitting events
 
   // Dialog and tab state
   const [open, setOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('general')
+  const [isLoading, setIsLoading] = useState(false)
 
   // Initialize form with default values
   const form = useForm<SettingsFormData>({
@@ -92,63 +99,58 @@ export const Settings = ({ trigger }: SettingsProps) => {
   //   form.setValue(`sections.${section}` as any, checked, { shouldValidate: true })
   // }
 
-  const handleTabChange = (value: string) => {
-    setActiveTab(value)
-  }
-
-  // Reset settings to defaults
-  const resetSettings = () => {
-    form.reset({
-      general: {
-        showPreviewResume: true,
-        showDownloadButton: true
-      }
-      // preview: {
-      //   showContactInfo: true,
-      //   showSocialLinks: true,
-      //   showProfilePhoto: true,
-      //   enablePrint: true
-      // }
-      // download: {
-      //   includeCoverLetter: false,
-      //   highResolution: true,
-      //   includePortfolio: false,
-      //   fileFormat: 'pdf'
-      // },
-      // sections: {
-      //   skills: true,
-      //   experience: true,
-      //   education: true,
-      //   projects: true,
-      //   certifications: true,
-      //   achievements: false,
-      //   publications: false,
-      //   languages: true,
-      //   volunteer: false
-      // }
-    })
-
-    toast({
-      title: 'Settings reset',
-      description: 'Your settings have been reset to defaults.'
-    })
-  }
+  const handleTabChange = (value: string) => setActiveTab(value)
 
   // Save settings
-  const onSubmit = (data: SettingsFormData) => {
-    // In a real app, you would save these settings to a database or local storage
-    console.log('Settings saved:', data)
+  const onSubmit = async (data: SettingsFormData) => {
+    // Ensure we have the required profile and user IDs
+    if (!profile?.id || !user?.id) {
+      toast({
+        title: 'Error',
+        description: 'Missing profile or user information',
+        variant: 'destructive'
+      })
+      return
+    }
 
-    toast({
-      title: 'Settings saved',
-      description: 'Your settings have been saved successfully.'
-    })
+    setIsLoading(true)
 
-    setOpen(false)
+    try {
+      // Save settings to the database
+      const result = await createOrUpdateSettings(user.id, profile.id, data)
+
+      if (result.success) {
+        toast({
+          title: 'Settings saved',
+          description: 'Your settings have been saved successfully.'
+        })
+
+        emit('profile:updated', {})
+
+        // Close the dialog
+        setOpen(false)
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error || 'Failed to save settings',
+          variant: 'destructive'
+        })
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'An unexpected error occurred while saving settings',
+        variant: 'destructive'
+      })
+
+      console.error('Failed to save settings:', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>
         {trigger || (
           <Button variant='reverse' className='bg-white'>
@@ -191,24 +193,24 @@ export const Settings = ({ trigger }: SettingsProps) => {
               </TabsContent>
 
               {/* <TabsContent value='preview'>
-                <Preview
-                  settings={form.watch('preview')}
-                  onSettingChange={handlePreviewSettingChange}
-                />
+              <Preview
+              settings={form.watch('preview')}
+              onSettingChange={handlePreviewSettingChange}
+              />
               </TabsContent> */}
 
               {/* <TabsContent value='download'>
-                <Download
-                  settings={form.watch('download')}
-                  onSettingChange={handleDownloadSettingChange}
-                />
+              <Download
+              settings={form.watch('download')}
+              onSettingChange={handleDownloadSettingChange}
+              />
               </TabsContent> */}
 
               {/* <TabsContent value='sections'>
-                <Sections
-                  settings={form.watch('sections')}
-                  onSettingChange={handleSectionVisibilityChange}
-                />
+              <Sections
+              settings={form.watch('sections')}
+              onSettingChange={handleSectionVisibilityChange}
+              />
               </TabsContent> */}
             </Tabs>
 
@@ -216,16 +218,18 @@ export const Settings = ({ trigger }: SettingsProps) => {
               <Button
                 type='button'
                 variant='neutral'
-                onClick={resetSettings}
+                onClick={() => setOpen(false)}
                 className='border-[2px] border-black font-bold hover:bg-gray-100'
+                disabled={isLoading}
               >
-                Reset
+                Cancel
               </Button>
               <Button
                 type='submit'
                 className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
+                disabled={isLoading}
               >
-                Save
+                {isLoading ? 'Saving...' : 'Save'}
               </Button>
             </div>
           </form>

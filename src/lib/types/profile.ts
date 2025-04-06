@@ -77,6 +77,16 @@ export type UserProfile = {
       metadata: { [key: string]: string }
     }[]
   }[]
+  user_profile_settings: {
+    id: string
+    user_profile_id: string
+    metadata: {
+      general: {
+        showPreviewResume: boolean
+        showDownloadButton: boolean
+      }
+    }
+  }
 }
 
 export interface ProjectData {

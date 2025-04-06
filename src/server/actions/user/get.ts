@@ -49,6 +49,16 @@ export type UserWithProfile = User & {
         metadata: { [key: string]: string }
       }[]
     }[]
+    user_profile_settings: {
+      id: string
+      user_profile_id: string
+      metadata: {
+        general: {
+          showPreviewResume: boolean
+          showDownloadButton: boolean
+        }
+      }
+    }
   }
 }
 
@@ -78,7 +88,8 @@ export const getUserByUsername = async (
                       orderBy: (items, { asc }) => [asc(items.order)]
                     }
                   }
-                }
+                },
+                user_profile_settings: true
               }
             }
           }

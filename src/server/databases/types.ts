@@ -52,11 +52,27 @@ export const userProfileSectionItemSchema = z.object({
   metadata: z.object({}).optional()
 })
 
+export const userProfileSettingSchema = z.object({
+  id: z.string().optional(),
+  user_profile_id: z.string(),
+  metadata: z
+    .object({
+      general: z
+        .object({
+          showPreviewResume: z.boolean().optional(),
+          showDownloadButton: z.boolean().optional()
+        })
+        .optional()
+    })
+    .optional()
+})
+
 export type User = z.infer<typeof userSchema>
 export type UserProfile = z.infer<typeof userProfileSchema>
 export type UserProfileFile = z.infer<typeof userProfileFileSchema>
 export type UserProfileSection = z.infer<typeof userProfileSectionSchema>
 export type UserProfileSectionItem = z.infer<typeof userProfileSectionItemSchema>
+export type UserProfileSetting = z.infer<typeof userProfileSettingSchema>
 
 export type ProfileSectionTemplate = {
   id: string

@@ -92,3 +92,19 @@ export const userProfileSectionItems = pgTable('user_profile_section_items', {
   order: integer().notNull().default(0),
   ...baseColumns
 })
+
+export const userProfileSettings = pgTable('user_profile_settings', {
+  id: uuid().defaultRandom().primaryKey().notNull(),
+  user_profile_id: uuid()
+    .notNull()
+    .references(() => userProfiles.id, { onDelete: 'cascade' }),
+  metadata: jsonb('metadata')
+    .$type<{
+      general?: {
+        showPreviewResume?: boolean
+        showDownloadButton?: boolean
+      }
+    }>()
+    .default({}),
+  ...baseColumns
+})

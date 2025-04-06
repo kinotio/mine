@@ -5,7 +5,8 @@ export {
   userProfileFiles,
   userProfileSections,
   userProfileSectionItems,
-  profileSectionTemplates
+  profileSectionTemplates,
+  userProfileSettings
 } from '@/server/databases/tables'
 
 // Re-export the relations

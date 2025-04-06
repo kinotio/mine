@@ -7,9 +7,10 @@ import {
   users,
   userProfiles,
   userProfileSections,
+  userProfileSettings,
   userProfileSectionItems
 } from '@/server/databases/tables'
-import { UserProfile, UserProfileSection } from '@/server/databases/types'
+import { UserProfile, UserProfileSection, UserProfileSetting } from '@/server/databases/types'
 import { ActionResponse } from '@/server/utils/types'
 
 import { ProfileValidation } from '@/server/validations/profile'
@@ -58,6 +59,19 @@ export const createProfile = async (payload: UserProfile): Promise<ActionRespons
     }
 
     const created = await database.insert(userProfiles).values(data).returning()
+
+    await database
+      .insert(userProfileSettings)
+      .values({
+        user_profile_id: created[0].id,
+        metadata: {
+          general: {
+            showPreviewResume: true,
+            showDownloadButton: true
+          }
+        }
+      })
+      .returning()
 
     return {
       success: true,
@@ -226,6 +240,109 @@ export const createProfileSectionItem = async (
         error instanceof Error
           ? error.message
           : 'An error occurred while creating profile section item.'
+    }
+  }
+}
+
+export const createOrUpdateSettings = async (
+  user_id: string,
+  user_profile_id: string,
+  settings: {
+    general?: {
+      showPreviewResume?: boolean
+      showDownloadButton?: boolean
+    }
+  }
+): Promise<ActionResponse<UserProfileSetting>> => {
+  try {
+    // Validate required fields
+    if (!user_profile_id || !user_id) {
+      return {
+        success: false,
+        error: 'Missing required fields'
+      }
+    }
+
+    // Basic validation that settings is a valid object
+    if (typeof settings !== 'object' || settings === null || Array.isArray(settings)) {
+      return {
+        success: false,
+        error: 'Invalid settings format. Expected a JSON object.'
+      }
+    }
+
+    // Verify the user profile exists
+    const userProfile = await database.query.userProfiles.findFirst({
+      where: (profiles, { eq }) => eq(profiles.id, user_profile_id)
+    })
+
+    if (!userProfile) {
+      return {
+        success: false,
+        error: 'User profile not found'
+      }
+    }
+
+    // Check if the user profile belongs to the user
+    if (userProfile.user_id !== user_id) {
+      return {
+        success: false,
+        error: 'Profile does not belong to this user'
+      }
+    }
+
+    // Check if settings already exist for this profile
+    const existingSettings = await database.query.userProfileSettings.findFirst({
+      where: (s, { eq }) => eq(s.user_profile_id, user_profile_id)
+    })
+
+    let result
+
+    if (existingSettings) {
+      // Merge with existing settings to preserve other settings categories
+      const mergedMetadata = {
+        ...existingSettings.metadata,
+        ...settings
+      }
+
+      // Update the existing settings
+      result = await database
+        .update(userProfileSettings)
+        .set({
+          metadata: mergedMetadata,
+          updated: new Date()
+        })
+        .where(eq(userProfileSettings.id, existingSettings.id))
+        .returning()
+    } else {
+      // Create new settings record
+      result = await database
+        .insert(userProfileSettings)
+        .values({
+          user_profile_id,
+          metadata: settings
+        })
+        .returning()
+    }
+
+    // Invalidate cache
+    const user = await database.query.users.findFirst({
+      where: eq(users.id, user_id)
+    })
+
+    if (user?.username) await cache.invalidate(`user:${user.username}`)
+
+    return {
+      success: true,
+      data: result[0] as UserProfileSetting
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error
+          ? error.message
+          : 'An error occurred while updating profile settings.'
     }
   }
 }
