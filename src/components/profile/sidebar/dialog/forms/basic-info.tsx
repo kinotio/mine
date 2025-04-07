@@ -18,8 +18,11 @@ interface BasicInfoProps {
   onCountryOpenChange: (open: boolean) => void
   onCountrySelect: (country: { value: string; label: string; flag: string }) => void
   onAvatarChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onAvatarRemove: () => void
   onBannerChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBannerRemove: () => void
   isLoading: boolean
+  profileName: string
 }
 
 export const BasicInfo = ({
@@ -30,8 +33,11 @@ export const BasicInfo = ({
   textColor,
   profileBannerUrl,
   onAvatarChange,
+  onAvatarRemove,
   onBannerChange,
-  isLoading
+  onBannerRemove,
+  isLoading,
+  profileName
 }: BasicInfoProps) => {
   return (
     <div className='space-y-4'>
@@ -40,14 +46,16 @@ export const BasicInfo = ({
         avatarColor={avatarColor}
         profileBannerUrl={profileBannerUrl}
         onBannerChange={onBannerChange}
+        onBannerRemove={onBannerRemove}
       />
 
       <AvatarUpload
         avatarPreview={avatarPreview}
         avatarColor={avatarColor}
         textColor={textColor}
-        name={control._formValues.name}
         onAvatarChange={onAvatarChange}
+        onAvatarRemove={onAvatarRemove}
+        profileName={profileName}
       />
 
       <FormField

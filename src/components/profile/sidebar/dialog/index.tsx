@@ -30,6 +30,7 @@ import {
 import { useProfile } from '@/components/profile/provider'
 
 import { getColorFromString, getTextColorForBackground } from '@/lib/colors'
+import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from '@/lib/constants'
 
 import { updateProfile, saveFile, uploadFile } from '@/server/actions'
 
@@ -62,16 +63,7 @@ export const ProfileDialogEdit = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  // Generate avatar color based on name
-  useEffect(() => {
-    if (isEmpty(profile.avatar_url)) {
-      const color = getColorFromString(profile.name)
-      setAvatarColor(color)
-      setTextColor(getTextColorForBackground(color))
-    }
-  }, [profile.name, profile.avatar_url])
-
-  // Initialize form
+  // Form reference
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -90,6 +82,50 @@ export const ProfileDialogEdit = () => {
     }
   })
 
+  // Reset form and reload data when dialog opens
+  useEffect(() => {
+    if (open) {
+      // Reset form with fresh profile data
+      form.reset({
+        name: profile.name,
+        title: profile.title ?? '',
+        location: profile.location ?? '',
+        bio: profile.bio ?? '',
+        email: profile.email,
+        avatarUrl: profile.avatar_url ?? '',
+        bannerUrl: profile.banner_url ?? '',
+        website: profile.website ?? '',
+        github: profile.github ?? '',
+        x: profile.x ?? '',
+        linkedin: profile.linkedin ?? '',
+        bluesky: profile.bluesky ?? ''
+      })
+
+      // Reset state values
+      setAvatarPreview(profile.avatar_url)
+      setBannerPreview(profile.banner_url)
+      setAvatarFile(undefined)
+      setBannerFile(undefined)
+      setActiveTab('basic')
+
+      // Generate avatar color
+      if (isEmpty(profile.avatar_url)) {
+        const color = getColorFromString(profile.name)
+        setAvatarColor(color)
+        setTextColor(getTextColorForBackground(color))
+      }
+    }
+  }, [open, profile, form])
+
+  // Generate avatar color based on name
+  useEffect(() => {
+    if (isEmpty(profile.avatar_url)) {
+      const color = getColorFromString(profile.name)
+      setAvatarColor(color)
+      setTextColor(getTextColorForBackground(color))
+    }
+  }, [profile.name, profile.avatar_url])
+
   // Handlers
   const handleCountrySelect = (country: { value: string; label: string; flag: string }) => {
     setSelectedCountry(country.value)
@@ -99,30 +135,83 @@ export const ProfileDialogEdit = () => {
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setAvatarFile(file)
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const result = event.target?.result as string
-        setAvatarPreview(result)
-        form.setValue('avatarUrl', result, { shouldValidate: true })
-      }
-      reader.readAsDataURL(file)
+
+    if (!file) return
+
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+      toast({
+        title: 'File too large',
+        description: `Avatar image must be less than ${MAX_FILE_SIZE_LABEL}. Please choose a smaller file.`,
+        variant: 'destructive'
+      })
+
+      // Reset the input
+      e.target.value = ''
+      return
     }
+
+    // Continue with file processing
+    setAvatarFile(file)
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const result = event.target?.result as string
+      setAvatarPreview(result)
+      form.setValue('avatarUrl', result, { shouldValidate: true })
+    }
+
+    reader.readAsDataURL(file)
+  }
+
+  const handleAvatarRemove = () => {
+    const color = getColorFromString(profile.name)
+    setAvatarColor(color)
+    setTextColor(getTextColorForBackground(color))
+    setAvatarPreview('')
+    setAvatarFile(undefined)
+    form.setValue('avatarUrl', '', { shouldValidate: true })
   }
 
   const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      setBannerFile(file)
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const result = event.target?.result as string
-        setBannerPreview(result)
-        form.setValue('bannerUrl', result, { shouldValidate: true })
-      }
-      reader.readAsDataURL(file)
+
+    if (!file) return
+
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+      toast({
+        title: 'File too large',
+        description: `Banner image must be less than ${MAX_FILE_SIZE_LABEL}. Please choose a smaller file.`,
+        variant: 'destructive'
+      })
+
+      // Reset the input
+      e.target.value = ''
+      return
     }
+
+    // Continue with file processing
+    setBannerFile(file)
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const result = event.target?.result as string
+      setBannerPreview(result)
+      form.setValue('bannerUrl', result, { shouldValidate: true })
+    }
+
+    reader.readAsDataURL(file)
+  }
+
+  const handleBannerRemove = () => {
+    const color = getColorFromString(profile.name)
+    setAvatarColor(color)
+    setBannerPreview('')
+    setBannerFile(undefined)
+    form.setValue('bannerUrl', '', { shouldValidate: true })
+  }
+
+  const handleDialogChange = (newOpen: boolean) => {
+    setOpen(newOpen)
   }
 
   const handleTabChange = (value: string) => {
@@ -167,29 +256,36 @@ export const ProfileDialogEdit = () => {
   }
 
   const handleFileUpload = async (
-    file: File,
+    file: File | undefined,
     type: 'avatars' | 'banners',
     updateField: 'avatar_url' | 'banner_url'
   ) => {
     if (!file) return
 
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('type', type)
-    formData.append('profileId', profile.id)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('type', type)
+      formData.append('profileId', profile.id)
 
-    const { success, data } = await uploadFile(formData)
+      const { success, data } = await uploadFile(formData)
 
-    if (success && data?.url) {
-      await updateProfile(profile.id, { [updateField]: data.url })
-      await saveFile({
-        file_url: data.url,
-        file_name: data.name,
-        file_type: data.type,
-        file_size: data.size.toString(),
-        tag: type.slice(0, -1),
-        user_profile_id: profile.id
-      })
+      if (success && data?.url) {
+        await updateProfile(profile.id, { [updateField]: data.url })
+        await saveFile({
+          file_url: data.url,
+          file_name: data.name,
+          file_type: data.type,
+          file_size: data.size.toString(),
+          tag: type.slice(0, -1),
+          user_profile_id: profile.id
+        })
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : `Failed to upload ${type}`
+      }
     }
   }
 
@@ -197,8 +293,15 @@ export const ProfileDialogEdit = () => {
     setIsLoading(true)
 
     try {
+      // Prepare data by converting empty strings to null for URLs
+      const updateData = {
+        ...data,
+        avatar_url: data.avatarUrl === '' ? undefined : data.avatarUrl,
+        banner_url: data.bannerUrl === '' ? undefined : data.bannerUrl
+      }
+
       // Update profile
-      const profileResult = await updateProfile(profile.id, data)
+      const profileResult = await updateProfile(profile.id, updateData)
 
       if (!profileResult.success) {
         toast({
@@ -209,8 +312,13 @@ export const ProfileDialogEdit = () => {
         return
       }
 
-      await handleFileUpload(avatarFile as File, 'avatars', 'avatar_url')
-      await handleFileUpload(bannerFile as File, 'banners', 'banner_url')
+      if (avatarFile) {
+        await handleFileUpload(avatarFile, 'avatars', 'avatar_url')
+      }
+
+      if (bannerFile) {
+        await handleFileUpload(bannerFile, 'banners', 'banner_url')
+      }
 
       // If we got here, at least the profile update was successful
       toast({
@@ -235,7 +343,7 @@ export const ProfileDialogEdit = () => {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
         {isSignedIn && hasPermission ? (
           <div className='absolute top-2 right-4 z-20'>
@@ -292,7 +400,10 @@ export const ProfileDialogEdit = () => {
                   onCountryOpenChange={setCountryOpen}
                   onCountrySelect={handleCountrySelect}
                   onAvatarChange={handleAvatarChange}
+                  onAvatarRemove={handleAvatarRemove}
                   onBannerChange={handleBannerChange}
+                  onBannerRemove={handleBannerRemove}
+                  profileName={profile.name}
                   isLoading={isLoading}
                 />
               </TabsContent>
