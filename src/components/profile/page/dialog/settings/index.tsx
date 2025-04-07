@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Settings as SettingsIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 
@@ -16,8 +16,8 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 
 import { useToast } from '@/hooks/use-toast'
-import { useProfile } from '@/components/profile/provider' // Import profile provider
-import { useEventEmitter } from '@/hooks/use-event' // For emitting events after save
+import { useProfile } from '@/components/profile/provider'
+import { useEventEmitter } from '@/hooks/use-event'
 
 import { General } from '@/components/profile/page/dialog/settings/tabs/general'
 // import { Preview } from '@/components/profile/page/dialog/settings/tabs/preview'
@@ -30,7 +30,7 @@ import {
   GeneralSettingKey
 } from '@/components/profile/page/dialog/settings/types'
 
-import { createOrUpdateSettings } from '@/server/actions/profile/create'
+import { createOrUpdateSettings } from '@/server/actions'
 
 const visibleTabs = [
   { id: 'general', label: 'General' }
@@ -39,65 +39,112 @@ const visibleTabs = [
   // { id: 'sections', label: 'Sections' }
 ]
 
+// Type definition for metadata structure
+type ProfileSettings = {
+  general?: {
+    showPreviewResume?: boolean
+    showDownloadButton?: boolean
+  }
+  preview?: {
+    showContactInfo?: boolean
+    showSocialLinks?: boolean
+    showProfilePhoto?: boolean
+    enablePrint?: boolean
+  }
+}
+
 export const Settings = ({ trigger }: SettingsProps) => {
   const { toast } = useToast()
-  const { profile, user } = useProfile() // Get user and profile info
-  const { emit } = useEventEmitter() // For emitting events
+  const { profile, user } = useProfile()
+  const { emit } = useEventEmitter()
 
   // Dialog and tab state
   const [open, setOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('general')
   const [isLoading, setIsLoading] = useState(false)
 
-  // Initialize form with default values
+  // Get settings from profile with safe fallbacks
+  const getProfileSetting = <T extends boolean>(
+    metadata: ProfileSettings | undefined | null,
+    path: string,
+    defaultValue: T
+  ): T => {
+    if (!metadata) {
+      return defaultValue
+    }
+
+    const parts = path.split('.')
+    const section = parts[0] as keyof ProfileSettings
+
+    if (!metadata[section]) {
+      return defaultValue
+    }
+
+    const sectionData = metadata[section]
+    if (!sectionData) {
+      return defaultValue
+    }
+
+    const setting = parts[1] as string
+
+    if (section === 'general') {
+      const generalSettings = sectionData as ProfileSettings['general']
+      const value =
+        setting === 'showPreviewResume'
+          ? generalSettings?.showPreviewResume
+          : generalSettings?.showDownloadButton
+
+      return (value !== undefined ? value : defaultValue) as T
+    }
+
+    // Add other sections as needed when you uncomment them
+
+    return defaultValue
+  }
+
+  // Initialize form with values from the profile
   const form = useForm<SettingsFormData>({
     defaultValues: {
       general: {
-        showPreviewResume: true,
-        showDownloadButton: true
+        showPreviewResume: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'general.showPreviewResume',
+          true
+        ),
+        showDownloadButton: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'general.showDownloadButton',
+          true
+        )
       }
       // preview: {
-      //   showContactInfo: true,
-      //   showSocialLinks: true,
-      //   showProfilePhoto: true,
-      //   enablePrint: true
-      // }
-      // download: {
-      //   includeCoverLetter: false,
-      //   highResolution: true,
-      //   includePortfolio: false,
-      //   fileFormat: 'pdf'
-      // },
-      // sections: {
-      //   skills: true,
-      //   experience: true,
-      //   education: true,
-      //   projects: true,
-      //   certifications: true,
-      //   achievements: false,
-      //   publications: false,
-      //   languages: true,
-      //   volunteer: false
+      //   showContactInfo: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.showContactInfo', true),
+      //   showSocialLinks: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.showSocialLinks', true),
+      //   showProfilePhoto: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.showProfilePhoto', true),
+      //   enablePrint: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.enablePrint', true)
       // }
     }
   })
+
+  // Update form values when profile changes
+  useEffect(() => {
+    if (profile?.user_profile_settings?.metadata) {
+      const metadata = profile.user_profile_settings.metadata as ProfileSettings
+
+      form.reset({
+        general: {
+          showPreviewResume: getProfileSetting(metadata, 'general.showPreviewResume', true),
+          showDownloadButton: getProfileSetting(metadata, 'general.showDownloadButton', true)
+        }
+        // Add other sections when you uncomment them
+      })
+    }
+  }, [profile, form])
 
   // Handlers for each tab section
   const handleGeneralSettingChange = (setting: GeneralSettingKey, checked: boolean) => {
     form.setValue(`general.${setting}`, checked, { shouldValidate: true })
   }
-
-  // const handlePreviewSettingChange = (setting: string, checked: boolean) => {
-  //   form.setValue(`preview.${setting}` as any, checked, { shouldValidate: true })
-  // }
-
-  // const handleDownloadSettingChange = (setting: string, value: unknown) => {
-  //   form.setValue(`download.${setting}` as any, value, { shouldValidate: true })
-  // }
-
-  // const handleSectionVisibilityChange = (section: string, checked: boolean) => {
-  //   form.setValue(`sections.${section}` as any, checked, { shouldValidate: true })
-  // }
 
   const handleTabChange = (value: string) => setActiveTab(value)
 
@@ -137,9 +184,14 @@ export const Settings = ({ trigger }: SettingsProps) => {
         })
       }
     } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'An unexpected error occurred while saving settings'
+
       toast({
         title: 'Error',
-        description: 'An unexpected error occurred while saving settings',
+        description: errorMessage,
         variant: 'destructive'
       })
 
@@ -149,8 +201,13 @@ export const Settings = ({ trigger }: SettingsProps) => {
     }
   }
 
+  // Toggle dialog
+  const handleDialogChange = (newOpen: boolean) => {
+    setOpen(newOpen)
+  }
+
   return (
-    <Dialog open={open} onOpenChange={() => setOpen(!open)}>
+    <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
         {trigger || (
           <Button variant='reverse' className='bg-white'>
@@ -192,26 +249,7 @@ export const Settings = ({ trigger }: SettingsProps) => {
                 />
               </TabsContent>
 
-              {/* <TabsContent value='preview'>
-              <Preview
-              settings={form.watch('preview')}
-              onSettingChange={handlePreviewSettingChange}
-              />
-              </TabsContent> */}
-
-              {/* <TabsContent value='download'>
-              <Download
-              settings={form.watch('download')}
-              onSettingChange={handleDownloadSettingChange}
-              />
-              </TabsContent> */}
-
-              {/* <TabsContent value='sections'>
-              <Sections
-              settings={form.watch('sections')}
-              onSettingChange={handleSectionVisibilityChange}
-              />
-              </TabsContent> */}
+              {/* Other tab contents */}
             </Tabs>
 
             <div className='flex justify-end gap-3 pt-4 border-t-2 border-gray-200'>
