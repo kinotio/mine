@@ -2,7 +2,6 @@ import type { Control } from 'react-hook-form'
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { LocationSelect } from '@/components/profile/sidebar/dialog/forms/location-select'
 import { AvatarUpload } from '@/components/profile/sidebar/dialog/forms/avatar-upload'
 import { BannerUpload } from '@/components/profile/sidebar/dialog/forms/banner-upload'
 import type { FormSchema } from '@/components/profile/sidebar/dialog/schemas'
@@ -20,6 +19,7 @@ interface BasicInfoProps {
   onCountrySelect: (country: { value: string; label: string; flag: string }) => void
   onAvatarChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onBannerChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  isLoading: boolean
 }
 
 export const BasicInfo = ({
@@ -29,12 +29,9 @@ export const BasicInfo = ({
   avatarColor,
   textColor,
   profileBannerUrl,
-  countryOpen,
-  selectedCountry,
-  onCountryOpenChange,
-  onCountrySelect,
   onAvatarChange,
-  onBannerChange
+  onBannerChange,
+  isLoading
 }: BasicInfoProps) => {
   return (
     <div className='space-y-4'>
@@ -56,6 +53,7 @@ export const BasicInfo = ({
       <FormField
         control={control}
         name='name'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Name</FormLabel>
@@ -70,6 +68,7 @@ export const BasicInfo = ({
       <FormField
         control={control}
         name='title'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Title</FormLabel>
@@ -84,20 +83,13 @@ export const BasicInfo = ({
       <FormField
         control={control}
         name='location'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Location</FormLabel>
-            <div className='flex gap-2'>
-              <FormControl>
-                <Input {...field} className='border-[2px] border-black flex-1' />
-              </FormControl>
-              <LocationSelect
-                open={countryOpen}
-                selectedCountry={selectedCountry}
-                onOpenChange={onCountryOpenChange}
-                onSelect={onCountrySelect}
-              />
-            </div>
+            <FormControl>
+              <Input {...field} className='border-[2px] border-black flex-1' />
+            </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
         )}

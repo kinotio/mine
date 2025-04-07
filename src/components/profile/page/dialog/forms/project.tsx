@@ -26,11 +26,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       <FormField
         control={form.control}
         name='title'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Project Title</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -40,15 +41,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       <FormField
         control={form.control}
         name='description'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Description</FormLabel>
             <FormControl>
-              <Textarea
-                {...field}
-                className='min-h-[100px] border-[2px] border-black'
-                disabled={isLoading}
-              />
+              <Textarea {...field} className='min-h-[100px] border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -58,11 +56,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       <FormField
         control={form.control}
         name='tags'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Tags</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormDescription>
               Separate tags with commas (e.g., React, TypeScript, UI/UX)
@@ -75,6 +74,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       <FormField
         control={form.control}
         name='image'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Project Image</FormLabel>
@@ -97,7 +97,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     className='hidden'
                     accept='image/*'
                     onChange={(e) => handleImageUpload(e, field)}
-                    disabled={isLoading}
                   />
                   {imagePreview && (
                     <div className='absolute top-2 right-2 z-10'>
@@ -111,7 +110,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                           setImagePreview(null)
                           field.onChange('')
                         }}
-                        disabled={isLoading}
                       >
                         <X className='h-4 w-4' />
                       </Button>
@@ -129,6 +127,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         <FormField
           control={form.control}
           name='sourceUrl'
+          disabled={isLoading}
           render={({ field }) => (
             <FormItem>
               <FormLabel className='font-bold'>Source URL</FormLabel>
@@ -137,7 +136,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                   {...field}
                   className='border-[2px] border-black'
                   placeholder='https://github.com/...'
-                  disabled={isLoading}
                 />
               </FormControl>
               <FormMessage className='text-[#ff6b6b] font-medium' />
@@ -148,16 +146,12 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         <FormField
           control={form.control}
           name='liveUrl'
+          disabled={isLoading}
           render={({ field }) => (
             <FormItem>
               <FormLabel className='font-bold'>Live URL</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  className='border-[2px] border-black'
-                  placeholder='https://...'
-                  disabled={isLoading}
-                />
+                <Input {...field} className='border-[2px] border-black' placeholder='https://...' />
               </FormControl>
               <FormMessage className='text-[#ff6b6b] font-medium' />
             </FormItem>

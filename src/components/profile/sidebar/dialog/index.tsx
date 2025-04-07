@@ -60,7 +60,7 @@ export const ProfileDialogEdit = () => {
   const [avatarColor, setAvatarColor] = useState('')
   const [textColor, setTextColor] = useState('#000000')
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Generate avatar color based on name
   useEffect(() => {
@@ -194,7 +194,7 @@ export const ProfileDialogEdit = () => {
   }
 
   const onSubmit = async (data: FormSchema) => {
-    setIsSubmitting(true)
+    setIsLoading(true)
 
     try {
       // Update profile
@@ -230,7 +230,7 @@ export const ProfileDialogEdit = () => {
         variant: 'destructive'
       })
     } finally {
-      setIsSubmitting(false)
+      setIsLoading(false)
     }
   }
 
@@ -293,15 +293,16 @@ export const ProfileDialogEdit = () => {
                   onCountrySelect={handleCountrySelect}
                   onAvatarChange={handleAvatarChange}
                   onBannerChange={handleBannerChange}
+                  isLoading={isLoading}
                 />
               </TabsContent>
 
               <TabsContent value='bio'>
-                <Bio control={form.control} />
+                <Bio control={form.control} isLoading={isLoading} />
               </TabsContent>
 
               <TabsContent value='contact'>
-                <Contact control={form.control} />
+                <Contact control={form.control} isLoading={isLoading} />
               </TabsContent>
             </Tabs>
 
@@ -311,16 +312,16 @@ export const ProfileDialogEdit = () => {
                 variant='neutral'
                 onClick={() => setOpen(false)}
                 className='border-[2px] border-black font-bold hover:bg-gray-100'
-                disabled={isSubmitting}
+                disabled={isLoading}
               >
                 Cancel
               </Button>
               <Button
                 type='submit'
                 className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
-                disabled={isSubmitting}
+                disabled={isLoading}
               >
-                {isSubmitting ? 'Saving...' : 'Save Changes'}
+                {isLoading ? 'Saving...' : 'Save Changes'}
               </Button>
             </div>
           </form>
