@@ -9,7 +9,8 @@ import {
   deleteProfileSection,
   updateProfileSection,
   updateProfileSectionItem,
-  getAllProfiles
+  getAllProfiles,
+  createOrUpdateSettings
 } from '@/server/actions/profile'
 import { updateUser, deleteUser, getUserByUsername, createUser } from '@/server/actions/user'
 import { sendFeedback } from '@/server/actions/email'
@@ -30,6 +31,7 @@ export {
   updateProfileSection,
   updateProfileSectionItem,
   getAllProfiles,
+  createOrUpdateSettings,
 
   // User
   updateUser,
