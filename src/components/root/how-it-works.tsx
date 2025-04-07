@@ -66,7 +66,10 @@ export const HowItWorksSection = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                {/* Desktop version - hidden on mobile */}
+                <div
+                  className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'} hidden md:block`}
+                >
                   <motion.div
                     className='bg-white border-4 border-black p-6 inline-block transform hover:rotate-1 transition-transform'
                     whileHover={{
@@ -79,6 +82,7 @@ export const HowItWorksSection = () => {
                   </motion.div>
                 </div>
 
+                {/* Center icon - only visible on desktop */}
                 <div className='hidden md:flex items-center justify-center relative z-10'>
                   <motion.div
                     className={`${step.color} p-4 border-4 border-black rounded-full`}
@@ -91,7 +95,8 @@ export const HowItWorksSection = () => {
                   </motion.div>
                 </div>
 
-                <div className='flex-1 md:hidden'>
+                {/* Mobile version - hidden on desktop */}
+                <div className='w-full md:hidden'>
                   <div
                     className={`${step.color} p-4 border-4 border-black rounded-full w-fit mb-4`}
                   >
