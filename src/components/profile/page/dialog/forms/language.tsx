@@ -10,11 +10,12 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form, isLoading }) =
       <FormField
         control={form.control}
         name='name'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Language</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -24,6 +25,7 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form, isLoading }) =
       <FormField
         control={form.control}
         name='proficiency'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Proficiency</FormLabel>
@@ -32,7 +34,6 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form, isLoading }) =
                 {...field}
                 className='border-[2px] border-black'
                 placeholder='Native, Fluent, Intermediate, Basic'
-                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
@@ -43,6 +44,7 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form, isLoading }) =
       <FormField
         control={form.control}
         name='level'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Proficiency Level: {field.value}%</FormLabel>
@@ -54,7 +56,6 @@ export const LanguageForm: React.FC<LanguageFormProps> = ({ form, isLoading }) =
                 defaultValue={[field.value]}
                 onValueChange={(value) => field.onChange(value[0])}
                 className='py-4'
-                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />

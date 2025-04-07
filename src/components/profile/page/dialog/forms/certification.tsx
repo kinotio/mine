@@ -18,11 +18,12 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
       <FormField
         control={form.control}
         name='title'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Certification Title</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -32,11 +33,12 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
       <FormField
         control={form.control}
         name='issuer'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Issuing Organization</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -46,16 +48,12 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
       <FormField
         control={form.control}
         name='date'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Date</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                className='border-[2px] border-black'
-                placeholder='2023'
-                disabled={isLoading}
-              />
+              <Input {...field} className='border-[2px] border-black' placeholder='2023' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -65,6 +63,7 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
       <FormField
         control={form.control}
         name='image'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Organization Logo</FormLabel>
@@ -82,7 +81,6 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
                     className='hidden'
                     accept='image/*'
                     onChange={(e) => handleImageUpload(e, field)}
-                    disabled={isLoading}
                   />
                   {imagePreview && (
                     <div className='absolute -top-2 -right-2 z-10'>
@@ -96,7 +94,6 @@ export const CertificationForm: React.FC<CertificationFormProps> = ({
                           setImagePreview(null)
                           field.onChange('')
                         }}
-                        disabled={isLoading}
                       >
                         <X className='h-3 w-3' />
                       </Button>

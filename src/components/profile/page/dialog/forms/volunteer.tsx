@@ -10,11 +10,12 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form, isLoading })
       <FormField
         control={form.control}
         name='organization'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Organization</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -24,11 +25,12 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form, isLoading })
       <FormField
         control={form.control}
         name='role'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Role</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -38,6 +40,7 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form, isLoading })
       <FormField
         control={form.control}
         name='period'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Period</FormLabel>
@@ -46,7 +49,6 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form, isLoading })
                 {...field}
                 className='border-[2px] border-black'
                 placeholder='2020 - Present'
-                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
@@ -57,15 +59,12 @@ export const VolunteerForm: React.FC<VolunteerFormProps> = ({ form, isLoading })
       <FormField
         control={form.control}
         name='description'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Description</FormLabel>
             <FormControl>
-              <Textarea
-                {...field}
-                className='min-h-[100px] border-[2px] border-black'
-                disabled={isLoading}
-              />
+              <Textarea {...field} className='min-h-[100px] border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>

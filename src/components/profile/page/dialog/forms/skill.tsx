@@ -10,11 +10,12 @@ export const SkillForm: React.FC<SkillFormProps> = ({ form, isLoading }) => {
       <FormField
         control={form.control}
         name='name'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Skill Name</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -24,6 +25,7 @@ export const SkillForm: React.FC<SkillFormProps> = ({ form, isLoading }) => {
       <FormField
         control={form.control}
         name='level'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Proficiency Level: {field.value}%</FormLabel>
@@ -35,7 +37,6 @@ export const SkillForm: React.FC<SkillFormProps> = ({ form, isLoading }) => {
                 defaultValue={[field.value]}
                 onValueChange={(value) => field.onChange(value[0])}
                 className='py-4'
-                disabled={isLoading}
               />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />

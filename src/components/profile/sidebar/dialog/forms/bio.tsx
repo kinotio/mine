@@ -7,14 +7,16 @@ import type { FormSchema } from '@/components/profile/sidebar/dialog/schemas'
 
 interface BioProps {
   control: Control<FormSchema>
+  isLoading: boolean
 }
 
-export const Bio = ({ control }: BioProps) => {
+export const Bio = ({ control, isLoading }: BioProps) => {
   return (
     <div className='space-y-4'>
       <FormField
         control={control}
         name='bio'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Bio</FormLabel>

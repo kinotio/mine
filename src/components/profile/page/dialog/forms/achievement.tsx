@@ -10,11 +10,12 @@ export const AchievementForm: React.FC<AchievementFormProps> = ({ form, isLoadin
       <FormField
         control={form.control}
         name='title'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Achievement Title</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -24,11 +25,12 @@ export const AchievementForm: React.FC<AchievementFormProps> = ({ form, isLoadin
       <FormField
         control={form.control}
         name='issuer'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Issuer/Organization</FormLabel>
             <FormControl>
-              <Input {...field} className='border-[2px] border-black' disabled={isLoading} />
+              <Input {...field} className='border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -38,16 +40,12 @@ export const AchievementForm: React.FC<AchievementFormProps> = ({ form, isLoadin
       <FormField
         control={form.control}
         name='date'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Date</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                className='border-[2px] border-black'
-                placeholder='June 2022'
-                disabled={isLoading}
-              />
+              <Input {...field} className='border-[2px] border-black' placeholder='June 2022' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
@@ -57,15 +55,12 @@ export const AchievementForm: React.FC<AchievementFormProps> = ({ form, isLoadin
       <FormField
         control={form.control}
         name='description'
+        disabled={isLoading}
         render={({ field }) => (
           <FormItem>
             <FormLabel className='font-bold'>Description</FormLabel>
             <FormControl>
-              <Textarea
-                {...field}
-                className='min-h-[100px] border-[2px] border-black'
-                disabled={isLoading}
-              />
+              <Textarea {...field} className='min-h-[100px] border-[2px] border-black' />
             </FormControl>
             <FormMessage className='text-[#ff6b6b] font-medium' />
           </FormItem>
