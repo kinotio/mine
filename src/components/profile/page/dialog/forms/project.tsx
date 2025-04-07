@@ -88,7 +88,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                   {!imagePreview && (
                     <div className='flex flex-col items-center'>
                       <Upload className='h-8 w-8 mb-2' />
-                      <span>Upload Image</span>
                     </div>
                   )}
                   <input
