@@ -293,11 +293,14 @@ export const ProfileDialogEdit = () => {
     setIsLoading(true)
 
     try {
+      // Destructure avatarUrl and bannerUrl from data
+      const { avatarUrl, bannerUrl, ...formData } = data
+
       // Prepare data by converting empty strings to null for URLs
       const updateData = {
-        ...data,
-        avatar_url: data.avatarUrl === '' ? undefined : data.avatarUrl,
-        banner_url: data.bannerUrl === '' ? undefined : data.bannerUrl
+        ...formData,
+        avatar_url: avatarUrl === '' ? null : avatarUrl,
+        banner_url: bannerUrl === '' ? null : bannerUrl
       }
 
       // Update profile
