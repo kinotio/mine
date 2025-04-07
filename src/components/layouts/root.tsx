@@ -29,24 +29,31 @@ const Header = () => {
 
   return (
     <header className='sticky top-0 z-40 border-b-4 border-black bg-white'>
-      <div className='flex h-16 items-center justify-between px-4 md:px-6'>
-        <Link href='/' className='flex items-center gap-2'>
-          <Mine width={100} height={50} />
-        </Link>
+      <div className='flex h-16 items-center px-4 md:px-6'>
+        {/* Logo - Left Side */}
+        <div className='flex-1'>
+          <Link href='/' className='flex items-center gap-2'>
+            <Mine width={100} height={50} />
+          </Link>
+        </div>
 
-        <nav className='hidden gap-6 lg:flex'>
-          {DATA.shared.quickLinks.map((link, index) => (
-            <Link
-              key={index}
-              href={link.href}
-              className='text-lg font-medium transition-colors hover:text-primary'
-            >
-              {link.name}
-            </Link>
-          ))}
+        {/* Navigation - Center */}
+        <nav className='hidden lg:flex flex-1 justify-center'>
+          <div className='flex gap-6'>
+            {DATA.shared.quickLinks.map((link, index) => (
+              <Link
+                key={index}
+                href={link.href}
+                className='text-lg font-medium transition-colors hover:text-primary'
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
         </nav>
 
-        <div className='flex items-center gap-4 justify-between'>
+        {/* Buttons - Right Side */}
+        <div className='flex items-center gap-4 flex-1 justify-end'>
           <SignedOut>
             <Button className='bg-sky-300' onClick={() => router.push('/explore')}>
               <Rocket className='w-5 h-5' />
@@ -80,8 +87,7 @@ const Footer = () => {
               <Kinotio width={125} height={50} />
             </Link>
             <p className='text-gray-400 max-w-xs mt-6'>
-              The platform for developers to showcase their skills, projects, and connect with
-              opportunities.
+              A Developer hub for building and sharing your awesome skills and works
             </p>
           </div>
 
