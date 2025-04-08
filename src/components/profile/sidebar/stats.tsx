@@ -22,8 +22,8 @@ export const ProfileSidebarStats = ({ profile }: ProfileStatsProps) => {
           <div className='text-sm font-bold'>Years Exp.</div>
         </div>
         <div className='bg-[#f8f8f8] border-[3px] border-black p-3 text-center'>
-          <div className='text-2xl font-black'>{calculatedStats.clients}</div>
-          <div className='text-sm font-bold'>Clients</div>
+          <div className='text-2xl font-black'>{calculatedStats.skills}</div>
+          <div className='text-sm font-bold'>Skills</div>
         </div>
         <div className='bg-[#f8f8f8] border-[3px] border-black p-3 text-center'>
           <div className='text-2xl font-black'>{calculatedStats.awards}</div>
