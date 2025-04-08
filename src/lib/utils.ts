@@ -53,7 +53,7 @@ export const calculateProfileStats = (profile: UserProfile) => {
     return {
       projects: 0,
       experience: 0,
-      clients: 0,
+      skills: 0,
       awards: 0
     }
   }
@@ -115,8 +115,9 @@ export const calculateProfileStats = (profile: UserProfile) => {
     }
   }
 
-  // Clients count from work experience
-  const clients = workSection?.user_profile_section_items?.length || 0
+  // Skills count (replacing clients)
+  const skillsSection = profile.user_profile_sections?.find((section) => section.slug === 'skills')
+  const skills = skillsSection?.user_profile_section_items?.length || 0
 
   // Awards from certifications
   const certSection = profile.user_profile_sections?.find(
@@ -127,7 +128,7 @@ export const calculateProfileStats = (profile: UserProfile) => {
   return {
     projects,
     experience,
-    clients,
+    skills,
     awards
   }
 }
