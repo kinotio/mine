@@ -57,7 +57,6 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.header,
     marginBottom: 4,
     textAlign: 'center',
-    textTransform: 'uppercase',
     letterSpacing: 1
   },
   title: {
