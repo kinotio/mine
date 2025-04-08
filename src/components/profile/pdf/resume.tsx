@@ -10,7 +10,12 @@ interface ResumeTemplateProps {
 
 const MainHeader = ({ profile }: { profile: UserProfile }) => (
   <View style={styles.header} fixed>
-    <Text style={styles.name}>{profile.name}</Text>
+    <Text style={styles.name}>
+      {profile.name
+        .split(' ')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')}
+    </Text>
     {profile.title && <Text style={styles.title}>{profile.title}</Text>}
     <Text style={styles.contact}>
       {profile.location && `${profile.location} | `}
