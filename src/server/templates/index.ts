@@ -1,2 +1,2 @@
-export { FeedbackEmail } from '@/server/templates/feedback-email'
-export { JoinedEmail } from '@/server/templates/joined-email'
+export { FeedbackEmail } from '@/server/templates/emails/feedback-email'
+export { JoinedEmail } from '@/server/templates/emails/joined-email'

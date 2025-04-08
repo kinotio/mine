@@ -20,24 +20,26 @@ import { useProfile } from '@/components/profile/provider'
 import { useEventEmitter } from '@/hooks/use-event'
 
 import { General } from '@/components/profile/page/dialog/settings/tabs/general'
-// import { Preview } from '@/components/profile/page/dialog/settings/tabs/preview'
-// import { Download } from '@/components/profile/page/dialog/settings/tabs/download'
-// import { Sections } from '@/components/profile/page/dialog/settings/tabs/sections'
+import { Resume } from '@/components/profile/page/dialog/settings/tabs/resume'
 
 import {
   SettingsFormData,
   SettingsProps,
-  GeneralSettingKey
+  GeneralSettingKey,
+  ResumeSettingKey
 } from '@/components/profile/page/dialog/settings/types'
 
 import { createOrUpdateSettings } from '@/server/actions'
 
 const visibleTabs = [
-  { id: 'general', label: 'General' }
-  // { id: 'preview', label: 'Preview' }
-  // { id: 'download', label: 'Download' },
-  // { id: 'sections', label: 'Sections' }
+  { id: 'general', label: 'General' },
+  { id: 'resume', label: 'Resume' }
 ]
+
+const tabColors = {
+  general: '#4cc9f0',
+  resume: '#f72585'
+}
 
 // Type definition for metadata structure
 type ProfileSettings = {
@@ -45,11 +47,17 @@ type ProfileSettings = {
     showPreviewResume?: boolean
     showDownloadButton?: boolean
   }
-  preview?: {
-    showContactInfo?: boolean
-    showSocialLinks?: boolean
-    showProfilePhoto?: boolean
-    enablePrint?: boolean
+  resume?: {
+    showEducation?: boolean
+    showVolunteer?: boolean
+    showLanguages?: boolean
+    showSkills?: boolean
+    showProjects?: boolean
+    showPortfolio?: boolean
+    showExperience?: boolean
+    showPublications?: boolean
+    showCertifications?: boolean
+    showAchievements?: boolean
   }
 }
 
@@ -69,37 +77,20 @@ export const Settings = ({ trigger }: SettingsProps) => {
     path: string,
     defaultValue: T
   ): T => {
-    if (!metadata) {
-      return defaultValue
-    }
+    if (!metadata) return defaultValue
 
     const parts = path.split('.')
     const section = parts[0] as keyof ProfileSettings
-
-    if (!metadata[section]) {
-      return defaultValue
-    }
-
-    const sectionData = metadata[section]
-    if (!sectionData) {
-      return defaultValue
-    }
-
     const setting = parts[1] as string
 
-    if (section === 'general') {
-      const generalSettings = sectionData as ProfileSettings['general']
-      const value =
-        setting === 'showPreviewResume'
-          ? generalSettings?.showPreviewResume
-          : generalSettings?.showDownloadButton
+    if (!metadata[section]) return defaultValue
 
-      return (value !== undefined ? value : defaultValue) as T
-    }
+    const sectionData = metadata[section]
+    if (!sectionData) return defaultValue
 
-    // Add other sections as needed when you uncomment them
-
-    return defaultValue
+    // Access the setting directly using the setting name
+    const value = sectionData[setting as keyof typeof sectionData]
+    return (value !== undefined ? value : defaultValue) as T
   }
 
   // Initialize form with values from the profile
@@ -116,13 +107,59 @@ export const Settings = ({ trigger }: SettingsProps) => {
           'general.showDownloadButton',
           true
         )
+      },
+      resume: {
+        showEducation: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showEducation',
+          true
+        ),
+        showVolunteer: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showVolunteer',
+          true
+        ),
+        showLanguages: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showLanguages',
+          true
+        ),
+        showSkills: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showSkills',
+          true
+        ),
+        showProjects: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showProjects',
+          true
+        ),
+        showPortfolio: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showPortfolio',
+          true
+        ),
+        showExperience: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showExperience',
+          true
+        ),
+        showPublications: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showPublications',
+          true
+        ),
+        showCertifications: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showCertifications',
+          true
+        ),
+        showAchievements: getProfileSetting(
+          profile?.user_profile_settings?.metadata as ProfileSettings | undefined,
+          'resume.showAchievements',
+          true
+        )
       }
-      // preview: {
-      //   showContactInfo: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.showContactInfo', true),
-      //   showSocialLinks: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.showSocialLinks', true),
-      //   showProfilePhoto: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.showProfilePhoto', true),
-      //   enablePrint: getProfileSetting(profile?.user_profile_settings?.metadata, 'preview.enablePrint', true)
-      // }
     }
   })
 
@@ -135,8 +172,19 @@ export const Settings = ({ trigger }: SettingsProps) => {
         general: {
           showPreviewResume: getProfileSetting(metadata, 'general.showPreviewResume', true),
           showDownloadButton: getProfileSetting(metadata, 'general.showDownloadButton', true)
+        },
+        resume: {
+          showCertifications: getProfileSetting(metadata, 'resume.showCertifications', true),
+          showEducation: getProfileSetting(metadata, 'resume.showEducation', true),
+          showExperience: getProfileSetting(metadata, 'resume.showExperience', true),
+          showLanguages: getProfileSetting(metadata, 'resume.showLanguages', true),
+          showSkills: getProfileSetting(metadata, 'resume.showSkills', true),
+          showVolunteer: getProfileSetting(metadata, 'resume.showVolunteer', true),
+          showProjects: getProfileSetting(metadata, 'resume.showProjects', true),
+          showPortfolio: getProfileSetting(metadata, 'resume.showPortfolio', true),
+          showAchievements: getProfileSetting(metadata, 'resume.showAchievements', true),
+          showPublications: getProfileSetting(metadata, 'resume.showPublications', true)
         }
-        // Add other sections when you uncomment them
       })
     }
   }, [profile, form])
@@ -144,6 +192,10 @@ export const Settings = ({ trigger }: SettingsProps) => {
   // Handlers for each tab section
   const handleGeneralSettingChange = (setting: GeneralSettingKey, checked: boolean) => {
     form.setValue(`general.${setting}`, checked, { shouldValidate: true })
+  }
+
+  const handleResumeSettingChange = (setting: ResumeSettingKey, checked: boolean) => {
+    form.setValue(`resume.${setting}`, checked, { shouldValidate: true })
   }
 
   const handleTabChange = (value: string) => setActiveTab(value)
@@ -202,9 +254,7 @@ export const Settings = ({ trigger }: SettingsProps) => {
   }
 
   // Toggle dialog
-  const handleDialogChange = (newOpen: boolean) => {
-    setOpen(newOpen)
-  }
+  const handleDialogChange = (newOpen: boolean) => setOpen(newOpen)
 
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>
@@ -235,7 +285,7 @@ export const Settings = ({ trigger }: SettingsProps) => {
                   <TabsTrigger
                     key={tab.id}
                     value={tab.id}
-                    className='font-bold data-[state=active]:bg-[#4cc9f0] data-[state=active]:text-black px-4 py-2'
+                    className={`font-bold data-[state=active]:bg-[${tabColors[tab.id as keyof typeof tabColors]}] data-[state=active]:text-black px-4 py-2`}
                   >
                     {tab.label}
                   </TabsTrigger>
@@ -249,7 +299,12 @@ export const Settings = ({ trigger }: SettingsProps) => {
                 />
               </TabsContent>
 
-              {/* Other tab contents */}
+              <TabsContent value='resume'>
+                <Resume
+                  settings={form.watch('resume')}
+                  onSettingChange={handleResumeSettingChange}
+                />
+              </TabsContent>
             </Tabs>
 
             <div className='flex justify-end gap-3 pt-4 border-t-2 border-gray-200'>

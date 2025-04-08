@@ -3,24 +3,25 @@ import { Layout } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 
-interface SectionVisibilitySettings {
-  skills: boolean
-  experience: boolean
-  education: boolean
-  projects: boolean
-  certifications: boolean
-  achievements: boolean
-  publications: boolean
-  languages: boolean
-  volunteer: boolean
+interface ResumeVisibilitySettings {
+  showSkills: boolean
+  showExperience: boolean
+  showEducation: boolean
+  showProjects: boolean
+  showPortfolio: boolean
+  showCertifications: boolean
+  showAchievements: boolean
+  showPublications: boolean
+  showLanguages: boolean
+  showVolunteer: boolean
 }
 
-interface SectionsSettingsProps {
-  settings: SectionVisibilitySettings
-  onSettingChange: (setting: keyof SectionVisibilitySettings, checked: boolean) => void
+interface ResumeSettingsProps {
+  settings: ResumeVisibilitySettings
+  onSettingChange: (setting: keyof ResumeVisibilitySettings, checked: boolean) => void
 }
 
-export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) => {
+export const Resume = ({ settings, onSettingChange }: ResumeSettingsProps) => {
   return (
     <div className='space-y-4'>
       <div className='bg-[#f8f8f8] border-[2px] border-black p-4'>
@@ -34,8 +35,8 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-skills'
-                checked={settings.skills}
-                onCheckedChange={(checked) => onSettingChange('skills', checked as boolean)}
+                checked={settings.showSkills}
+                onCheckedChange={(checked) => onSettingChange('showSkills', checked as boolean)}
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-skills' className='font-medium'>
@@ -46,8 +47,8 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-experience'
-                checked={settings.experience}
-                onCheckedChange={(checked) => onSettingChange('experience', checked as boolean)}
+                checked={settings.showExperience}
+                onCheckedChange={(checked) => onSettingChange('showExperience', checked as boolean)}
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-experience' className='font-medium'>
@@ -58,8 +59,8 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-education'
-                checked={settings.education}
-                onCheckedChange={(checked) => onSettingChange('education', checked as boolean)}
+                checked={settings.showEducation}
+                onCheckedChange={(checked) => onSettingChange('showEducation', checked as boolean)}
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-education' className='font-medium'>
@@ -70,8 +71,8 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-projects'
-                checked={settings.projects}
-                onCheckedChange={(checked) => onSettingChange('projects', checked as boolean)}
+                checked={settings.showProjects}
+                onCheckedChange={(checked) => onSettingChange('showProjects', checked as boolean)}
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-projects' className='font-medium'>
@@ -81,9 +82,23 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
 
             <div className='flex items-center space-x-2'>
               <Checkbox
+                id='show-portfolio'
+                checked={settings.showPortfolio}
+                onCheckedChange={(checked) => onSettingChange('showPortfolio', checked as boolean)}
+                className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
+              />
+              <Label htmlFor='show-portfolio' className='font-medium'>
+                Portfolio
+              </Label>
+            </div>
+
+            <div className='flex items-center space-x-2'>
+              <Checkbox
                 id='show-certifications'
-                checked={settings.certifications}
-                onCheckedChange={(checked) => onSettingChange('certifications', checked as boolean)}
+                checked={settings.showCertifications}
+                onCheckedChange={(checked) =>
+                  onSettingChange('showCertifications', checked as boolean)
+                }
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-certifications' className='font-medium'>
@@ -96,8 +111,10 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-achievements'
-                checked={settings.achievements}
-                onCheckedChange={(checked) => onSettingChange('achievements', checked as boolean)}
+                checked={settings.showAchievements}
+                onCheckedChange={(checked) =>
+                  onSettingChange('showAchievements', checked as boolean)
+                }
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-achievements' className='font-medium'>
@@ -108,8 +125,10 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-publications'
-                checked={settings.publications}
-                onCheckedChange={(checked) => onSettingChange('publications', checked as boolean)}
+                checked={settings.showPublications}
+                onCheckedChange={(checked) =>
+                  onSettingChange('showPublications', checked as boolean)
+                }
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-publications' className='font-medium'>
@@ -120,8 +139,8 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-languages'
-                checked={settings.languages}
-                onCheckedChange={(checked) => onSettingChange('languages', checked as boolean)}
+                checked={settings.showLanguages}
+                onCheckedChange={(checked) => onSettingChange('showLanguages', checked as boolean)}
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-languages' className='font-medium'>
@@ -132,8 +151,8 @@ export const Sections = ({ settings, onSettingChange }: SectionsSettingsProps) =
             <div className='flex items-center space-x-2'>
               <Checkbox
                 id='show-volunteer'
-                checked={settings.volunteer}
-                onCheckedChange={(checked) => onSettingChange('volunteer', checked as boolean)}
+                checked={settings.showVolunteer}
+                onCheckedChange={(checked) => onSettingChange('showVolunteer', checked as boolean)}
                 className='border-[2px] border-black data-[state=checked]:bg-[#f72585] data-[state=checked]:text-white'
               />
               <Label htmlFor='show-volunteer' className='font-medium'>

@@ -68,6 +68,18 @@ export const createProfile = async (payload: UserProfile): Promise<ActionRespons
           general: {
             showPreviewResume: true,
             showDownloadButton: true
+          },
+          resume: {
+            showEducation: true,
+            showVolunteer: true,
+            showLanguages: true,
+            showSkills: true,
+            showProjects: true,
+            showPortfolio: true,
+            showExperience: true,
+            showPublications: true,
+            showCertifications: true,
+            showAchievements: true
           }
         }
       })
