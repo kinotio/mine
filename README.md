@@ -24,7 +24,7 @@ And then install Infisical CLI [here](https://infisical.com/docs/cli/overview), 
 $ infisical run --env=dev --watch --recursive -- pnpm dev
 ```
 
-## 🗺️ Roadmap
+## Roadmap
 
 ### Resume Features
 
