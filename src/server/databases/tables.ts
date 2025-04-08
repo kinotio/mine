@@ -104,6 +104,18 @@ export const userProfileSettings = pgTable('user_profile_settings', {
         showPreviewResume?: boolean
         showDownloadButton?: boolean
       }
+      resume?: {
+        showEducation?: boolean
+        showVolunteer?: boolean
+        showLanguages?: boolean
+        showSkills?: boolean
+        showProjects?: boolean
+        showPortfolio?: boolean
+        showExperience?: boolean
+        showPublications?: boolean
+        showCertifications?: boolean
+        showAchievements?: boolean
+      }
     }>()
     .default({}),
   ...baseColumns

@@ -248,6 +248,19 @@ const ProfileSection = ({ section }: { section: UserProfile['user_profile_sectio
 }
 
 export const ResumeTemplate = ({ profile }: ResumeTemplateProps) => {
+  // Extract settings from profile
+  const settings = profile.user_profile_settings?.metadata?.resume || {
+    showSkills: true,
+    showExperience: true,
+    showEducation: true,
+    showProjects: true,
+    showCertifications: true,
+    showAchievements: true,
+    showPublications: true,
+    showLanguages: true,
+    showVolunteer: true
+  }
+
   // Extract skills
   const skills = extractSkills(profile)
 
@@ -311,32 +324,37 @@ export const ResumeTemplate = ({ profile }: ResumeTemplateProps) => {
         {/* Essential content */}
         <ProfessionalSummary bio={profile.bio} />
 
-        {skills.length > 0 && <SkillsSection skills={skills} />}
+        {settings.showSkills && skills.length > 0 && <SkillsSection skills={skills} />}
 
-        {/* Content sections */}
-        {experienceSections.map((section, index) => (
-          <ProfileSection key={`exp-${index}`} section={section} />
-        ))}
+        {settings.showExperience &&
+          experienceSections.map((section, index) => (
+            <ProfileSection key={`exp-${index}`} section={section} />
+          ))}
 
-        {projectSections.map((section, index) => (
-          <ProfileSection key={`proj-${index}`} section={section} />
-        ))}
+        {settings.showProjects &&
+          projectSections.map((section, index) => (
+            <ProfileSection key={`proj-${index}`} section={section} />
+          ))}
 
-        {educationSections.map((section, index) => (
-          <ProfileSection key={`edu-${index}`} section={section} />
-        ))}
+        {settings.showEducation &&
+          educationSections.map((section, index) => (
+            <ProfileSection key={`edu-${index}`} section={section} />
+          ))}
 
-        {certificationSections.map((section, index) => (
-          <ProfileSection key={`cert-${index}`} section={section} />
-        ))}
+        {settings.showCertifications &&
+          certificationSections.map((section, index) => (
+            <ProfileSection key={`cert-${index}`} section={section} />
+          ))}
 
-        {languageSections.map((section, index) => (
-          <ProfileSection key={`lang-${index}`} section={section} />
-        ))}
+        {settings.showLanguages &&
+          languageSections.map((section, index) => (
+            <ProfileSection key={`lang-${index}`} section={section} />
+          ))}
 
-        {portfolioSections.map((section, index) => (
-          <ProfileSection key={`port-${index}`} section={section} />
-        ))}
+        {settings.showPortfolio &&
+          portfolioSections.map((section, index) => (
+            <ProfileSection key={`port-${index}`} section={section} />
+          ))}
 
         {otherSections.map((section, index) => (
           <ProfileSection key={`other-${index}`} section={section} />

@@ -8,29 +8,19 @@ export interface SettingsFormData {
     showPreviewResume: boolean
     showDownloadButton: boolean
   }
-  // preview: {
-  //   showContactInfo: boolean
-  //   showSocialLinks: boolean
-  //   showProfilePhoto: boolean
-  //   enablePrint: boolean
-  // }
-  // download: {
-  //   includeCoverLetter: boolean
-  //   highResolution: boolean
-  //   includePortfolio: boolean
-  //   fileFormat: 'pdf' | 'docx' | 'both'
-  // }
-  // sections: {
-  //   skills: boolean
-  //   experience: boolean
-  //   education: boolean
-  //   projects: boolean
-  //   certifications: boolean
-  //   achievements: boolean
-  //   publications: boolean
-  //   languages: boolean
-  //   volunteer: boolean
-  // }
+  resume: {
+    showEducation: boolean
+    showVolunteer: boolean
+    showLanguages: boolean
+    showSkills: boolean
+    showProjects: boolean
+    showPortfolio: boolean
+    showExperience: boolean
+    showPublications: boolean
+    showCertifications: boolean
+    showAchievements: boolean
+  }
 }
 
 export type GeneralSettingKey = keyof SettingsFormData['general']
+export type ResumeSettingKey = keyof SettingsFormData['resume']

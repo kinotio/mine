@@ -85,6 +85,18 @@ export type UserProfile = {
         showPreviewResume: boolean
         showDownloadButton: boolean
       }
+      resume: {
+        showSkills: boolean
+        showExperience: boolean
+        showEducation: boolean
+        showProjects: boolean
+        showPortfolio: boolean
+        showCertifications: boolean
+        showAchievements: boolean
+        showPublications: boolean
+        showLanguages: boolean
+        showVolunteer: boolean
+      }
     }
   }
 }
