@@ -116,22 +116,32 @@ export const AddSectionDialog = ({ trigger }: AddSectionDialogProps) => {
                 <>
                   <p className='mb-4'>Choose a section type to add to your profile:</p>
                   <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
-                    {sectionTemplates.map((template) => (
-                      <div
-                        key={template.id}
-                        className='border-[3px] border-black p-4 cursor-pointer hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
-                        style={{ backgroundColor: `${template.color}20` }}
-                        onClick={() => handleSelectTemplate(template)}
-                      >
+                    {sectionTemplates.map((template) => {
+                      const isAttached = profile.user_profile_sections?.some(
+                        (section) => section.profile_section_template_id === template.id
+                      )
+
+                      return (
                         <div
-                          className='w-10 h-10 rounded-full flex items-center justify-center mb-2 border-[2px] border-black'
-                          style={{ backgroundColor: template.color }}
+                          key={template.id}
+                          className={`border-[3px] border-black p-4 ${
+                            isAttached
+                              ? 'opacity-50 cursor-not-allowed'
+                              : 'cursor-pointer hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)]'
+                          } transition-all`}
+                          style={{ backgroundColor: `${template.color}20` }}
+                          onClick={() => !isAttached && handleSelectTemplate(template)}
                         >
-                          <Icon name={template.icon as keyof typeof icons} size={16} />
+                          <div
+                            className='w-10 h-10 rounded-full flex items-center justify-center mb-2 border-[2px] border-black'
+                            style={{ backgroundColor: template.color }}
+                          >
+                            <Icon name={template.icon as keyof typeof icons} size={16} />
+                          </div>
+                          <h3 className='font-bold'>{template.name}</h3>
                         </div>
-                        <h3 className='font-bold'>{template.name}</h3>
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 </>
               ) : (
