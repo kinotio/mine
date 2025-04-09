@@ -52,7 +52,7 @@ $ infisical run --env=dev --watch --recursive -- pnpm dev
 - [ ] **Export Options**
 
   - [ ] Multiple format support (DOC, TXT, HTML)
-  - [ ] Custom file naming
+  - [x] Custom file naming
   - [ ] Separate section exports
   - [ ] Cover letter generation
 
