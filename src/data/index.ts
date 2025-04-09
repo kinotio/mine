@@ -1,7 +1,7 @@
 export const DATA = {
   name: 'Mine',
   url: 'https://mine.kinotio.io',
-  description: 'A Developer hub for building and sharing your awesome skills and works',
+  description: 'Your Creative Hub: Build, Share, Connect',
   social_url: {
     github: 'https://github.com/kinotiodotio',
     discord: 'https://discord.gg/cskvbKQA',
@@ -11,7 +11,7 @@ export const DATA = {
   },
   repo: 'https://github.com/kinotiodotio/mine',
   doc_repo: 'https://github.com/kinotiodotio/mine/tree/main',
-  keywords: ['Mine', 'Open Source', 'Hub', 'Developer-Hubs', 'Skills', 'Works'],
+  keywords: ['Mine', 'Open Source', 'Hub', 'Skills', 'Works', 'Build', 'Share', 'Connect'],
   kinotio: {
     url: 'https://kinotio.io'
   },

@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Code, Zap, Star } from 'lucide-react'
+import { ArrowRight, Palette, Share, Users } from 'lucide-react'
 import Link from 'next/link'
 
 import { floatingIcons, itemVariants, containerVariants } from '@/components/root/config'
+import { getUserProfileInitial } from '@/lib/utils'
 
 export const Hero = () => {
   return (
@@ -25,26 +26,40 @@ export const Hero = () => {
         >
           <motion.div variants={itemVariants} className='flex flex-col justify-center space-y-4'>
             <div className='inline-block bg-white border-4 border-black px-4 py-1 transform -rotate-2 w-fit'>
-              <span className='text-lg font-bold'>Developers Unite!</span>
+              <span className='text-lg font-bold'>Your Creative Hub</span>
             </div>
 
             <motion.h1
               className='text-5xl font-extrabold leading-tight tracking-tighter md:text-6xl lg:text-7xl'
               variants={itemVariants}
             >
-              Showcase Your{' '}
+              Where{' '}
               <span className='bg-yellow-500 px-2 border-4 border-black transform inline-block rotate-1'>
-                Dev Skills
+                Talents
               </span>{' '}
-              To The World
+              Come Alive
             </motion.h1>
+
+            <motion.div className='flex items-center justify-start gap-4 mt-4'>
+              <span className='bg-[#4cc9f0] border-4 border-black px-4 py-1 text-xl font-bold text-white transform -rotate-2 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[4px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300'>
+                Build
+              </span>
+              <span className='text-black font-bold'>•</span>
+              <span className='bg-[#ff6b6b] border-4 border-black px-4 py-1 text-xl font-bold text-white transform rotate-2 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[4px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300'>
+                Share
+              </span>
+              <span className='text-black font-bold'>•</span>
+              <span className='bg-[#4eb778] border-4 border-black px-4 py-1 text-xl font-bold text-white transform -rotate-1 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[4px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-300'>
+                Connect
+              </span>
+            </motion.div>
 
             <motion.p
               className='max-w-[600px] text-lg text-black md:text-xl font-medium'
               variants={itemVariants}
             >
-              Create your developer profile, showcase your projects, and connect with other
-              developers in a vibrant community.
+              Create your professional portfolio, showcase your work, and connect with a vibrant
+              community of creators and innovators.
             </motion.p>
 
             <motion.div className='flex flex-col gap-4 sm:flex-row' variants={itemVariants}>
@@ -64,20 +79,17 @@ export const Hero = () => {
           <motion.div className='flex items-center justify-center' variants={itemVariants}>
             <div className='relative bg-white border-4 border-black p-6 transform rotate-2 w-full max-w-md'>
               <div className='absolute -top-4 -right-4 bg-teal-500 border-4 border-black px-4 py-1 font-bold'>
-                Developer Profile
+                Portfolio
               </div>
 
               <div className='flex flex-col gap-4'>
                 <div className='flex items-center gap-4'>
                   <div className='h-16 w-16 flex items-center justify-center rounded-full border-4 border-black font-bold text-xl bg-blue-400'>
-                    {'Jane Developer'
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
+                    {getUserProfileInitial('Sarah Creative')}
                   </div>
                   <div>
-                    <h3 className='text-xl font-bold'>Jane Developer</h3>
-                    <p className='text-gray-600'>Full Stack Engineer</p>
+                    <h3 className='text-xl font-bold'>Sarah Creative</h3>
+                    <p className='text-gray-600'>Digital Artist & Designer</p>
                   </div>
                 </div>
 
@@ -89,9 +101,9 @@ export const Hero = () => {
                       animate='animate'
                       className='bg-blue-200 p-2 border-2 border-black'
                     >
-                      <Code className='h-5 w-5' />
+                      <Palette className='h-5 w-5' />
                     </motion.div>
-                    <span className='font-medium'>React</span>
+                    <span className='font-medium'>Creative Design</span>
                   </div>
                   <div className='flex gap-2'>
                     <motion.div
@@ -100,9 +112,9 @@ export const Hero = () => {
                       animate='animate'
                       className='bg-green-500 p-2 border-2 border-black'
                     >
-                      <Zap className='h-5 w-5' />
+                      <Share className='h-5 w-5' />
                     </motion.div>
-                    <span className='font-medium'>Node.js</span>
+                    <span className='font-medium'>Portfolio</span>
                   </div>
                   <div className='flex gap-2'>
                     <motion.div
@@ -111,14 +123,14 @@ export const Hero = () => {
                       animate='animate'
                       className='bg-blue-500 p-2 border-2 border-black'
                     >
-                      <Star className='h-5 w-5' />
+                      <Users className='h-5 w-5' />
                     </motion.div>
-                    <span className='font-medium'>TypeScript</span>
+                    <span className='font-medium'>Community</span>
                   </div>
                 </div>
 
                 <div className='bg-gray-100 border-2 border-black p-3'>
-                  <p className='font-medium'>{`"I build scalable web applications with modern technologies. Check out my projects below!"`}</p>
+                  <p className='font-medium'>{`"I create digital experiences that inspire and engage. Let's connect and create something amazing!"`}</p>
                 </div>
               </div>
             </div>

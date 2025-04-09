@@ -21,12 +21,12 @@ export const Faq = () => {
     {
       question: 'Is Mine free to use?',
       answer:
-        'Mine is free to use for developers and other users. No subscription required. You can create a basic profile and showcase up your projects.'
+        'Mine is free to use for users. No subscription required. You can create a basic profile and showcase up your projects.'
     },
     {
       question: 'How do I add projects to my profile?',
       answer:
-        "After logging in, navigate to your profile and click on 'Add Project'. You can then enter details about your project including title, description, technologies used, and links to live demos or repositories. You can also upload screenshots or videos of your project."
+        "After logging in, navigate to your profile and click on 'Add Project'. You can then enter details about your project including title, description, technologies used, and links to live demos or repositories. You can also upload screenshots of your project."
     }
   ]
 

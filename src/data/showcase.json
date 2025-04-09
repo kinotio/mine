@@ -2,43 +2,43 @@
   "showcase_profiles": [
     {
       "name": "Alex Johnson",
-      "role": "Frontend Developer",
-      "image": "",
-      "skills": ["React", "TypeScript", "Tailwind CSS"],
-      "projects": [
-        {
-          "title": "E-commerce Platform",
-          "description": "A modern e-commerce platform with cart functionality and payment integration.",
-          "image": "/placeholder.svg?height=300&width=500",
-          "color": "bg-orange-500"
-        }
-      ]
-    },
-    {
-      "name": "Maria Garcia",
       "role": "Full Stack Developer",
       "image": "",
-      "skills": ["Node.js", "MongoDB", "Vue.js"],
+      "skills": ["React", "TypeScript", "Node.js"],
       "projects": [
         {
-          "title": "Task Management App",
-          "description": "A collaborative task management application with real-time updates.",
+          "title": "AI Code Assistant",
+          "description": "An intelligent coding companion that helps developers write better code faster.",
           "image": "/placeholder.svg?height=300&width=500",
-          "color": "bg-teal-500"
+          "color": "bg-[#4cc9f0]"
         }
       ]
     },
     {
-      "name": "David Kim",
-      "role": "Backend Engineer",
+      "name": "Sarah Chen",
+      "role": "Digital Artist & UI Designer",
       "image": "",
-      "skills": ["Python", "Django", "PostgreSQL"],
+      "skills": ["Figma", "Illustration", "Motion Design"],
       "projects": [
         {
-          "title": "API Gateway Service",
-          "description": "A high-performance API gateway with authentication and rate limiting.",
+          "title": "Artfolio Showcase",
+          "description": "A curated collection of digital illustrations and UI animations for leading brands.",
           "image": "/placeholder.svg?height=300&width=500",
-          "color": "bg-yellow-500"
+          "color": "bg-[#ff6b6b]"
+        }
+      ]
+    },
+    {
+      "name": "Marcus Silva",
+      "role": "Game Developer & 3D Artist",
+      "image": "",
+      "skills": ["Unity", "Blender", "C#"],
+      "projects": [
+        {
+          "title": "Cosmic Adventures",
+          "description": "An award-winning indie game featuring handcrafted 3D worlds and characters.",
+          "image": "/placeholder.svg?height=300&width=500",
+          "color": "bg-[#4eb778]"
         }
       ]
     }
