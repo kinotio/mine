@@ -45,10 +45,10 @@ export const Showcase = () => {
           transition={{ duration: 0.5 }}
         >
           <div className='inline-block bg-white border-4 border-black px-6 py-2 transform rotate-1 mb-4'>
-            <h2 className='text-3xl font-extrabold'>Developer Showcase</h2>
+            <h2 className='text-3xl font-extrabold'>Showcase</h2>
           </div>
           <p className='text-xl max-w-3xl mx-auto mt-4'>
-            See how developers are using Mine to showcase their skills and projects.
+            See how people are using Mine to showcase their skills and projects.
           </p>
         </motion.div>
 
