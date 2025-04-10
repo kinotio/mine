@@ -6,10 +6,10 @@ import { Grid3X3, List, SlidersHorizontal, X } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
-import { Card } from '@/components/root/explore/card'
-import { Search } from '@/components/root/explore/search'
-import { Filters } from '@/components/root/explore/filters'
-import { Pagination } from '@/components/root/explore/pagination'
+import { Card } from '@/components/shared/explore/card'
+import { Search } from '@/components/shared/explore/search'
+import { Filters } from '@/components/shared/explore/filters'
+import { Pagination } from '@/components/shared/explore/pagination'
 
 import { UserProfile } from '@/lib/types/profile'
 import { calculateProfileStats } from '@/lib/utils'
