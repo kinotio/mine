@@ -151,76 +151,99 @@ export const Explore = () => {
           <span>Explore</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[1200px] max-h-[90vh] min-h-[80vh] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] bg-white'>
-        <div className='space-y-6 overflow-y-auto mt-12'>
-          <div className='flex flex-col md:flex-row gap-4'>
-            <div className='flex-1'>
-              <Search
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                profiles={profiles}
-              />
-            </div>
-
-            <div className='flex gap-2'>
-              <Button
-                onClick={() => setShowFilters(!showFilters)}
-                className='bg-[#4cc9f0] hover:bg-[#3db8df] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
-              >
-                <SlidersHorizontal className='mr-2 h-5 w-5' />
-                Filters
-              </Button>
+      <DialogContent className='sm:max-w-[1200px] h-[90vh] border-[3px] border-black shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] bg-white p-6'>
+        <div className='h-full flex flex-col mt-6 relative'>
+          <div className='space-y-6 '>
+            <div className='flex flex-col md:flex-row gap-4'>
+              <div className='flex-1'>
+                <Search
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  profiles={profiles}
+                />
+              </div>
 
               <div className='flex gap-2'>
                 <Button
-                  onClick={() => setViewMode('grid')}
-                  variant='neutral'
-                  className={`rounded-none px-3 ${viewMode === 'grid' ? 'bg-[#f0f0f0]' : 'bg-white'}`}
+                  onClick={() => setShowFilters(!showFilters)}
+                  className='bg-[#4cc9f0] hover:bg-[#3db8df] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
                 >
-                  <Grid3X3 className='h-5 w-5' />
+                  <SlidersHorizontal className='mr-2 h-5 w-5' />
+                  Filters
                 </Button>
-                <Button
-                  onClick={() => setViewMode('list')}
-                  variant='neutral'
-                  className={`rounded-none px-3 ${viewMode === 'list' ? 'bg-[#f0f0f0]' : 'bg-white'}`}
-                >
-                  <List className='h-5 w-5' />
-                </Button>
+
+                <div className='flex gap-2'>
+                  <Button
+                    onClick={() => setViewMode('grid')}
+                    variant='neutral'
+                    className={`rounded-none px-3 ${viewMode === 'grid' ? 'bg-[#f0f0f0]' : 'bg-white'}`}
+                  >
+                    <Grid3X3 className='h-5 w-5' />
+                  </Button>
+                  <Button
+                    onClick={() => setViewMode('list')}
+                    variant='neutral'
+                    className={`rounded-none px-3 ${viewMode === 'list' ? 'bg-[#f0f0f0]' : 'bg-white'}`}
+                  >
+                    <List className='h-5 w-5' />
+                  </Button>
+                </div>
               </div>
             </div>
+
+            {showFilters && (
+              <div className='bg-[#f8f8f8] border-[3px] border-black p-4 absolute z-10 w-full'>
+                <Filters
+                  activeFilters={activeFilters}
+                  onFilterChange={handleFilterChange}
+                  onClearFilters={clearFilters}
+                  profiles={profiles}
+                />
+              </div>
+            )}
           </div>
 
-          {showFilters && (
-            <div className='bg-[#f8f8f8] border-[3px] border-black p-4'>
-              <Filters
-                activeFilters={activeFilters}
-                onFilterChange={handleFilterChange}
-                onClearFilters={clearFilters}
-                profiles={profiles}
-              />
-            </div>
-          )}
+          {/* Scrollable Cards Section */}
+          <div className='flex-1 min-h-0 mt-6'>
+            <div className='h-[72vh] flex flex-col'>
+              <div className='flex-1 overflow-y-auto pr-2 pt-2'>
+                {currentProfiles.length === 0 ? (
+                  <div className='text-center py-12 bg-[#f8f8f8] border-[3px] border-black'>
+                    <h3 className='text-xl font-bold mb-2'>No profiles found</h3>
+                    <p className='text-gray-600 mb-4'>Try adjusting your search or filters</p>
+                    <Button
+                      onClick={clearFilters}
+                      className='bg-[#8ac926] hover:bg-[#79b821] text-black font-bold border-[3px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[-2px] hover:shadow-[3px_5px_0px_0px_rgba(0,0,0,1)] transition-all'
+                    >
+                      Clear All Filters
+                    </Button>
+                  </div>
+                ) : (
+                  <div className={viewMode === 'grid' ? 'grid grid-cols-2 gap-4' : 'space-y-4'}>
+                    {currentProfiles.map((profile) => (
+                      <Card
+                        key={profile.id}
+                        profile={profile}
+                        viewMode={viewMode}
+                        onClick={() => handleCardClick(profile.url.split('@')[1])}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
 
-          <div className={viewMode === 'grid' ? 'grid grid-cols-2 gap-4' : 'space-y-4'}>
-            {currentProfiles.map((profile) => (
-              <Card
-                key={profile.id}
-                profile={profile}
-                viewMode={viewMode}
-                onClick={() => handleCardClick(profile.url.split('@')[1])}
-              />
-            ))}
+              {/* Fixed Pagination at bottom */}
+              {totalPages > 1 && (
+                <div className='mt-4 flex justify-center'>
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                </div>
+              )}
+            </div>
           </div>
-
-          {totalPages > 1 && (
-            <div className='flex justify-center'>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            </div>
-          )}
         </div>
       </DialogContent>
     </Dialog>
