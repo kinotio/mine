@@ -107,7 +107,7 @@ export const Card = ({ profile, viewMode, onClick }: CardProps) => {
         </div>
 
         <div className='flex-1'>
-          <div className='flex flex-col md:flex-row md:items-center md:justify-between mb-2'>
+          <div className='flex flex-col md:flex-row md:items-center md:justify-between mb-2 mr-12'>
             <div>
               <h3 className='text-xl font-bold'>{profile.name}</h3>
               <p className='text-gray-700'>{profile.title}</p>
