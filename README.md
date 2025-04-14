@@ -12,16 +12,50 @@ Build, Share and Connect
 
 ## Setup
 
+### Services
+
+You need to have Docker installed on your machine. you can check [here](https://docs.docker.com/get-docker/) for installation instructions.
+
+Run the docker compose file by executing the following command:
+
+```bash
+$ docker-compose up -d
+```
+
+### Application
+
 Install dependencies:
 
 ```bash
 $ pnpm install
 ```
 
-And then install Infisical CLI [here](https://infisical.com/docs/cli/overview), then run the following command:
+And then install Infisical CLI [here](https://infisical.com/docs/cli/overview), then run these following commands:
+
+Run database migration by executing the following command:
+
+```bash
+$ infisical run --env=dev --watch --recursive -- pnpm run db:migrate
+```
+
+And, Run the application by executing the following command:
 
 ```bash
 $ infisical run --env=dev --watch --recursive -- pnpm dev
+```
+
+Or, if you don't have access to our Infisical, you can set all the environment variables from the `.env.Export` file to your `.env` file by creating a new `.env` file in the root directory, and then running these following commands:
+
+Run database migration by executing the following command:
+
+```bash
+$ pnpm run db:migrate
+```
+
+And, Run the application by executing the following command:
+
+```bash
+$ pnpm dev
 ```
 
 ## Roadmap
