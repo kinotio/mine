@@ -6,6 +6,14 @@
   />
 </p>
 
+<p align="center">
+  <img
+    src="public/images/mine.png"
+    alt="Mine"
+    style="width:100%;"
+  />
+</p>
+
 ![build](https://github.com/kinotiodotio/mine/workflows/build/badge.svg)
 
 Build, Share and Connect
