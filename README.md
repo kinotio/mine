@@ -44,7 +44,7 @@ And, Run the application by executing the following command:
 $ infisical run --env=dev --watch --recursive -- pnpm dev
 ```
 
-Or, if you don't have access to our Infisical, you can set all the environment variables from the `.env.Export` file to your `.env` file by creating a new `.env` file in the root directory, and then running these following commands:
+Or, if you don't have access to our Infisical, you can set all the environment variables from the `.env.example` file to your `.env` file by creating a new `.env` file in the root directory, and then running these following commands:
 
 Run database migration by executing the following command:
 
