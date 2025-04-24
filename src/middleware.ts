@@ -8,15 +8,14 @@ export default clerkMiddleware(async (auth, request) => {
 
   const { userId, sessionClaims } = await auth()
 
-  if (
-    (userId && request.nextUrl.pathname === '/') ||
-    (userId && request.nextUrl.pathname.startsWith('/legal')) ||
-    (userId && request.nextUrl.pathname.startsWith('/sign-in')) ||
-    (userId && request.nextUrl.pathname.startsWith('/sign-up')) ||
-    (userId && request.nextUrl.pathname.startsWith('/explore'))
-  ) {
-    url.pathname = `/@${sessionClaims?.username}`
-    return NextResponse.redirect(url)
+  if (userId) {
+    const pathname = request.nextUrl.pathname
+    const publicPaths = ['/legal', '/sign-in', '/sign-up', '/explore']
+    
+    if (pathname === '/' || publicPaths.some(path => pathname.startsWith(path))) {
+      url.pathname = `/@${sessionClaims?.username}`
+      return NextResponse.redirect(url)
+    }
   }
 
   if (isProtectedRoute(request)) await auth.protect()
