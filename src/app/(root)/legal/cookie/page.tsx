@@ -41,7 +41,7 @@ const Page = () => {
                 2. How We Use Cookies
               </h3>
               <p className='mb-4'>
-                When you use and access Mine by kinotio.io, we may place a number of cookie files in
+                When you use and access Mine by kinotio, we may place a number of cookie files in
                 your web browser. We use cookies for the following purposes:
               </p>
               <ul className='list-disc pl-6 space-y-2'>

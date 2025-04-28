@@ -25,7 +25,7 @@ const Page = () => {
                 1. Introduction
               </h3>
               <p className='mb-4'>
-                At Mine by kinotio.io, we take your privacy seriously. This Privacy Policy explains
+                At Mine by kinotio, we take your privacy seriously. This Privacy Policy explains
                 how we collect, use, disclose, and safeguard your information when you visit our
                 website and use our platform.
               </p>
@@ -77,7 +77,7 @@ const Page = () => {
                 <li>Respond to your comments, questions, and requests</li>
                 <li>
                   Communicate with you about products, services, offers, and events offered by Mine
-                  by kinotio.io
+                  by kinotio
                 </li>
                 <li>
                   Monitor and analyze trends, usage, and activities in connection with our platform

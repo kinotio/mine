@@ -25,7 +25,7 @@ const Page = () => {
                 1. Agreement to Terms
               </h3>
               <p className='mb-4'>
-                By accessing or using Mine by kinotio.io, you agree to be bound by these Terms of
+                By accessing or using Mine by kinotio, you agree to be bound by these Terms of
                 Service and all applicable laws and regulations. If you do not agree with any of
                 these terms, you are prohibited from using or accessing this site.
               </p>
@@ -36,7 +36,7 @@ const Page = () => {
                 2. Use License
               </h3>
               <p className='mb-4'>
-                Permission is granted to temporarily use Mine by kinotio.io for personal,
+                Permission is granted to temporarily use Mine by kinotio for personal,
                 non-commercial purposes only. This is the grant of a license, not a transfer of
                 title, and under this license you may not:
               </p>
@@ -44,7 +44,7 @@ const Page = () => {
                 <li>Modify or copy the materials</li>
                 <li>Use the materials for any commercial purpose</li>
                 <li>
-                  Attempt to decompile or reverse engineer any software contained on kinotio.io
+                  Attempt to decompile or reverse engineer any software contained on kinotio
                 </li>
                 <li>Remove any copyright or other proprietary notations from the materials</li>
                 <li>
@@ -53,7 +53,7 @@ const Page = () => {
               </ul>
               <p className='mt-4'>
                 This license shall automatically terminate if you violate any of these restrictions
-                and may be terminated by kinotio.io at any time.
+                and may be terminated by kinotio at any time.
               </p>
             </div>
 
@@ -67,7 +67,7 @@ const Page = () => {
                 may result in immediate termination of your account.
               </p>
               <p className='mb-4'>
-                {`You are responsible for safeguarding the password that you use to access Mine by kinotio.io and for any activities or actions under your password. We encourage you to use "strong" passwords (passwords that use a combination of upper and lower case letters, numbers, and symbols) with your account.`}
+                {`You are responsible for safeguarding the password that you use to access Mine by kinotio and for any activities or actions under your password. We encourage you to use "strong" passwords (passwords that use a combination of upper and lower case letters, numbers, and symbols) with your account.`}
               </p>
             </div>
 
@@ -76,10 +76,10 @@ const Page = () => {
                 4. User Content
               </h3>
               <p className='mb-4'>
-                {`Our platform allows you to post, link, store, share and otherwise make available certain information, text, graphics, videos, or other material ("Content"). You are responsible for the Content that you post on or through Mine by kinotio.io, including its legality, reliability, and appropriateness.`}
+                {`Our platform allows you to post, link, store, share and otherwise make available certain information, text, graphics, videos, or other material ("Content"). You are responsible for the Content that you post on or through Mine by kinotio, including its legality, reliability, and appropriateness.`}
               </p>
               <p className='mb-4'>
-                By posting Content on or through Mine by kinotio.io, you represent and warrant that:
+                By posting Content on or through Mine by kinotio, you represent and warrant that:
               </p>
               <ul className='list-disc pl-6 space-y-2'>
                 <li>
@@ -87,7 +87,7 @@ const Page = () => {
                   rights and license as provided in these Terms
                 </li>
                 <li>
-                  The posting of your Content on or through Mine by kinotio.io does not violate the
+                  The posting of your Content on or through Mine by kinotio does not violate the
                   rights, publicity rights, copyrights, contract rights or any other rights of any
                   person
                 </li>
@@ -99,7 +99,7 @@ const Page = () => {
                 5. Prohibited Activities
               </h3>
               <p className='mb-4'>
-                You may not access or use Mine by kinotio.io for any purpose other than that for it
+                You may not access or use Mine by kinotio for any purpose other than that for it
                 available. The following activities are prohibited:
               </p>
               <ul className='list-disc pl-6 space-y-2'>
@@ -131,7 +131,7 @@ const Page = () => {
                 6. Limitation of Liability
               </h3>
               <p className='mb-4'>
-                In no event shall Mine by kinotio.io, nor its directors, employees, partners, or
+                In no event shall Mine by kinotio, nor its directors, employees, partners, or
                 affiliates, be liable for any indirect, incidental, special, consequential or
                 punitive damages, including without limitation, loss of profits, data, use,
                 goodwill, or other intangible losses, resulting from:
@@ -164,8 +164,8 @@ const Page = () => {
               </h3>
               <p>
                 If you have any questions about these Terms, please contact us at:{' '}
-                <a href='mailto:contact@kinotio.io' className='text-teal font-bold underline'>
-                  contact@kinotio.io
+                <a href='mailto:contact@kinotio' className='text-teal font-bold underline'>
+                  contact@kinotio
                 </a>
               </p>
             </div>

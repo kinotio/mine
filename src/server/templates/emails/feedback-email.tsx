@@ -133,7 +133,7 @@ export const FeedbackEmail: React.FC<FeedbackEmailProps> = ({ email, feedback, r
             <Section style={{ textAlign: 'center', backgroundColor: '#ffffff' }}>
               <Kinotio width={100} height={50} />
               <Text style={{ fontSize: '12px', color: '#666666', margin: '10px 0' }}>
-                © {new Date().getFullYear()} kinotio.io. All rights reserved.
+                © {new Date().getFullYear()} kinotio. All rights reserved.
               </Text>
               <Row>
                 <Column style={{ textAlign: 'center' }}>
