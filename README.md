@@ -14,7 +14,7 @@
   />
 </p>
 
-![build](https://github.com/kinotiodotio/mine/workflows/build/badge.svg)
+![build](https://github.com/kinotio/mine/workflows/build/badge.svg)
 
 Build, Share and Connect
 

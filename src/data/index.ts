@@ -3,14 +3,12 @@ export const DATA = {
   url: 'https://mine.kinotio.io',
   description: 'Your Creative Hub: Build, Share, Connect',
   social_url: {
-    github: 'https://github.com/kinotiodotio',
+    github: 'https://github.com/kinotio',
     discord: 'https://discord.gg/cskvbKQA',
-    linkedin: 'https://linkedin.com/company/kinotiodotio',
-    x: 'https://x.com/kinotiodotio',
-    bluesky: 'https://bsky.app/profile/kinotio.io'
+    linkedin: 'https://linkedin.com/company/kinotio'
   },
-  repo: 'https://github.com/kinotiodotio/mine',
-  doc_repo: 'https://github.com/kinotiodotio/mine/tree/main',
+  repo: 'https://github.com/kinotio/mine',
+  doc_repo: 'https://github.com/kinotio/mine/tree/main',
   keywords: ['Mine', 'Open Source', 'Hub', 'Skills', 'Works', 'Build', 'Share', 'Connect'],
   kinotio: {
     url: 'https://kinotio.io'
@@ -54,20 +52,12 @@ export const DATA = {
     ],
     connect: [
       {
-        href: 'https://x.com/kinotiodotio',
-        name: 'X (Formerly Twitter)'
-      },
-      {
-        href: 'https://linkedin.com/company/kinotiodotio',
+        href: 'https://linkedin.com/company/kinotio',
         name: 'LinkedIn'
       },
       {
         href: 'https://discord.gg/cskvbKQA',
         name: 'Discord'
-      },
-      {
-        href: 'https://bsky.app/profile/kinotio.io',
-        name: 'Bluesky'
       }
     ],
     legal: [
