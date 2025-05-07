@@ -8,7 +8,7 @@ import { ActionResponse } from '@/server/utils/types'
 
 import database from '@/server/services/drizzle'
 import cache from '@/server/services/redis'
-import r2 from '@/server/services/r2'
+import { minioClient } from '@/server/services/minio'
 
 type DeleteUserResponse = {
   user: User
@@ -46,20 +46,14 @@ export const deleteUser = async (id: string): Promise<ActionResponse<DeleteUserR
         Array.isArray(user.user_profile?.user_profile_files) &&
         user.user_profile?.user_profile_files?.length > 0
       ) {
-        // Delete files from R2
+        // Delete files from Minio
         const deletePromises = user.user_profile.user_profile_files.map(
           async (file: UserProfileFile) => {
             try {
-              // Extract the key from the file URL
-              // We need to get the full path after the public URL
-              const urlObj = new URL(file.file_url)
-              const key = urlObj.pathname.startsWith('/')
-                ? urlObj.pathname.substring(1) // Remove leading slash if present
-                : urlObj.pathname
-
-              await r2.removeFile(key)
+              const [bucket, objectName] = file.file_url.split('/').slice(-2)
+              await minioClient.removeObject(bucket, objectName)
             } catch (error) {
-              console.log(error)
+              console.error(`Failed to delete file from storage: ${file.file_url}`, error)
               // Continue with other deletions even if one fails
             }
           }

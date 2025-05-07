@@ -9,11 +9,6 @@ const nextConfig = {
         port: '9000',
         pathname: '/**'
       },
-      {
-        protocol: 'https',
-        hostname: 'bucket.kinotio.io',
-        pathname: '/**'
-      }
     ]
   }
 }
